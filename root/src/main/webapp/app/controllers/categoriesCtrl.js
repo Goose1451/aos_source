@@ -18,7 +18,7 @@ define(['./module'], function (controllers) {
             }
 
             // You can inject your own value for speakers by uncommenting the code shown below (e.g. Changing Speakers to Audio)
-             resolveParams.categories[3].categoryName = "Audio";
+            // resolveParams.categories[3].categoryName = "Audio";
 
             s.categories = resolveParams.categories;
             s.specialOffer = resolveParams.specialOffer;

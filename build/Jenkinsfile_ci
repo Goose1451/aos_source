@@ -344,7 +344,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   git status
   git add "build/version.xml"
   git commit -m "updates version.xml" --quiet
-  git push https://kubany:fan.hot.dol-736@github.houston.softwaregrp.net/nimbus/aos-source.git master
+  git push https://kubany:5a44daacef44e8c31b413e7143777baa1c813263@github.houston.softwaregrp.net/nimbus/aos-source.git master
   '''
   }
 }

@@ -75,7 +75,7 @@ stage('Update Production Release'){
 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'c3de99a2-ff92-4a6a-873b-5f866bc60977',
 usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD']]) {
 
-# sh "docker login -u=${env.DOCKERHUB_USERNAME} -p=${env.DOCKERHUB_PASSWORD}"
+
 sh "docker login -u=aosbuild -p=W3lcome1"
 sh '''#!/bin/bash
 # copy wars 

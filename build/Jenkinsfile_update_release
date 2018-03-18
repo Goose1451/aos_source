@@ -72,7 +72,7 @@ mvn -P production,pack_wars_without_accountservices package install -am -ff -e -
 
 stage('Update Production Release'){
 
-withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'c3de99a2-ff92-4a6a-873b-5f866bc60977',
+withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'b1d480d7-80d6-457d-b15e-5e484ac35c1a',
 usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD']]) {
 
 sh "docker login -u=${env.DOCKERHUB_USERNAME} -p=${env.DOCKERHUB_PASSWORD}"

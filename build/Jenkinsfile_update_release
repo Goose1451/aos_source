@@ -75,8 +75,8 @@ stage('Update Production Release'){
 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'c3de99a2-ff92-4a6a-873b-5f866bc60977',
 usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD']]) {
 
-
-sh "docker login -u=aosbuild -p=W3lcome1"
+sh "docker login -u=${env.DOCKERHUB_USERNAME} -p=${env.DOCKERHUB_PASSWORD}"
+echo "*** logged in ***"
 sh '''#!/bin/bash
 # copy wars 
 if ( "${Create_new_release_images}" == "true" );then
@@ -86,6 +86,7 @@ if ( "${Create_new_release_images}" == "true" );then
  cp ${accountservice_war_path} ./Dockerfiles/aos_all_in_one/tomcat_account
 fi
 
+echo "*** edit .env  & docker-compose.yml ***"
 # edited .evn & docker-compose.yml
 sed -i 's/LOCAL/AMAZON/g' "./Nimbus_aos/aos_all_in_one/.env"
 sed -i 's/8080/80/g' "./Nimbus_aos/aos_all_in_one/.env"

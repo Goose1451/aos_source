@@ -114,21 +114,22 @@ if ( "${Create_new_release_images}" == "true" );then
  cd ../../../
 fi
 
+echo "copy the docker-compose to production machine"
 #copy the docker-compose to production machine
-scp "./Nimbus_aos/aos_all_in_one/docker-compose.yml" root@$production_ip:/root/aos_release
-scp "./Nimbus_aos/aos_all_in_one/startup.sh" root@$production_ip:/root/aos_release
-scp "./Nimbus_aos/aos_all_in_one/.env" root@$production_ip:/root/aos_release
-scp "./Nimbus_aos/aos_all_in_one/.env_private" root@$production_ip:/root/aos_release
+sshpass -p "Xy6stqZ" scp "./Nimbus_aos/aos_all_in_one/docker-compose.yml" root@$production_ip:/root/aos_release
+sshpass -p "Xy6stqZ" scp "./Nimbus_aos/aos_all_in_one/startup.sh" root@$production_ip:/root/aos_release
+sshpass -p "Xy6stqZ" scp "./Nimbus_aos/aos_all_in_one/.env" root@$production_ip:/root/aos_release
+sshpass -p "Xy6stqZ" scp "./Nimbus_aos/aos_all_in_one/.env_private" root@$production_ip:/root/aos_release
 
 #copy trace to producion
-scp "HPEAppPulseJava_1.60_AdvantageOnlineShopping.zip" root@$production_ip:/root
-scp "install_trace.sh" root@$production_ip:/root
+sshpass -p "Xy6stqZ" scp "HPEAppPulseJava_1.60_AdvantageOnlineShopping.zip" root@$production_ip:/root
+sshpass -p "Xy6stqZ" scp "install_trace.sh" root@$production_ip:/root
 
-ssh "$production_ip" \"chmod +x /root/aos_release/startup.sh && cd /root/aos_release && ./startup.sh\"
+sshpass -p "Xy6stqZ" ssh "$production_ip" \"chmod +x /root/aos_release/startup.sh && cd /root/aos_release && ./startup.sh\"
 
 sleep 120
 #install trace on main & account
-ssh "$production_ip" \"chmod +x /root/install_trace.sh && /root/install_trace.sh "main-app" "${Release_version}" && /root/install_trace.sh "accountservice" "${Release_version}" \"
+sshpass -p "Xy6stqZ" ssh "$production_ip" \"chmod +x /root/install_trace.sh && /root/install_trace.sh "main-app" "${Release_version}" && /root/install_trace.sh "accountservice" "${Release_version}" \"
 
 """
 }

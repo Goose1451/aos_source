@@ -1,7 +1,7 @@
 // all environment varoables we must declare with "aos_" prefix
 import jenkins.model.*
 
-println Hudson.instance.slaves.find({it.name == 'mac'}).getComputer().isOnline();
+def mac_node_online = Hudson.instance.slaves.find({it.name == 'mac'}).getComputer().isOnline();
 
 def Dependency_deliveryNumber() {
 def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
@@ -47,7 +47,9 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 
 stage('iOS Tests'){
 env.aos_stageName="iOS_Tests"
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
+if(!mac_node_online){
+    currentBuild.result = 'SUCCESS'
+} else if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
  currentBuild.result = 'SUCCESS'
 }else{
   env.Resumed = "false"

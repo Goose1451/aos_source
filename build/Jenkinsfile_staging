@@ -43,8 +43,9 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 
 
 stage('iOS Tests'){
-
 env.aos_stageName="iOS_Tests"
+echo "***********"
+echo jenkins.model.Jenkins
 if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
  currentBuild.result = 'SUCCESS'
 }else{

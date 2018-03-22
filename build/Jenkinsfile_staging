@@ -1,7 +1,7 @@
 // all environment varoables we must declare with "aos_" prefix
 import jenkins.model.*
 
-def instance = Jenkins.getInstance()
+def instance = Hudson.getInstance()
 
 def Dependency_deliveryNumber() {
 def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'

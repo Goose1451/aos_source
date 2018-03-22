@@ -45,9 +45,8 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 stage('iOS Tests'){
 
 env.aos_stageName="iOS_Tests"
-if(!Jenkins.instance.getNode('mac').toComputer().isOnline()
-
-){
+echo Jenkins.instance
+if(!Jenkins.instance.getNode('mac').toComputer().isOnline()){
 	echo 'mac node is offline'
 	currentBuild.result = 'SUCCESS'
 }

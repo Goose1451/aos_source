@@ -41,10 +41,15 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 }
 }
 
+
 stage('iOS Tests'){
 
 env.aos_stageName="iOS_Tests"
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
+if(!jenkins.model.Nodes.getNode('my-node').toComputer().isOnline()){
+	echo 'mac node is offline'
+	currentBuild.result = 'SUCCESS'
+}
+else if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
  currentBuild.result = 'SUCCESS'
 }else{
   env.Resumed = "false"

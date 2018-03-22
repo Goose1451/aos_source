@@ -13,10 +13,7 @@ def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
 matcher ? matcher[0][1] : null
 }
 
-def check_node(node){
-	echo node
-	echo instance
-}
+
 try{
 node('UbuntuDemoApp'){
 
@@ -50,8 +47,6 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 
 stage('iOS Tests'){
 env.aos_stageName="iOS_Tests"
-echo "***********"
-check_node('mac')
 if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
  currentBuild.result = 'SUCCESS'
 }else{

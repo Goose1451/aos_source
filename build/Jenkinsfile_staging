@@ -1,4 +1,8 @@
 // all environment varoables we must declare with "aos_" prefix
+import jenkins.model.*
+
+def instance = Jenkins.getInstance()
+
 def Dependency_deliveryNumber() {
 def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
 matcher ? matcher[0][1] : null
@@ -10,9 +14,6 @@ matcher ? matcher[0][1] : null
 }
 
 def check_node(node){
-	import jenkins.model.*
-	echo node
-	def instance = Jenkins.getInstance()
 	echo node
 	echo instance
 }

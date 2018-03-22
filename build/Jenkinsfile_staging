@@ -1,5 +1,5 @@
 // all environment varoables we must declare with "aos_" prefix
-
+import jenkins.model.*
 def Dependency_deliveryNumber() {
 def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
 matcher ? matcher[0][1] : null
@@ -45,7 +45,7 @@ if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || 
 stage('iOS Tests'){
 env.aos_stageName="iOS_Tests"
 echo "***********"
-echo jenkins.model.Jenkins
+echo Jenkins.getInstance()
 if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
  currentBuild.result = 'SUCCESS'
 }else{

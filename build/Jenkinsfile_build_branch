@@ -1,0 +1,147 @@
+// all environment varoables we must declare with "aos_" prefix
+
+def deliveryNumber() {
+def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
+matcher ? matcher[0][1] : null
+}
+
+def version() {
+def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
+matcher ? matcher[0][1] : null
+}
+
+try{
+node('UbuntuDemoApp'){
+
+def mvnHome = tool name: 'Maven 3.3.9_Linux', type: 'hudson.tasks.Maven$MavenInstallation'
+env.PATH="${env.PATH}:${mvnHome}/bin"
+
+if (env.Resumed == "true"){
+ if (!fileExists("${WORKSPACE}/resumed_build_params.groovy"))
+   echo "cannot resume after build success."
+ else 
+   load "${WORKSPACE}/resumed_build_params.groovy"
+}
+
+stage('Checkout Branch'){
+
+env.aos_stageName="Checkout Branch"
+
+if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
+ currentBuild.result = 'SUCCESS'
+}else{
+
+  env.Resumed = "false"
+
+  checkout([$class: 'GitSCM', branches: [[name: '*/' + env.Branch]], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'efc35e72-9a72-4102-9b83-f6b54683ca0b', url: 'https://github.houston.softwaregrp.net/nimbus/aos-source.git']]])
+  
+  sh 'git checkout -b ${env.DOCKERHUB_PASSWORD}'
+  
+  env.aos_build_main_wars=false
+  env.aos_build_accountservice_war=false
+  env.aos_build_both_wars=false
+  env.aos_copy_Nimbus_files=false
+  commits = sh(returnStdout: true, script: 'git show --pretty="format:" --name-only | awk -F/ \'{print $1}\'').trim()
+
+  println(commits)
+    
+  if (commits == "" || commits == null){
+     println("no commits were detected, aos_build_both_wars=true")
+	 env.aos_build_both_wars=true
+	 env.aos_copy_Nimbus_files=true
+  }else{
+  
+    commits.eachLine { line ->
+      if (line.equals("catalog") || line.equals("mastercredit") || line.equals("order") || line.equals("safepay") || line.equals("shipex")) {
+          env.aos_build_main_wars=true
+      }
+      if (line.equals("accountservice")) {
+          env.aos_build_accountservice_war=true
+      }
+      if (line.equals("root") || line.equals("common") || line.equals("shared_resources")) {
+          env.aos_build_both_wars=true
+      }
+	  if (line.equals("Nimbus_aos")) {
+          env.aos_copy_Nimbus_files=true
+      }
+    }
+  }
+  
+  println("aos_build_main_wars = $aos_build_main_wars")
+  println("aos_build_accountservice_war = $aos_build_accountservice_war")
+  println("aos_build_both_wars = $aos_build_both_wars")
+  println("aos_copy_Nimbus_files = $aos_copy_Nimbus_files")
+  
+  sh '''current_delivery_number=`cat build/version.xml | grep "<deliveryNumber>" | sed -e \'s/<[^>]*>//g\'`
+  echo "current_delivery_number=$current_delivery_number"
+  new_delivery_number=$(($current_delivery_number+1))
+  echo "new_delivery_number=$new_delivery_number"
+  sed -i "s/<deliveryNumber>.*/<deliveryNumber>$new_delivery_number<\\/deliveryNumber>/g" "build/version.xml"
+  echo "end edit delivery number with $new_delivery_number"
+  
+  new_commitId=`git log --format="%H" -n 1`
+  echo "new_commitId=$new_commitId"
+  sed -i "s/<commitId>.*/<commitId>$new_commitId<\\/commitId>/g" "build/version.xml"
+  echo "end edit commit id with $new_commitId"'''
+  
+  sh 'cat build/version.xml'
+
+  env.aos_version = version()
+    if (aos_version) {
+      echo "Building version ${aos_version}"
+  }
+  
+  env.aos_delivery = deliveryNumber()
+    if (aos_delivery) {
+      echo "Building deliveryMumber ${aos_delivery}"
+  }
+  
+  env.aos_description="Version: ${aos_version}, Delivery: ${aos_delivery}"
+  //currentBuild.description = "Version: ${aos_version}, Delivery: ${aos_delivery}"
+}
+}
+
+load "${WORKSPACE}/build/machines_ip.groovy"
+
+currentBuild.description = "${aos_description}"
+
+mail (to: 'adm_demo_alerts@hpe.com, kubany@hpe.com',
+	subject: "Success: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
+	body: "Review the information at: ${env.JOB_URL}",
+	mimeType: 'text/html');
+	
+}	
+}catch(err){
+    node('UbuntuDemoApp'){
+	
+	if (env.aos_description != null)
+	 currentBuild.description = "${aos_description}"
+	 
+	env.aos_failed_stageName=env.aos_stageName
+	
+	dir(""){
+	
+	echo sh(returnStdout: true, script: 'env | grep "aos_" >${WORKSPACE}/resumed_build_params.groovy')
+	
+	sh 'sed -i \'s/^/env./g\' ${WORKSPACE}/resumed_build_params.groovy'
+    sh 'sed -i \'s/$/"/g\' ${WORKSPACE}/resumed_build_params.groovy'
+    sh 'sed -i \'s/=/="/g\' ${WORKSPACE}/resumed_build_params.groovy'
+	
+	def aos_version = version()
+    if (aos_version) {
+    echo "Building version ${aos_version}"
+    }
+
+    def aos_delivery = deliveryNumber()
+    if (aos_delivery) {
+    echo "Building deliveryMumber ${aos_delivery}"
+    }
+
+    currentBuild.result = 'FAILURE'
+	mail (to: 'adm_demo_alerts@hpe.com, kubany@hpe.com',
+		subject: "Failed: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
+		body: "Review the information at: ${env.JOB_URL}",
+		mimeType: 'text/html');
+	}
+	}
+}

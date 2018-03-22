@@ -10,6 +10,7 @@ def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
 matcher ? matcher[0][1] : null
 }
 
+
 try{
 node('UbuntuDemoApp'){
 

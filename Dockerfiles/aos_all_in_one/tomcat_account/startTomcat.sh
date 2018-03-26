@@ -21,6 +21,7 @@ if [ ! -f /initialized.txt ]; then # Run initialization logic
 
     command="sed -i 's/CONNECTOR_DETAILES/${connector_details}/' /usr/local/tomcat/conf/server.xml"
     eval $command
+    touch /initialized.txt
 fi
 bash wait-for-it.sh "${POSTGRES_IP}"
 catalina.sh run

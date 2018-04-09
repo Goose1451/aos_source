@@ -121,7 +121,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
         /*************** SQL injection vulnerability *****************/
         /*if(getAppUserByLoginName(loginName) == null){
-            
+            loginName +=loginName;
             //Moti Ostrovski: if not set countryID or equals 0=> set country USA
             countryId = countryId == 0 ? 40 : countryId;
             Country country = countryRepository.get(countryId);

@@ -117,6 +117,12 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
 }
 }
 
+
+
+
+
+try{
+
 stage('Build Installer'){
 
 env.aos_stageName="Build_Installer"
@@ -131,6 +137,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
 }
 }
 
+
 stage('Downloads latest snapshot Installer'){
 
 env.aos_stageName="Downloads_latest_snapshot_Installer"
@@ -142,23 +149,23 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   env.Resumed = "false"
 
   node('Windows2008R2'){
-  
+
   checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-installer.git'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version LeanFT Windows', submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.houston.softwaregrp.net:nimbus/aos-installer.git']]])
-  
+
   sh 'git checkout master'
-  
+
   env.aos_installer_delivery = deliveryNumber()
   env.aos_installer_new_delivery = (aos_installer_delivery.toInteger() + 1).toString()
-  
+
   echo "Installer delivery ${aos_installer_delivery}"
-  
+
   env.aos_description="Installer version: ${aos_version}.${aos_installer_delivery}"
   //currentBuild.description = "Installer version: ${aos_version}.${aos_installer_delivery}"
-  
+
   sh '''
    pwd
    if [ ! -d "/c/LeanFTJavaRunner/installer_release" ];then
-    echo "in 1"   
+    echo "in 1"
     mkdir -p /c/LeanFTJavaRunner/installer_release
    else
     echo "in 2"
@@ -173,18 +180,18 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
 }
 }
 
-stage('SignHP Installer'){
+    stage('SignHP Installer'){
 
-env.aos_stageName="SignHP_Installer"
+    env.aos_stageName="SignHP_Installer"
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+    if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
+     currentBuild.result = 'SUCCESS'
+    }else{
 
-  env.Resumed = "false"
+      env.Resumed = "false"
 
-  build job: 'demoapp_folder/demoapp_installer_signHp'
-}
+      build job: 'demoapp_folder/demoapp_installer_signHp'
+    }
 }
 
 stage('Upload Installer to latest release'){
@@ -198,46 +205,53 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   env.Resumed = "false"
 
   node('Windows2008R2'){
-  
+
   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'e1e6e164-d262-4718-93db-69a4b24caf0b',
   usernameVariable: 'USERNAME', passwordVariable: 'NEXUS_DEPLOY_PASSWORD']]) {
-   
-  sh '''#!/bin/bash	
+
+  sh '''#!/bin/bash
   #declare parameters
   NEW_COMMIT_ID=`git log --format="%H" -n 1`
-    
+
   sed -i "s/<commitId>.*/<commitId>$NEW_COMMIT_ID<\\/commitId>/g" "build/version.xml"
-  
+
   cp "build/version.xml" "build/pom.xml"
-  
+
   "/c/Program Files/7-Zip/7z.exe" a -tzip installer.zip /c/LeanFTJavaRunner/installer_release/InstallAOS_${aos_version}_${aos_installer_delivery}.exe || exit 1
-  
+
   #***************************************************************************UPLOAD TO LATEST***************************************************************************
-  
+
   curl -f -v -F r=adm-demo-app-release -F hasPom="false" -F e=zip -F g=com.advantage.online.store -F a=Installer_Release -F v=latestVersion -F p=zip -F file=@installer.zip --user "deployment:${NEXUS_DEPLOY_PASSWORD}" "http://mydtbld0183.hpeswlab.net:8081/nexus/service/local/artifact/maven/content"
   #upload the xml file with the version
   curl -f -v -F r=adm-demo-app-release -F hasPom="false" -F g=com.advantage.online.store -F a=Installer_Release -F c=version -F v=latestVersion -F p=pom -F file=@build/pom.xml --user "deployment:${NEXUS_DEPLOY_PASSWORD}" "http://mydtbld0183.hpeswlab.net:8081/nexus/service/local/artifact/maven/content"
-  
+
   #***************************************************************************UPLOAD TO RELEASE****************************************************************************
-  
+
   curl -f -v -F r=adm-demo-app-release -F hasPom="false" -F e=zip -F g=com.advantage.online.store -F a=Installer_Release_${aos_version} -F v=${aos_installer_delivery} -F p=zip -F file=@installer.zip --user "deployment:${NEXUS_DEPLOY_PASSWORD}" "http://mydtbld0183.hpeswlab.net:8081/nexus/service/local/artifact/maven/content"
   #upload the xml file with the version
   curl -f -v -F r=adm-demo-app-release -F hasPom="false" -F g=com.advantage.online.store -F a=Installer_Release_${aos_version} -F c=version -F v=${aos_installer_delivery} -F p=pom -F file=@build/pom.xml --user "deployment:${NEXUS_DEPLOY_PASSWORD}" "http://mydtbld0183.hpeswlab.net:8081/nexus/service/local/artifact/maven/content"
-  
+
   sed -i "s/<deliveryNumber>.*/<deliveryNumber>$aos_installer_new_delivery<\\/deliveryNumber>/g" "build/version.xml"
-  
+
   [ -f "./build/pom.xml" ] && rm -rf "./build/pom.xml"
   git pull -q
   git status
   git add "build/version.xml"
   git commit -m "updates version.xml" --quiet
   git push origin master
-  
+
   '''
   }
   }
 }
 }
+
+} catch (e) {
+     result = "FAIL" // make sure other exceptions are recorded as failure too
+  }
+
+
+
 
 currentBuild.description = "${aos_description}"
 

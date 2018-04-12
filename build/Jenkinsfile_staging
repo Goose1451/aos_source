@@ -295,7 +295,6 @@ mail (to: 'adm_demo_alerts@hpe.com',
 	
 }	
 }catch(err){
-	echo err
     node('UbuntuDemoApp'){
 
     currentBuild.result = 'FAILURE'

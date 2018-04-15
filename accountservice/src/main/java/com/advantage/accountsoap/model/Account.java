@@ -47,7 +47,7 @@ public class Account {
     public static final int MAX_NUM_OF_APP_USER = 500;
 
     public static final String MESSAGE_NEW_USER_CREATED_SUCCESSFULLY = "New user created successfully.";
-    public static final String MESSAGE_USER_LOGIN_FAILED = "Incorrect user name or password.gilal?no way!";
+    public static final String MESSAGE_USER_LOGIN_FAILED = "Incorrect user name or password.gilal";
     public static final String MESSAGE_USER_LOGOUT_FAILED = "Invalid user name or password";
     public static final String MESSAGE_USER_IS_BLOCKED_FROM_LOGIN = "User is temporary blocked from login";
     public static final String MESSAGE_USER_NAME_ALREAY_EXISTS = "User name already exists";

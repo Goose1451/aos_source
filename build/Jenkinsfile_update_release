@@ -13,7 +13,7 @@ node('UbuntuDemoApp'){
 
 stage('Checkout'){
 
-checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.houston.softwaregrp.net:nimbus/aos-source.git']]])
+checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'efc35e72-9a72-4102-9b83-f6b54683ca0b', url: 'https://github.houston.softwaregrp.net/nimbus/aos-source.git']]])
 
 
 sh """git checkout ${Release_version}"""
@@ -76,7 +76,7 @@ withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'c3de99
 usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD']]) {
 
 sh "docker login -u=${env.DOCKERHUB_USERNAME} -p=${env.DOCKERHUB_PASSWORD}"
-
+echo "*** logged in ***"
 sh '''#!/bin/bash
 # copy wars 
 if ( "${Create_new_release_images}" == "true" );then
@@ -86,6 +86,7 @@ if ( "${Create_new_release_images}" == "true" );then
  cp ${accountservice_war_path} ./Dockerfiles/aos_all_in_one/tomcat_account
 fi
 
+echo "*** edit .env  & docker-compose.yml ***"
 # edited .evn & docker-compose.yml
 sed -i 's/LOCAL/AMAZON/g' "./Nimbus_aos/aos_all_in_one/.env"
 sed -i 's/8080/80/g' "./Nimbus_aos/aos_all_in_one/.env"
@@ -113,6 +114,7 @@ if ( "${Create_new_release_images}" == "true" );then
  cd ../../../
 fi
 
+echo "copy the docker-compose to production machine"
 #copy the docker-compose to production machine
 scp "./Nimbus_aos/aos_all_in_one/docker-compose.yml" root@$production_ip:/root/aos_release
 scp "./Nimbus_aos/aos_all_in_one/startup.sh" root@$production_ip:/root/aos_release

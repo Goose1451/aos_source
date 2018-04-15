@@ -33,7 +33,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
 
   env.Resumed = "false"
 
-  checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.houston.softwaregrp.net:nimbus/aos-source.git']]])
+  checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'efc35e72-9a72-4102-9b83-f6b54683ca0b', url: 'https://github.houston.softwaregrp.net/nimbus/aos-source.git']]])
   
   sh 'git checkout master'
   
@@ -344,7 +344,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   git status
   git add "build/version.xml"
   git commit -m "updates version.xml" --quiet
-  git push origin master
+  git push https://kubany:5a44daacef44e8c31b413e7143777baa1c813263@github.houston.softwaregrp.net/nimbus/aos-source.git master
   '''
   }
 }

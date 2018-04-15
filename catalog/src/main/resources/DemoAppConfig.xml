@@ -158,4 +158,10 @@
     <Use_Camera_Capability datatype="enum:[Tip]" description="Add an option to enable the user to take a picture with the camera . This picture will be added to the current product page. In offline mode, the picture is retained for the current session only.
 When using MC, if “Camera Sensor” is enabled, this picture will be replaced with the picture the user previously uploaded to MC." tools="MobileCenter" locationInAdvantage="Mobile apps: Product page">Tip</Use_Camera_Capability>
 
+    <Tips_SQL_injection_vulnerability datatype="enum:[Tip]" description="A functional test finds the following defect:
+The user creates a user with any Username, but the name that is actually created is duplicated, as displayed at the top right side of the site.  
+The user opens a defect, fixes the code, and commits the change. This triggers a Fortify scan (provided that you added the Fortify scan trigger in the code change) that will find an SQL injection vulnerability.
+
+To achieve this, you must edit the accountservice\src\main\java\com\advantage\accountsoap\dao\impl\DefaultAccountRepository file. In this file, first uncomment the code that is located between the 'SQL injection vulnerability' tags.  Then, comment out the code that is located between the 'Code without SQL injection vulnerability' tags. Note that there are 2 locations in the code in which you need to make these changes." tools="Fortify, LeanFT, UFT" locationInAdvantage="Create Account page">Tip</Tips_SQL_injection_vulnerability>
+
 </Parameters>

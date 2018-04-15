@@ -119,6 +119,38 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         //ArgumentValidationHelper.validateStringArgumentIsNotNullAndNotBlank(address, "address");
         //ArgumentValidationHelper.validateStringArgumentIsNotNullAndNotBlank(zipcode, "zipcode");
 
+        /*************** SQL injection vulnerability *****************/
+        /*if(getAppUserByLoginName(loginName) == null){
+            loginName +=loginName;
+            //Moti Ostrovski: if not set countryID or equals 0=> set country USA
+            countryId = countryId == 0 ? 40 : countryId;
+            Country country = countryRepository.get(countryId);
+            Account account = null;
+            try {
+                account = new Account(appUserType, lastName, firstName, loginName, password, country, phoneNumber, stateProvince, cityName, address, zipcode, email, allowOffersPromotion);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            entityManager.persist(account);
+
+
+            //  New user created successfully.
+            this.failureMessage = "New user created successfully";
+            accountStatusResponse = new AccountStatusResponse(true, Account.MESSAGE_NEW_USER_CREATED_SUCCESSFULLY, account.getId());
+
+            return account;
+        } else{
+            //  User with this login already exists
+            this.failureMessage = "User name already exists";
+            accountStatusResponse = new AccountStatusResponse(false, Account.MESSAGE_USER_NAME_ALREAY_EXISTS, -1);
+            return null;
+
+        }*/
+        /*************** End Of SQL injection vulnerability *****************/
+
+
+
+        /*************** Code without SQL injection vulnerability *****************/
         if (ValidationHelper.isValidLogin(loginName)) {
             if (ValidationHelper.isValidPassword(password)) {
                 if (validatePhoneNumberAndEmail(phoneNumber, email)) {
@@ -164,6 +196,8 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
             accountStatusResponse = new AccountStatusResponse(false, Account.MESSAGE_USER_LOGIN_FAILED, -1);
             return null;
         }
+
+        /*************** End Of Code without SQL injection vulnerability *****************/
 
     }
 
@@ -311,6 +345,27 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
     }
 
+    /*SQL Injection US#174005*/
+    public Account getAppUserByLoginName(String userLogin) {
+
+        final Query query = entityManager.createNativeQuery("Select * from Account  where login_name=" + userLogin);
+
+        @SuppressWarnings("unchecked")
+        List<Account> accounts = query.getResultList();
+
+        final Account user;
+
+        if (accounts.isEmpty()) {
+
+            user = null;
+        } else {
+
+            user = accounts.get(0);
+        }
+
+        return user;
+
+    }
 
     @Override
     public AccountStatusResponse doLogin(String loginUser, String loginPassword, String email) {

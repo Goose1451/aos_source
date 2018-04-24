@@ -19,6 +19,11 @@
     z-index: 900;
 }
 
+.fixedTableEdgeCompatibility{
+
+    table-layout: fixed;
+}
+
 #shoppingCart table *{
     padding: 0;
     margin: 0;
@@ -32,6 +37,7 @@
 #shoppingCart tbody td {
     padding: 20px 0;
     border-top: #d0d0d0 solid 1px;
+
 }
 
 #shoppingCart tbody tr:last-child td{

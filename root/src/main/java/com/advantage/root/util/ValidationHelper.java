@@ -26,7 +26,7 @@ public class ValidationHelper {
      * RegEx to match a full-name with optional characters: ".'-". <br/>
      * e.g. James T. Kirk, Walter O'Brian, Bat-Sheva
      */
-    private static final String FULL_NAME_PATTERN = "^[A-Za-z0-9.'_-]{2,30}$";        // old value "^[\\p{L} .'-]+$"
+    private static final String FULL_NAME_PATTERN = "^[\\p{Blank}A-Za-z0-9.'_-]{2,30}$";        // old value "^[\\p{L} .'-]+$"
 
     private static final String MASTER_CREDIT_CVV_NUMBER_PATTERN = "([0-9]{3})";
 

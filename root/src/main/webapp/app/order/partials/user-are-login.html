@@ -174,6 +174,9 @@
                         translate }}</p>
                 </div>
 
+                <label class="payNow_error_label" id="payNowSPErrorLabel"></label>
+
+
                 <sec-form >
 
                     <sec-view a-hint="{{'SafePay_User_name' | translate}}"
@@ -205,7 +208,6 @@
                             <sec-sender id="payNowSPDrtv" class="roboto-medium payNowButtonMarginWithError" a-value="{{'PAY_NOW' | translate}}"
                                         a-hint="_SAFEPAY"
                                         sec-send="payNow_SafePay()" style="margin-right: 20%;"></sec-sender>
-                            <label class="payNow_error_label" id="payNowSPErrorLabel"></label>
                         </label>
                     </div>
 

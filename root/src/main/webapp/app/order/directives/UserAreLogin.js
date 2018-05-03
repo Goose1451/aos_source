@@ -158,8 +158,8 @@ define(['./module'], function (directives) {
                                         var errorObj = JSON.parse(err);
                                         if(errorObj && errorObj.data && errorObj.data.reason){
 
-                                                $("#payNowMCErrorLabel").html(errorObj.data.reason);
-                                                $("#payNowMCErrorLabelExpended").html(errorObj.data.reason);
+                                                //$("#payNowMCErrorLabel").html(errorObj.data.reason);
+                                                //$("#payNowMCErrorLabelExpended").html(errorObj.data.reason);
                                                 $("#payNowSPErrorLabel").html(errorObj.data.reason);
                                         }
                                     }

@@ -12,15 +12,16 @@ define(['./module'], function (controllers) {
 
             Helper.forAllPage();
 
-            s.orderPaymenLogin = {
+            s.orderPaymentLogin = {
                 loginUser : '',
                 loginPassword : '',
                 email : '',
             };
 
-            s.orderPaymenLogin_signIn = function(){
-                s.signIn(s.orderPaymenLogin, false);
-            }
+            <!--D37018- Changing target signIn function from 'userNotLoginCtrl.orderPaymentLogin_signIn' to directly go 'loginModal.signIn'-->
+            // s.orderPaymentLogin_signIn = function(){
+            //     s.signIn(s.orderPaymentLogin, false);
+            // }
 
             s.registrationRedirect = function(){
                 $location.path('/register');

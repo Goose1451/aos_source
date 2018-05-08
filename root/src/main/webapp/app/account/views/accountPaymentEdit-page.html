@@ -40,6 +40,9 @@
 
                             <div ng-show="imgRadioButton == 1">
 
+                                <label class="payNow_error_label" id="safePayDetailErrorLabel"></label>
+                                </label>
+
                                 <sec-form sec-disable-until-some-change="true">
 
 
@@ -69,6 +72,7 @@
                                             <sec-sender class="roboto-medium" a-value="{{'SAVE' | translate}}"
                                                         sec-send="saveSafePay()"></sec-sender>
                                     </div>
+
 
                                 </sec-form>
 

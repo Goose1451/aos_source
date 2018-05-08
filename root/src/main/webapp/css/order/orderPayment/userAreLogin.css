@@ -215,7 +215,8 @@
 }
 
 #paymentMethod .notice {
-    padding-top: 25px;
+    padding-top: 42px;
+    margin-bottom: 35px;
 }
 
 #paymentMethod .notice h4 {

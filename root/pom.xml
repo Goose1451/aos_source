@@ -24,7 +24,7 @@
                                     <id>exec-npm-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>npm.cmd</executable>
+                                        <executable>npm</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>
@@ -93,7 +93,7 @@
                                     <id>exec-npm-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>npm.cmd</executable>
+                                        <executable>npm</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>

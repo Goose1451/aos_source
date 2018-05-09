@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE xs:schema [
+        <!ELEMENT xs:schema (xs:element|xs:complexType)*>
+        <!ATTLIST xs:schema
+                version CDATA #REQUIRED
+                targetNamespace CDATA #REQUIRED
+                xmlns:tns CDATA #REQUIRED
+                xmlns:xs CDATA #REQUIRED>
+        <!ELEMENT xs:element (xs:complexType)*>
+        <!ATTLIST xs:element
+                form CDATA #IMPLIED
+                maxOccurs CDATA #IMPLIED
+                name CDATA #IMPLIED
+                nillable CDATA #IMPLIED
+                ref CDATA #IMPLIED
+                type CDATA #IMPLIED>
+        <!ELEMENT xs:complexType (xs:sequence)*>
+        <!ATTLIST xs:complexType
+                name CDATA #IMPLIED>
+        <!ELEMENT xs:sequence (xs:element)*>
+        ]>
 <xs:schema version="1.0" targetNamespace="com.advantage.online.store.accountservice" xmlns:tns="com.advantage.online.store.accountservice" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="AccountCreateRequest">
@@ -664,6 +684,40 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GetAccountFieldsRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="field" type="xs:string" form="qualified"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GetAccountFieldsResponse">
+    <xs:complexType>
+      <xs:sequence>
+          <xs:element name="id" type="xs:long" form="qualified"/>
+          <xs:element name="lastName" type="xs:string" form="qualified"/>
+          <xs:element name="firstName" type="xs:string" form="qualified"/>
+          <xs:element name="loginName" type="xs:string" form="qualified"/>
+          <xs:element name="accountType" type="xs:int" form="qualified"/>
+          <xs:element name="countryId" type="xs:long" form="qualified"/>
+          <xs:element name="countryName" type="xs:string" form="qualified"/>
+          <xs:element name="countryIsoName" type="xs:string" form="qualified"/>
+          <xs:element name="stateProvince" type="xs:string" form="qualified"/>
+          <xs:element name="cityName" type="xs:string" form="qualified"/>
+          <xs:element name="address" type="xs:string" form="qualified"/>
+          <xs:element name="zipcode" type="xs:string" form="qualified"/>
+          <xs:element name="phoneNumber" type="xs:string" form="qualified"/>
+          <xs:element name="email" type="xs:string" form="qualified"/>
+          <xs:element name="defaultPaymentMethodId" type="xs:long" form="qualified"/>
+          <xs:element name="allowOffersPromotion" type="xs:boolean" form="qualified"/>
+          <xs:element name="internalUnsuccessfulLoginAttempts" type="xs:int" form="qualified"/>
+          <xs:element name="internalUserBlockedFromLoginUntil" type="xs:long" form="qualified"/>
+          <xs:element name="internalLastSuccesssulLogin" type="xs:long" form="qualified"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -7,9 +7,9 @@
         <sec-view a-hint="{{'User_name' | translate}}"
                   a-hint-description="InOrderPayment"
                   a-star="false"
-                  sec-model="orderPaymenLogin.loginUser"
+                  sec-model="orderPaymentLogin.loginUser"
                   sec-require="mainCtrl.getRequire('User_name')"
-                  sec-disable-validation="true" >
+                   >
         </sec-view>
 
         <!--sec-pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{0,12})" pattern-error-attr="Use_up_to_12_characters_Include_at_least_one_letter_and_one_number"-->
@@ -18,15 +18,16 @@
                   a-hint-description="InOrderPayment"
                   a-star="false"
                   a-type="password"
-                  sec-model="orderPaymenLogin.loginPassword"
-                  sec-disable-validation="true" >
+                  sec-model="orderPaymentLogin.loginPassword"
+                  sec-require="mainCtrl.getRequire('Password')"
+                   >
         </sec-view>
 
         <sec-view a-hint="{{'Email' | translate}}"
                   a-hint-description="InOrderPayment"
                   a-star="false"
                   ng-show="config.emailAddressInLogin"
-                  sec-model="orderPaymenLogin.email"
+                  sec-model="orderPaymentLogin.email"
                   sec-disable-validation="!config.emailAddressInLogin"
                   sec-require="mainCtrl.getRequire('Email')"
                   sec-pattern="mainCtrl.getPattern('Email')">
@@ -39,9 +40,15 @@
 
         <br />
 
+
         <sec-sender class="roboto-medium"
                     a-value="{{'LOGIN' | translate}}"
-                    sec-send="orderPaymenLogin_signIn()"></sec-sender>
+                    sec-send="signIn(orderPaymentLogin)"></sec-sender>
+        <!--D37018- Changing target signIn function from 'userNotLoginCtrl.orderPaymentLogin_signIn' to directly go 'loginModal.signIn'-->
+
+
+
+
 
         <br />
 

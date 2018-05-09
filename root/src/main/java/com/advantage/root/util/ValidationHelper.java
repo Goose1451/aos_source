@@ -26,7 +26,7 @@ public class ValidationHelper {
      * RegEx to match a full-name with optional characters: ".'-". <br/>
      * e.g. James T. Kirk, Walter O'Brian, Bat-Sheva
      */
-    private static final String FULL_NAME_PATTERN = "^[A-Za-z0-9.'_-]{2,30}$";        // old value "^[\\p{L} .'-]+$"
+    private static final String FULL_NAME_PATTERN = "^[\\p{Blank}A-Za-z0-9.'_-]{2,30}$";        // old value "^[\\p{L} .'-]+$"
 
     private static final String MASTER_CREDIT_CVV_NUMBER_PATTERN = "([0-9]{3})";
 
@@ -40,8 +40,8 @@ public class ValidationHelper {
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
             "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-    //  Contain 3-15 characters of: Digits 0-9, UPPER case (A-Z), lower case (a-z), underscore (_), dot (.) and hyphen (-)
-    private static final String LOGIN_USER_NAME_PATTERN = "^[A-Za-z0-9_.-]{3,15}$";
+    //  Contain 5-15 characters of: Digits 0-9, UPPER case (A-Z), lower case (a-z), underscore (_), dot (.) and hyphen (-)
+    private static final String LOGIN_USER_NAME_PATTERN = "^[A-Za-z0-9_.-]{5,15}$";
 
     /**
      * <ul><code>Password</code> must be compliant with <b>AOS policy</b></ul>:

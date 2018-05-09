@@ -137,6 +137,9 @@ define(['./module'], function (controllers) {
                     if (response.success) {
                         $location.path('myAccount');
                     }
+                    if (!response.success) {
+                        $("#safePayDetailErrorLabel").html(response.reason);
+                    }
                     else {
                         $timeout(function () {
                             s.accountDetailsAnswer = {message: '', class: 'invalid'}

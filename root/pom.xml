@@ -24,7 +24,7 @@
                                     <id>exec-npm-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>npm</executable>
+                                        <executable>npm.cmd</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>
@@ -38,7 +38,7 @@
                                     <id>exec-bower-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>bower</executable>
+                                        <executable>bower.cmd</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>
@@ -52,7 +52,7 @@
                                     <id>exec-grunt</id>
                                     <phase>process-resources</phase>
                                     <configuration>
-                                        <executable>grunt</executable>
+                                        <executable>grunt.cmd</executable>
                                         <workingDirectory>src/main/webapp</workingDirectory>
                                     </configuration>
                                     <goals>
@@ -93,7 +93,7 @@
                                     <id>exec-npm-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>npm</executable>
+                                        <executable>npm.cmd</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>
@@ -107,7 +107,7 @@
                                     <id>exec-bower-install</id>
                                     <phase>generate-sources</phase>
                                     <configuration>
-                                        <executable>bower</executable>
+                                        <executable>bower.cmd</executable>
                                         <arguments>
                                             <argument>install</argument>
                                         </arguments>
@@ -121,7 +121,7 @@
                                     <id>exec-grunt</id>
                                     <phase>process-resources</phase>
                                     <configuration>
-                                        <executable>grunt</executable>
+                                        <executable>grunt.cmd</executable>
                                         <workingDirectory>src/main/webapp</workingDirectory>
                                         <arguments>
                                             <argument>dev</argument>

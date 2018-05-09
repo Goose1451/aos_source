@@ -1,5 +1,7 @@
 package com.advantage.accountsoap;
 
+import com.advantage.accountsoap.dto.account.GetAccountFieldsRequest;
+import com.advantage.accountsoap.dto.account.GetAccountFieldsResponse;
 import com.advantage.accountsoap.config.WebServiceConfig;
 import com.advantage.accountsoap.dto.IAdminRequest;
 import com.advantage.accountsoap.dto.IUserRequest;
@@ -500,6 +502,16 @@ public class AccountserviceEndpoint {
         AccountStatusResponse response = accountService.removePaymentPreferences(request.getAccountId(), request.getId());
 
         return new DeletePaymentPreferenceResponse(response);
+    }
+
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "GetAccountFieldsRequest")
+    @ResponsePayload
+    public GetAccountFieldsResponse getAccountFields(@RequestPayload GetAccountFieldsRequest request){
+        logger.debug(AccountserviceEndpoint.class.getName() + ".getAccountFields(..)");
+        //  TODO-Benny: Verify that .NET and mobile version support this authorization
+        //authorizeAsUser(request);
+        GetAccountFieldsResponse response = new GetAccountFieldsResponse();
+        return response;
     }
 
     //endregion

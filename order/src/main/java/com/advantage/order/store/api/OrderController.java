@@ -29,6 +29,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
@@ -52,6 +53,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -777,6 +779,27 @@ public class OrderController {
             return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         else
             return new ResponseEntity<String>("FAILED", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @RequestMapping(value = "/orders/fields", method = RequestMethod.GET)
+    @ApiOperation(value = "Get order fields")
+    @ApiResponses(value = {
+            @ApiResponse(code = 500, message = "Internal server error", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    public ResponseEntity<HistoryOrderHeaderDto> orderFields(HttpServletRequest request,
+                                                 HttpServletResponse response) {
+        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
+        if (cefData != null) {
+            logger.trace("cefDataId=" + cefData.toString());
+        } else {
+            logger.warn("cefData is null");
+        }
+
+        HistoryOrderProductDto historyOrderProductDto = new HistoryOrderProductDto(0L, "0", "0", 0, 0, 0L);
+        LinkedList<HistoryOrderProductDto> products = new LinkedList<HistoryOrderProductDto>();
+        products.add(historyOrderProductDto);
+        HistoryOrderHeaderDto hohd = new HistoryOrderHeaderDto(0L, 0L, 0, "0", 0, 0, "0", new HistoryOrderAccountDto(  0L,  "0", "0"), products);
+
+        return new ResponseEntity<HistoryOrderHeaderDto>(hohd, HttpStatus.OK);
     }
 
     boolean checkServicesStatus(){

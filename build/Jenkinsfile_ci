@@ -247,7 +247,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
 
   env.Resumed = "false"/opt/jenkins-slave/workspace/demoapp_folder/demoapp_build_pipeline
 
-  if(env.aos_build_accountservice_war == "true" && (env.aos_build_both_wars == "false" && env.aos_build_main_wars == "false" && env.aos_force_build_wars == "false)){
+  if(env.aos_build_accountservice_war == "true" && (env.aos_build_both_wars == "false" && env.aos_build_main_wars == "false" && env.aos_force_build_wars == "false")){
        println("downloading latest wars.zip from Nexus")
        sh"""
        cd mkdir root/target && cd root/target

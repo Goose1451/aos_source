@@ -41,7 +41,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   env.aos_build_accountservice_war=false
   env.aos_build_both_wars=false
   env.aos_copy_Nimbus_files=false
-  commits = sh(returnStdout: true, script: 'git show --pretty="format:" --name-only | awk -F/ \'{print $1}\'').trim()
+  commits = sh(returnStdout: true, script: 'git show -2 --pretty="format:" --name-only | awk -F/ \'{print $1}\'').trim()
 
   println(commits)
     

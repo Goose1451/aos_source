@@ -19,6 +19,7 @@ import javax.inject.Inject;
         @PropertySource(Constants.FILE_PROPERTIES_GLOBAL)})
 public class AccountserviceApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(AccountserviceApplication.class, args);
     }

@@ -226,7 +226,8 @@ var english = {
     'Use_exactly' : 'Use exactly',
     'Year': 'Year',
     'Month': 'Month',
-    'Valid_CCV_number_required': 'Valid CCV number required',
+    //'Valid_CCV_number_required': 'Valid CCV number required',
+    'Valid_CCV_number_required': 'Use exactly 3 digits',
 
     'AgreeAgreementRequire': 'I agree to the www.AdvantageOnlineShopping.com Conditions of Use and Privacy Notice',
 

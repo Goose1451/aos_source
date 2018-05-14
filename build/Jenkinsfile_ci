@@ -245,7 +245,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
  currentBuild.result = 'SUCCESS'
 }else{
 
-  env.Resumed = "false"/opt/jenkins-slave/workspace/demoapp_folder/demoapp_build_pipeline
+  env.Resumed = "false"
   echo "check if accountservice build"
   if(env.aos_build_accountservice_war == "true" && (env.aos_build_both_wars == "false" && env.aos_build_main_wars == "false" && env.aos_force_build_wars == "false")){
        echo "downloading latest wars.zip from Nexus"

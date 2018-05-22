@@ -34,9 +34,10 @@
                 <h3 class="roboto-medium" translate="CATEGORIES"
                     data-ng-mouseenter="searchByCategoryId(null, '')">
                 </h3>
-                <a href="#/search/{{categoryFilter}}?viewAll={{autoCompleteValue}}">
+                <a href="#/search/{{categoryFilter}}?viewAll={{autoCompleteValue}}"
+                   data-ng-repeat="result in autoCompleteResult">
                     <label class="roboto-light"
-                           data-ng-repeat="result in autoCompleteResult"
+
                            data-ng-mouseenter="searchByCategoryId(result.categoryId, result.categoryName)">
                         {{result.categoryName | lowercase}}
                     </label>

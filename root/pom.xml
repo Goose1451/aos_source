@@ -27,7 +27,9 @@
                                         <executable>npm.cmd</executable>
                                         <arguments>
                                             <argument>install</argument>
-					<argument>--loglevel=verbose</argument>
+					<!-- use this argument to change npm log level
+					     <argument>--loglevel=verbose</argument>
+					-->
                                         </arguments>
                                         <workingDirectory>src/main/webapp</workingDirectory>
                                     </configuration>

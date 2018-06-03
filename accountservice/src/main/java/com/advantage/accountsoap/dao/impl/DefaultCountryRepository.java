@@ -9,6 +9,7 @@ import com.advantage.accountsoap.util.JPAQueryHelper;
 import com.advantage.accountsoap.util.fs.FileSystemHelper;
 import com.advantage.common.Constants;
 import com.advantage.root.util.JsonHelper;
+import com.advantage.root.util.RestApiHelper;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -210,14 +211,14 @@ public class DefaultCountryRepository extends AbstractRepository implements Coun
      */
     @Override
     public List<Country> getAllCountries() {
-        int configSlowDBCall = 0;
+        String configSlowDBCall = RestApiHelper.getDemoAppConfigParameterValue("DB_call_delay");;
         List<Country> countries = new ArrayList<>();
 
-        if (configSlowDBCall == 0) {
+        if (configSlowDBCall.equals("0")) {
             countries = entityManager.createNamedQuery(Country.QUERY_GET_ALL, Country.class)
                     .getResultList();
         } else {
-            String jsonCountries = this.getAllCountriesWithSleep(configSlowDBCall)
+            String jsonCountries = this.getAllCountriesWithSleep(Integer.parseInt(configSlowDBCall))
                     .replaceAll("\\t", "")
                     .replaceAll("\\n", "");
 

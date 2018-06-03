@@ -23,14 +23,14 @@ BEGIN
 
       -- exit when no more row to fetch
       EXIT WHEN NOT FOUND;
- 
+
       -- build the output
       countries := countries || '{ "id": ' || country_rec.country_id || ', "name": "' || country_rec.name || '", "isoName": "' || country_rec.iso_name || '", "phonePrefix": ' || country_rec.phone_prefix || ' }, ';
       
    END LOOP;
 
    -- Remove last comma and close JSON array
-   countries := LEFT(countries, LENGTH(countries) - 3) || '] }';
+   countries := LEFT(countries, LENGTH(countries) - 3) || '} ] }';
    
    -- Close the cursor
    CLOSE countries_cur;

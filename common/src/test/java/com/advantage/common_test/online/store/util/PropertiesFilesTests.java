@@ -71,22 +71,22 @@ public class PropertiesFilesTests {
         validatePropertiesName(properties, Constants.FILE_PROPERTIES_INTERNAL);
     }
 
-    @Test
-    public void testPropertiesPorts() throws Exception {
-        String[] properties = {
-                "account.hibernate.db.url.port",
-                "catalog.hibernate.db.url.port",
-                "order.hibernate.db.url.port",
-                "account.soapservice.url.port",
-                "catalog.service.url.port",
-                "order.service.url.port",
-                "mastercredit.service.url.port",
-                "shipex.soapservice.url.port",
-                "safepay.service.url.port"
-        };
-        validatePropertiesAreNaturalNumber(properties);
-        validatePropertiesArePorts(properties);
-    }
+//    @Test
+//    public void testPropertiesPorts() throws Exception {
+//        String[] properties = {
+//                "account.hibernate.db.url.port",
+//                "catalog.hibernate.db.url.port",
+//                "order.hibernate.db.url.port",
+//                "account.soapservice.url.port",
+//                "catalog.service.url.port",
+//                "order.service.url.port",
+//                "mastercredit.service.url.port",
+//                "shipex.soapservice.url.port",
+//                "safepay.service.url.port"
+//        };
+//        validatePropertiesAreNaturalNumber(properties);
+//        validatePropertiesArePorts(properties);
+//    }
 
     @Test
     public void testGlobalProperties() throws Exception {

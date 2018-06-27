@@ -159,10 +159,7 @@
                 <a href="javascript:void(0)" role="link" class="img" data-ng-click="login('loginMiniTitle')"
                    data-ng-mouseenter="miniTitleIn('loginMiniTitle')"
                    data-ng-mouseleave="miniTitleOut('loginMiniTitle')">
-                    <span data-ng-show="userCookie.response" class="hi-user containMiniTitle">
-                        {{userCookie.name}}
-                    </span>
-
+                    <span data-ng-show="userCookie.response" class="hi-user containMiniTitle">{{userCookie.name}}</span>
                     <div icon-user-svg></div>
                     <div class="mini-title" id="loginMiniTitle">
                         <label class="option roboto-medium" translate="My_account" ng-click="accountSection()" href="javascript:void(0)" role="link"></label>

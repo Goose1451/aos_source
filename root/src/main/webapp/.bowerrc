@@ -1,5 +1,6 @@
 {
   "proxy" : "http://proxy.il.hpecorp.net:8080",
   "https-proxy" : "http://proxy.il.hpecorp.net:8080",
-  "directory": "vendor"
+  "directory": "vendor",
+  "registry": "https://registry.bower.io"
 }

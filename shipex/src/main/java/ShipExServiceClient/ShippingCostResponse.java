@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -19,10 +18,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}PlaceOrderTransactionType"/>
+ *         &lt;element name="SETransactionType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Code" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Reason" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="TransactionReference" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="Amount" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="Currency" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="TransactionDate" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -37,21 +37,23 @@ import javax.xml.bind.annotation.XmlType;
     "seTransactionType",
     "code",
     "reason",
-    "transactionReference",
+    "amount",
+    "currency",
     "transactionDate"
 })
-@XmlRootElement(name = "PlaceShippingOrderResponse", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
-public class PlaceShippingOrderResponse {
+@XmlRootElement(name = "ShippingCostResponse", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
+public class ShippingCostResponse {
 
     @XmlElement(name = "SETransactionType", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
-    @XmlSchemaType(name = "string")
-    protected PlaceOrderTransactionType seTransactionType;
+    protected String seTransactionType;
     @XmlElement(name = "Code", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String code;
     @XmlElement(name = "Reason", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String reason;
-    @XmlElement(name = "TransactionReference", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
-    protected String transactionReference;
+    @XmlElement(name = "Amount", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
+    protected String amount;
+    @XmlElement(name = "Currency", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
+    protected String currency;
     @XmlElement(name = "TransactionDate", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String transactionDate;
 
@@ -60,10 +62,10 @@ public class PlaceShippingOrderResponse {
      * 
      * @return
      *     possible object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link String }
      *     
      */
-    public PlaceOrderTransactionType getSETransactionType() {
+    public String getSETransactionType() {
         return seTransactionType;
     }
 
@@ -72,10 +74,10 @@ public class PlaceShippingOrderResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link String }
      *     
      */
-    public void setSETransactionType(PlaceOrderTransactionType value) {
+    public void setSETransactionType(String value) {
         this.seTransactionType = value;
     }
 
@@ -128,27 +130,51 @@ public class PlaceShippingOrderResponse {
     }
 
     /**
-     * Gets the value of the transactionReference property.
+     * Gets the value of the amount property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getTransactionReference() {
-        return transactionReference;
+    public String getAmount() {
+        return amount;
     }
 
     /**
-     * Sets the value of the transactionReference property.
+     * Sets the value of the amount property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setTransactionReference(String value) {
-        this.transactionReference = value;
+    public void setAmount(String value) {
+        this.amount = value;
+    }
+
+    /**
+     * Gets the value of the currency property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /**
+     * Sets the value of the currency property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCurrency(String value) {
+        this.currency = value;
     }
 
     /**

@@ -107,7 +107,7 @@ public class OrderManagementService {
         ShippingCostResponse costResponse = null;
 
         if (costRequest == null) {
-            return generateShippingCostResponseError(costRequest.getSETransactionType(), ERROR_SHIPEX_GET_SHIPPING_COST_REQUEST_IS_EMPTY);
+            return generateShippingCostResponseError(costRequest.getSETransactionType().value(), ERROR_SHIPEX_GET_SHIPPING_COST_REQUEST_IS_EMPTY);
         }
 
         URL urlWsdlLocation = Url_resources.getUrlSoapShipEx();
@@ -124,16 +124,16 @@ public class OrderManagementService {
             if (logger.isInfoEnabled()) {
                 logger.info("Response returned \'" + costResponse.getCode() + "\', Reason: \'" + costResponse.getReason() + "\'");
             }
-            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType(), "Shipping Express: getShippingCost() --> Response returned \'" + costResponse.getCode() + "\', Reason: \'" + costResponse.getReason() + "\'");
+            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType().value(), "Shipping Express: getShippingCost() --> Response returned \'" + costResponse.getCode() + "\', Reason: \'" + costResponse.getReason() + "\'");
         } else if (costResponse.getAmount().isEmpty()) {
             logger.info(ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_EMPTY_AMOUNT);
-            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_EMPTY_AMOUNT);
+            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType().value(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_EMPTY_AMOUNT);
         } else if (costResponse.getCurrency().isEmpty()) {
             logger.info(ERROR_SHIPEX_RESPONSE_FAILURE_CURRENCY_IS_EMPTY);
-            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_CURRENCY_IS_EMPTY);
-        } else if (!costResponse.getSETransactionType().equalsIgnoreCase(costRequest.getSETransactionType())) {
+            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType().value(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_CURRENCY_IS_EMPTY);
+        } else if (!costResponse.getSETransactionType().value().equalsIgnoreCase(costRequest.getSETransactionType().value())) {
             logger.info(ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
-            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
+            costResponse = generateShippingCostResponseError(costRequest.getSETransactionType().value(), "Shipping Express: getShippingCost() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
         } else {
             costResponse.setReason(ResponseEnum.OK.getStringCode());
         }
@@ -145,7 +145,7 @@ public class OrderManagementService {
 
         ShippingCostResponse costResponse = new ShippingCostResponse();
 
-        costResponse.setSETransactionType(transactionType);
+        costResponse.setSETransactionType(ShippingCostTransactionType.SHIPPING_COST);
         costResponse.setReason(errorText);
         costResponse.setAmount("0");
         costResponse.setCode(ResponseEnum.ERROR.getStringCode());
@@ -297,7 +297,7 @@ public class OrderManagementService {
             orderRequest.setOrderNumber(Long.toString(orderNumber));
             orderRequest.setSECustomerName(shippingInfo.getCustomerName());
             orderRequest.setSECustomerPhone(shippingInfo.getCustomerPhone());
-            orderRequest.setSETransactionType(Constants.TRANSACTION_TYPE_PLACE_SHIPPING_ORDER);
+            orderRequest.setSETransactionType(PlaceOrderTransactionType.PLACE_SHIPPING_ORDER);
 
             PlaceShippingOrderResponse orderResponse = placeShippingOrder(orderRequest);
 
@@ -600,7 +600,7 @@ public class OrderManagementService {
         PlaceShippingOrderResponse orderResponse = null;
 
         if (orderRequest == null) {
-            orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping order request is empty");
+            orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping order request is empty");
         }
 
         if (orderResponse == null) {
@@ -616,19 +616,19 @@ public class OrderManagementService {
 
             if (!orderResponse.getCode().equalsIgnoreCase(ResponseEnum.OK.getStringCode())) {
                 logger.info("Response returned \'" + orderResponse.getCode() + "\', Reason: \'" + orderResponse.getReason() + "\'");
-                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping Express: placeShippingOrder() --> Response returned '" + orderResponse.getCode() + "\', Reason: \'" + orderResponse.getReason() + "\'");
+                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping Express: placeShippingOrder() --> Response returned '" + orderResponse.getCode() + "\', Reason: \'" + orderResponse.getReason() + "\'");
             } else if (orderResponse.getTransactionDate().isEmpty()) {
                 logger.warn(ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_DATE_IS_EMPTY);
-                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_DATE_IS_EMPTY);
+                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_DATE_IS_EMPTY);
             } else if (orderResponse.getTransactionReference().isEmpty()) {
                 logger.warn(ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_REFERENCE_IS_EMPTY);
-                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_REFERENCE_IS_EMPTY);
+                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_REFERENCE_IS_EMPTY);
             } else if (orderResponse.getTransactionReference().length() != 10) {
                 logger.warn(ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_TRANSACTION_REFERENCE_LENGTH);
-                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_TRANSACTION_REFERENCE_LENGTH);
-            } else if (!orderResponse.getSETransactionType().equalsIgnoreCase(orderRequest.getSETransactionType())) {
+                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_INVALID_TRANSACTION_REFERENCE_LENGTH);
+            } else if (!orderResponse.getSETransactionType().value().equalsIgnoreCase(orderRequest.getSETransactionType().value())) {
                 logger.warn(ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
-                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
+                orderResponse = generatePlaceShippingOrderResponseError(orderRequest.getSETransactionType().value(), "Shipping Express: placeShippingOrder() --> " + ERROR_SHIPEX_RESPONSE_FAILURE_TRANSACTION_TYPE_MISMATCH);
             }
         }
         return orderResponse;
@@ -649,7 +649,7 @@ public class OrderManagementService {
 
         PlaceShippingOrderResponse orderResponse = new PlaceShippingOrderResponse();
 
-        orderResponse.setSETransactionType(transactionType);
+        orderResponse.setSETransactionType(PlaceOrderTransactionType.PLACE_SHIPPING_ORDER);
         orderResponse.setCode(ResponseEnum.ERROR.getStringCode());
         orderResponse.setReason(errorText);
         orderResponse.setTransactionDate("");
@@ -826,7 +826,7 @@ public class OrderManagementService {
 
         //  region Generate_memory_leak
         String stringValue = RestApiHelper.getDemoAppConfigParameterValue("Generate_memory_leak");
-        if ((stringValue != null) && (!stringValue.isEmpty()) && (stringValue.equals("0"))) {
+        if ((stringValue != null) && (!stringValue.isEmpty()) && (!stringValue.equals("0"))) {
             Feature1779OrdersHistory ordersHistory = new Feature1779OrdersHistory(Integer.valueOf(stringValue).intValue());
 
             ordersHistory.generateMemoryLeak(Integer.valueOf(stringValue).intValue());

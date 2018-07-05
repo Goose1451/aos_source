@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -18,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SETransactionType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}ShippingCostTransactionType"/>
  *         &lt;element name="SEAddress" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEAddress"/>
  *         &lt;element name="SENumberOfProducts" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="SECustomerName" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -39,18 +40,19 @@ import javax.xml.bind.annotation.XmlType;
     "seCustomerName",
     "seCustomerPhone"
 })
-@XmlRootElement(name = "ShippingCostRequest")
+@XmlRootElement(name = "ShippingCostRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
 public class ShippingCostRequest {
 
-    @XmlElement(name = "SETransactionType", required = true)
-    protected String seTransactionType;
-    @XmlElement(name = "SEAddress", required = true)
+    @XmlElement(name = "SETransactionType", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
+    @XmlSchemaType(name = "string")
+    protected ShippingCostTransactionType seTransactionType;
+    @XmlElement(name = "SEAddress", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected SEAddress seAddress;
-    @XmlElement(name = "SENumberOfProducts")
+    @XmlElement(name = "SENumberOfProducts", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
     protected int seNumberOfProducts;
-    @XmlElement(name = "SECustomerName", required = true)
+    @XmlElement(name = "SECustomerName", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String seCustomerName;
-    @XmlElement(name = "SECustomerPhone", required = true)
+    @XmlElement(name = "SECustomerPhone", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String seCustomerPhone;
 
     /**
@@ -58,10 +60,10 @@ public class ShippingCostRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ShippingCostTransactionType }
      *     
      */
-    public String getSETransactionType() {
+    public ShippingCostTransactionType getSETransactionType() {
         return seTransactionType;
     }
 
@@ -70,10 +72,10 @@ public class ShippingCostRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ShippingCostTransactionType }
      *     
      */
-    public void setSETransactionType(String value) {
+    public void setSETransactionType(ShippingCostTransactionType value) {
         this.seTransactionType = value;
     }
 

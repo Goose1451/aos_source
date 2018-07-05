@@ -6,6 +6,7 @@ import ShippingExpress.model.ShippingExpressService;
 import ShippingExpress.util.ArgumentValidationHelper;
 import com.advantage.common.Constants;
 import com.advantage.common.enums.ResponseEnum;
+import https.www_advantageonlinebanking_com.shipex.ShippingCostTransactionType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -16,7 +17,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class ShipExEndpoint {
     final static Logger logger = Logger.getLogger(ShipExEndpoint.class);
-    public static final String TRANSACTION_TYPE_SHIPPING_COST = "SHIPPINGCOST";
+    public static final String TRANSACTION_TYPE_SHIPPING_COST = "ShippingCost";
     public static final String TRANSACTION_TYPE_PLACE_SHIPPING_ORDER = "PlaceShippingOrder";
     private ShippingExpressService shippingService;
 
@@ -38,7 +39,7 @@ public class ShipExEndpoint {
         ShippingCostResponse response = new ShippingCostResponse();
         String validation = ArgumentValidationHelper.shippingCostRequestValidation(request);
         logShippingCostRequest(request);
-        response.setSETransactionType(Constants.TRANSACTION_TYPE_SHIPPING_COST);
+        response.setSETransactionType(ShippingCostTransactionType.SHIPPING_COST.value());
         if (!validation.equalsIgnoreCase(ResponseEnum.OK.getStringCode())) {
             response.setCode(ResponseEnum.ERROR.getStringCode());
             response.setReason(validation);

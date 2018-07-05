@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -19,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}PlaceOrderTransactionType"/>
+ *         &lt;element name="SETransactionType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="SEAddress" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEAddress"/>
  *         &lt;element name="SEProducts" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEProducts" form="qualified"/>
  *         &lt;element name="OrderNumber" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -46,8 +45,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PlaceShippingOrderRequest {
 
     @XmlElement(name = "SETransactionType", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
-    @XmlSchemaType(name = "string")
-    protected PlaceOrderTransactionType seTransactionType;
+    protected String seTransactionType;
     @XmlElement(name = "SEAddress", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected SEAddress seAddress;
     @XmlElement(name = "SEProducts", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
@@ -64,10 +62,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @return
      *     possible object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link String }
      *     
      */
-    public PlaceOrderTransactionType getSETransactionType() {
+    public String getSETransactionType() {
         return seTransactionType;
     }
 
@@ -76,10 +74,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link String }
      *     
      */
-    public void setSETransactionType(PlaceOrderTransactionType value) {
+    public void setSETransactionType(String value) {
         this.seTransactionType = value;
     }
 

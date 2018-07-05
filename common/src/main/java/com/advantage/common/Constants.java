@@ -34,7 +34,7 @@ public class Constants {
     public final static String ENV_NUMBER_OF_LOGIN_TRIES_BEFORE_BLOCKING = "number.of.login.tries.before.blocking";
     public final static String ENV_PRODUCT_INSTOCK_DEFAULT_VALUE = "product.inStock.default.value";
 
-    public static final String TRANSACTION_TYPE_SHIPPING_COST = "SHIPPINGCOST";
+    public static final String TRANSACTION_TYPE_SHIPPING_COST = "ShippingCost";
     public static final String TRANSACTION_TYPE_PLACE_SHIPPING_ORDER = "PlaceShippingOrder";
 
     public static final String PROPERTY_IMAGE_MANAGEMENT_REPOSITORY = "advantage.imageManagement.repository";

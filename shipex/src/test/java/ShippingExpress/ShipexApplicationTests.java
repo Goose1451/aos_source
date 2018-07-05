@@ -1,5 +1,7 @@
 package ShippingExpress;
 
+import ShipExServiceClient.ShippingCostTransactionType;
+import ShipExServiceClient.TransactionType;
 import ShippingExpress.WsModel.*;
 import ShippingExpress.model.ShippingExpressService;
 import ShippingExpress.util.ArgumentValidationHelper;
@@ -40,14 +42,14 @@ public class ShipexApplicationTests {
         address.setPostalCode("123123");
         address.setState("state");
         
-        costRequest.setSETransactionType(Constants.TRANSACTION_TYPE_SHIPPING_COST);
+        costRequest.setSETransactionType(ShippingCostTransactionType.SHIPPING_COST.value());
         costRequest.setSEAddress(address);
         costRequest.setSENumberOfProducts(5);
         costRequest.setSECustomerPhone("+1231234567");
         costRequest.setSECustomerName("name");
 
         orderRequest.setSEAddress(address);
-        orderRequest.setSETransactionType(Constants.TRANSACTION_TYPE_PLACE_SHIPPING_ORDER);
+        orderRequest.setSETransactionType(TransactionType.PLACE_SHIPPING_ORDER.value());
         orderRequest.setOrderNumber("1234567890");
         orderRequest.setSECustomerPhone("+1231234567");
         orderRequest.setSECustomerName("name");

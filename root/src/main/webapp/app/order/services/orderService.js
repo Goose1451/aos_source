@@ -211,7 +211,7 @@ define(['./module'], function (services) {
                         "secustomerName": user.firstName + " " + user.lastName,
                         "secustomerPhone": user.phoneNumber,
                         "senumberOfProducts": $filter('productsCartCount')(cart),
-                        "setransactionType": "SHIPPINGCOST",
+                        "setransactionType": "SHIPPING_COST",
                         "sessionId" : $rootScope.orderSessionId ? $rootScope.orderSessionId : null
                     };
 

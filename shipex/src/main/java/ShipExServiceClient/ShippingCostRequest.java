@@ -19,10 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}PlaceOrderTransactionType"/>
+ *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}TransactionType"/>
  *         &lt;element name="SEAddress" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEAddress"/>
- *         &lt;element name="SEProducts" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEProducts" form="qualified"/>
- *         &lt;element name="OrderNumber" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SENumberOfProducts" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="SECustomerName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="SECustomerPhone" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
@@ -37,23 +36,20 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "seTransactionType",
     "seAddress",
-    "seProducts",
-    "orderNumber",
+    "seNumberOfProducts",
     "seCustomerName",
     "seCustomerPhone"
 })
-@XmlRootElement(name = "PlaceShippingOrderRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
-public class PlaceShippingOrderRequest {
+@XmlRootElement(name = "ShippingCostRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
+public class ShippingCostRequest {
 
     @XmlElement(name = "SETransactionType", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     @XmlSchemaType(name = "string")
-    protected PlaceOrderTransactionType seTransactionType;
+    protected TransactionType seTransactionType;
     @XmlElement(name = "SEAddress", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected SEAddress seAddress;
-    @XmlElement(name = "SEProducts", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
-    protected SEProducts seProducts;
-    @XmlElement(name = "OrderNumber", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
-    protected String orderNumber;
+    @XmlElement(name = "SENumberOfProducts", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
+    protected int seNumberOfProducts;
     @XmlElement(name = "SECustomerName", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String seCustomerName;
     @XmlElement(name = "SECustomerPhone", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
@@ -64,10 +60,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @return
      *     possible object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link TransactionType }
      *     
      */
-    public PlaceOrderTransactionType getSETransactionType() {
+    public TransactionType getSETransactionType() {
         return seTransactionType;
     }
 
@@ -76,10 +72,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link PlaceOrderTransactionType }
+     *     {@link TransactionType }
      *     
      */
-    public void setSETransactionType(PlaceOrderTransactionType value) {
+    public void setSETransactionType(TransactionType value) {
         this.seTransactionType = value;
     }
 
@@ -108,51 +104,19 @@ public class PlaceShippingOrderRequest {
     }
 
     /**
-     * Gets the value of the seProducts property.
+     * Gets the value of the seNumberOfProducts property.
      * 
-     * @return
-     *     possible object is
-     *     {@link SEProducts }
-     *     
      */
-    public SEProducts getSEProducts() {
-        return seProducts;
+    public int getSENumberOfProducts() {
+        return seNumberOfProducts;
     }
 
     /**
-     * Sets the value of the seProducts property.
+     * Sets the value of the seNumberOfProducts property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link SEProducts }
-     *     
      */
-    public void setSEProducts(SEProducts value) {
-        this.seProducts = value;
-    }
-
-    /**
-     * Gets the value of the orderNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    /**
-     * Sets the value of the orderNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrderNumber(String value) {
-        this.orderNumber = value;
+    public void setSENumberOfProducts(int value) {
+        this.seNumberOfProducts = value;
     }
 
     /**

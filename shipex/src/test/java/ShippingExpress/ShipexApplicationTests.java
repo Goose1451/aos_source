@@ -1,12 +1,12 @@
 package ShippingExpress;
 
+import ShipExServiceClient.ShippingCostTransactionType;
+import ShipExServiceClient.TransactionType;
 import ShippingExpress.WsModel.*;
 import ShippingExpress.model.ShippingExpressService;
 import ShippingExpress.util.ArgumentValidationHelper;
 import com.advantage.common.Constants;
 import com.advantage.common.enums.ResponseEnum;
-import https.www_advantageonlinebanking_com.shipex.ShippingCostTransactionType;
-import https.www_advantageonlinebanking_com.shipex.TransactionType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

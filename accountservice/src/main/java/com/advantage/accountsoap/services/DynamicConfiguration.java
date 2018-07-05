@@ -4,7 +4,6 @@ import com.advantage.accountsoap.config.AccountConfiguration;
 import com.advantage.common.Constants;
 import com.advantage.common.Url_resources;
 import com.advantage.root.util.JsonHelper;
-import com.google.common.base.Throwables;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -88,7 +87,7 @@ public class DynamicConfiguration {
 
     private void readConfiguration() {
         if (accountConfiguration.getAllowUserConfiguration().equalsIgnoreCase("yes")) {
-            delayLength = requestFromCatalogDelayCartResponse();
+            delayLength = requestFromConfigurationDelayTimeResponse();
             if (delayLength > 0) {
                 numberOfSessionsToDelay = requestFromCatalogNumberOfSessionsToDelay();
             } else {
@@ -109,7 +108,7 @@ public class DynamicConfiguration {
         }
     }
 
-    private int requestFromCatalogDelayCartResponse() {
+    private int requestFromConfigurationDelayTimeResponse() {
         String delay = getCatalogConfigParameter(XML_SLA_ADD_DELAY_TIME_PARAMNAME);
         if (delay == null) {
             return DEFAULT_DELAY;

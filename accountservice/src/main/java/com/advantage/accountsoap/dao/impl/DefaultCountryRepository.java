@@ -211,7 +211,7 @@ public class DefaultCountryRepository extends AbstractRepository implements Coun
      */
     @Override
     public List<Country> getAllCountries() {
-        String configSlowDBCall = RestApiHelper.getDemoAppConfigParameterValue("DB_call_delay");;
+        String configSlowDBCall = RestApiHelper.getDemoAppConfigParameterValue("DB_call_delay");
         List<Country> countries = new ArrayList<>();
 
         if (configSlowDBCall.equals("0")) {

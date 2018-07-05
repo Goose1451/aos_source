@@ -8,11 +8,17 @@ import com.advantage.order.store.model.ShoppingCart;
 import com.advantage.order.store.model.ShoppingCartPK;
 import com.advantage.root.util.ArgumentValidationHelper;
 
+import com.advantage.order.store.services.*;
+
+import com.advantage.root.util.RestApiHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+
+import org.apache.log4j.Logger;
 
 /**
  * Order services - Data Manager
@@ -22,6 +28,8 @@ import java.util.*;
 @Qualifier("shoppingCartRepository")
 @Repository
 public class DefaultShoppingCartRepository extends AbstractRepository implements ShoppingCartRepository {
+
+    private static final Logger logger = Logger.getLogger(DefaultShoppingCartRepository.class);
 
     private static String NOT_FOUND = "NOT FOUND";
 
@@ -98,6 +106,17 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
 
         if (shoppingCart.getLastUpdate() == 0) {
             shoppingCart.setLastUpdate(Calendar.getInstance().getTime().getTime());
+        }
+        String delayRequest = RestApiHelper.getDemoAppConfigParameterValue("SLA_add_addToCart_delay_time");
+        int delayRequestTime = Integer.parseInt(delayRequest);
+
+        if(delayRequestTime>0){
+
+            try {
+                Thread.sleep(delayRequestTime * 1000);
+            } catch (InterruptedException e) {
+                logger.fatal(e);
+            }
         }
 
         entityManager.persist(shoppingCart);

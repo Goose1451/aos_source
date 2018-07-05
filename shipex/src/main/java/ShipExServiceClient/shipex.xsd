@@ -1,0 +1,117 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="https://www.AdvantageOnlineBanking.com/ShipEx/"
+           xmlns:sx="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://www.AdvantageOnlineBanking.com/ShipEx/" elementFormDefault="qualified">
+
+    <xs:complexType name="product">
+        <xs:sequence>
+            <xs:element name="productName" type="xs:string" minOccurs="0"/>
+            <xs:element name="productQuantity" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SEProducts">
+        <xs:sequence>
+            <xs:element name="product" type="tns:product" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SEAddress">
+        <xs:sequence>
+            <sx:element name="City" type="xs:string"/>
+            <sx:element name="Country" type="xs:string"/>
+            <sx:element name="State" type="xs:string"/>
+            <sx:element name="PostalCode" type="xs:string"/>
+            <xs:element name="AddressLine1" type="xs:string"/>
+            <xs:element name="AddressLine2" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="ShippingCostRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <sx:element name="SETransactionType" type="tns:TransactionType"/>
+                <sx:element name="SEAddress" type="tns:SEAddress"/>
+                <xs:element name="SENumberOfProducts" type="xs:int"/>
+                <xs:element name="SECustomerName" type="xs:string"/>
+                <xs:element name="SECustomerPhone" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetHealthCheckRequest">
+        <xs:complexType>
+            <xs:sequence>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetHealthCheckResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ShippingCostResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SETransactionType" type="xs:string"/>
+                <xs:element name="Code" type="xs:string"/>
+                <xs:element name="Reason" type="xs:string"/>
+                <xs:element name="Amount" type="xs:string"/>
+                <xs:element name="Currency" type="xs:string"/>
+                <xs:element name="TransactionDate" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="PlaceShippingOrderRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <sx:element name="SETransactionType" type="xs:string"/>
+                <sx:element name="SEAddress" type="tns:SEAddress"/>
+                <xs:element name="SEProducts" type="tns:SEProducts" form="qualified"/>
+                <xs:element name="OrderNumber" type="xs:string"/>
+                <xs:element name="SECustomerName" type="xs:string"/>
+                <xs:element name="SECustomerPhone" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="PlaceShippingOrderResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <sx:element name="SETransactionType" type="xs:string"/>
+                <xs:element name="Code" type="xs:string"/>
+                <xs:element name="Reason" type="xs:string"/>
+                <xs:element name="TransactionReference" type="xs:string"/>
+                <xs:element name="TransactionDate" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="TrackNumberRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="TrackNumberResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="track" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="TransactionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ShippingCost">
+            </xs:enumeration>
+            <xs:enumeration value="PlaceShippingOrder">
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

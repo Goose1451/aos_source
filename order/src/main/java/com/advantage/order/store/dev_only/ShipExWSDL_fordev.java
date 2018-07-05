@@ -41,7 +41,7 @@ public class ShipExWSDL_fordev {
         address.setState("Israel");
 
         costRequest.setSEAddress(address);
-        costRequest.setSETransactionType(Constants.TRANSACTION_TYPE_SHIPPING_COST);
+        costRequest.setSETransactionType(ShippingCostTransactionType.SHIPPING_COST);
         costRequest.setSECustomerName("Customer Full Name");
         costRequest.setSECustomerPhone("+972777654321");
         costRequest.setSENumberOfProducts(1);
@@ -69,7 +69,7 @@ public class ShipExWSDL_fordev {
             //  Failure - invalid currency (empty)
             System.out.println("Failure - invalid currency (empty)");
         }
-        else if (costResponse.getSETransactionType().equalsIgnoreCase(costRequest.getSETransactionType())) {
+        else if (costResponse.getSETransactionType().value().equalsIgnoreCase(costRequest.getSETransactionType().value())) {
             //  Failure - Transaction type mismatch
             System.out.println("Failure - Transaction type mismatch");
         }

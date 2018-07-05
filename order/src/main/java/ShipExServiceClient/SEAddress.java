@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SEAddress", propOrder = {
+@XmlType(name = "SEAddress", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", propOrder = {
     "city",
     "country",
     "state",
@@ -42,17 +42,17 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class SEAddress {
 
-    @XmlElement(name = "City", required = true)
+    @XmlElement(name = "City", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String city;
-    @XmlElement(name = "Country", required = true)
+    @XmlElement(name = "Country", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String country;
-    @XmlElement(name = "State", required = true)
+    @XmlElement(name = "State", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String state;
-    @XmlElement(name = "PostalCode", required = true)
+    @XmlElement(name = "PostalCode", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String postalCode;
-    @XmlElement(name = "AddressLine1", required = true)
+    @XmlElement(name = "AddressLine1", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String addressLine1;
-    @XmlElement(name = "AddressLine2", required = true)
+    @XmlElement(name = "AddressLine2", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String addressLine2;
 
     /**

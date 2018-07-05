@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "TrackNumberRequest")
+@XmlRootElement(name = "TrackNumberRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
 public class TrackNumberRequest {
 
 

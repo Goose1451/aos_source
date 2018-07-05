@@ -3,6 +3,7 @@ package ShipExServiceClient;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -27,13 +28,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "product", propOrder = {
+@XmlType(name = "product", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", propOrder = {
     "productName",
     "productQuantity"
 })
 public class Product {
 
+    @XmlElement(namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
     protected String productName;
+    @XmlElement(namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
     protected int productQuantity;
 
     /**

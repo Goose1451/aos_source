@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "GetHealthCheckRequest")
+@XmlRootElement(name = "GetHealthCheckRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
 public class GetHealthCheckRequest {
 
 

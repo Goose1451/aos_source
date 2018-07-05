@@ -3,6 +3,7 @@ package ShipExServiceClient;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -30,9 +31,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "track"
 })
-@XmlRootElement(name = "TrackNumberResponse")
+@XmlRootElement(name = "TrackNumberResponse", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
 public class TrackNumberResponse {
 
+    @XmlElement(namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
     protected long track;
 
     /**

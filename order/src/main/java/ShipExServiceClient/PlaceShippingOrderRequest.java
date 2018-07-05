@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -18,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SETransactionType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SETransactionType" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}PlaceOrderTransactionType"/>
  *         &lt;element name="SEAddress" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEAddress"/>
  *         &lt;element name="SEProducts" type="{https://www.AdvantageOnlineBanking.com/ShipEx/}SEProducts" form="qualified"/>
  *         &lt;element name="OrderNumber" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -41,20 +42,21 @@ import javax.xml.bind.annotation.XmlType;
     "seCustomerName",
     "seCustomerPhone"
 })
-@XmlRootElement(name = "PlaceShippingOrderRequest")
+@XmlRootElement(name = "PlaceShippingOrderRequest", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/")
 public class PlaceShippingOrderRequest {
 
-    @XmlElement(name = "SETransactionType", required = true)
-    protected String seTransactionType;
-    @XmlElement(name = "SEAddress", required = true)
+    @XmlElement(name = "SETransactionType", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
+    @XmlSchemaType(name = "string")
+    protected PlaceOrderTransactionType seTransactionType;
+    @XmlElement(name = "SEAddress", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected SEAddress seAddress;
-    @XmlElement(name = "SEProducts", required = true)
+    @XmlElement(name = "SEProducts", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected SEProducts seProducts;
-    @XmlElement(name = "OrderNumber", required = true)
+    @XmlElement(name = "OrderNumber", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String orderNumber;
-    @XmlElement(name = "SECustomerName", required = true)
+    @XmlElement(name = "SECustomerName", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String seCustomerName;
-    @XmlElement(name = "SECustomerPhone", required = true)
+    @XmlElement(name = "SECustomerPhone", namespace = "https://www.AdvantageOnlineBanking.com/ShipEx/", required = true)
     protected String seCustomerPhone;
 
     /**
@@ -62,10 +64,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link PlaceOrderTransactionType }
      *     
      */
-    public String getSETransactionType() {
+    public PlaceOrderTransactionType getSETransactionType() {
         return seTransactionType;
     }
 
@@ -74,10 +76,10 @@ public class PlaceShippingOrderRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link PlaceOrderTransactionType }
      *     
      */
-    public void setSETransactionType(String value) {
+    public void setSETransactionType(PlaceOrderTransactionType value) {
         this.seTransactionType = value;
     }
 

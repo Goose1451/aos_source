@@ -5,6 +5,8 @@ import ShippingExpress.model.ShippingExpressService;
 import ShippingExpress.util.ArgumentValidationHelper;
 import com.advantage.common.Constants;
 import com.advantage.common.enums.ResponseEnum;
+import https.www_advantageonlinebanking_com.shipex.ShippingCostTransactionType;
+import https.www_advantageonlinebanking_com.shipex.TransactionType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,14 +42,14 @@ public class ShipexApplicationTests {
         address.setPostalCode("123123");
         address.setState("state");
         
-        costRequest.setSETransactionType(Constants.TRANSACTION_TYPE_SHIPPING_COST);
+        costRequest.setSETransactionType(ShippingCostTransactionType.SHIPPING_COST.value());
         costRequest.setSEAddress(address);
         costRequest.setSENumberOfProducts(5);
         costRequest.setSECustomerPhone("+1231234567");
         costRequest.setSECustomerName("name");
 
         orderRequest.setSEAddress(address);
-        orderRequest.setSETransactionType(Constants.TRANSACTION_TYPE_PLACE_SHIPPING_ORDER);
+        orderRequest.setSETransactionType(TransactionType.PLACE_SHIPPING_ORDER.value());
         orderRequest.setOrderNumber("1234567890");
         orderRequest.setSECustomerPhone("+1231234567");
         orderRequest.setSECustomerName("name");

@@ -65,7 +65,7 @@
     <!-- Original Name = "SLA_Add_Delay_In_Add_To_Cart_Response_Time" ; Corrected Name = "SLA_add_addToCart_delay_time" -->
     <!-- feature 1270 -->
     <!--<SLA_Add_Delay_In_Add_To_Cart_Response_Time datatype="string" description="Create a delay in DB call, in 'add to cart'. 0=(Default) Disabled, any other positive number = the number of seconds to add as a delay in response time. UI and API." tools="LoadRunner;StormRunner" locationInAdvantage="">0</SLA_Add_Delay_In_Add_To_Cart_Response_Time>-->
-    <SLA_add_addToCart_delay_time datatype="string" description="Defines the number of seconds to add as a delay in response time when trying to login. Default = 0 (no delay). If you modify this value, also modify the SLA_add_delay_sessions parameter." tools="LoadRunner;StormRunner" locationInAdvantage="AccountServiceEndpoint">0</SLA_add_addToCart_delay_time>
+    <SLA_add_addToCart_delay_time datatype="string" description="Defines the number of seconds to add as a delay in response time when a logged in user adds an item to cart. Default = 0 (no delay)." tools="LoadRunner;StormRunner" locationInAdvantage="AccountServiceEndpoint">0</SLA_add_addToCart_delay_time>
 
     <!-- "SLA: Add delay in add to user login time (seconds)": 0 = (Default) Disabled; any other positive number = the number of seconds to add as a delay in response time -->
     <!-- Original Name = "SLA_Add_Delay_In_Add_To_Cart_Response_Time" ; Corrected Name = "SLA_add_delay_time" -->

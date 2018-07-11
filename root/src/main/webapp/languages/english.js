@@ -263,7 +263,7 @@ var english = {
 
     'COLOR': 'COLOR',
 
-    'My_Orders': 'My Orders',
+    'My_Orders': 'My orders',
 
     'No_orders': 'No orders',
     'reviews': 'reviews',

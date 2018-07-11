@@ -79,7 +79,7 @@ public class ShoppingCart {
 
     public ShoppingCart() {
     }
-
+kldkasldk
     public ShoppingCart(long userId, Long productId, int color, int quantity) {
         this.userId = userId;
         this.setLastUpdate(new Date().getTime());

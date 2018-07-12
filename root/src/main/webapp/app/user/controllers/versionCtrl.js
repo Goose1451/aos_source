@@ -6,6 +6,7 @@ define(['./module'], function (controllers) {
 
             /* record of the versions */
             $scope.records = [
+                "VERSION 1.1.5",
                 "VERSION 1.1.4",
                 "VERSION 1.1.3",
                 "VERSION 1.1.2"

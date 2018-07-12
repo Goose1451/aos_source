@@ -10,7 +10,7 @@ RUN apt-get update && \
     postgresql \
     vim
 
-RUN rm -rf webapps/ROOT
+RUN rm -rf webapps/ROOT webapps/docs
 COPY wars.zip webapps
 COPY updatewars.sh webapps
 COPY wait-for-it.sh webapps

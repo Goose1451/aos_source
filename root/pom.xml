@@ -20,45 +20,7 @@
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>exec-maven-plugin</artifactId>
                             <executions>
-                                <execution>
-                                    <id>exec-npm-install</id>
-                                    <phase>generate-sources</phase>
-                                    <configuration>
-                                        <executable>npm.cmd</executable>
-                                        <arguments>
-                                            <argument>install</argument>
-                                        </arguments>
-                                        <workingDirectory>src/main/webapp</workingDirectory>
-                                    </configuration>
-                                    <goals>
-                                        <goal>exec</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>exec-bower-install</id>
-                                    <phase>generate-sources</phase>
-                                    <configuration>
-                                        <executable>bower</executable>
-                                        <arguments>
-                                            <argument>install</argument>
-                                        </arguments>
-                                        <workingDirectory>src/main/webapp</workingDirectory>
-                                    </configuration>
-                                    <goals>
-                                        <goal>exec</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>exec-grunt</id>
-                                    <phase>process-resources</phase>
-                                    <configuration>
-                                        <executable>grunt</executable>
-                                        <workingDirectory>src/main/webapp</workingDirectory>
-                                    </configuration>
-                                    <goals>
-                                        <goal>exec</goal>
-                                    </goals>
-                                </execution>
+                                
                             </executions>
                         </plugin>
                         <plugin>

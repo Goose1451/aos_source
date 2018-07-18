@@ -107,7 +107,7 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
         if (shoppingCart.getLastUpdate() == 0) {
             shoppingCart.setLastUpdate(Calendar.getInstance().getTime().getTime());
         }
-        String delayRequest = RestApiHelper.getDemoAppConfigParameterValue("SLA_add_addToCart_delay_time");
+        String delayRequest = RestApiHelper.getDemoAppConfigParameterValue("Add_to_cart_time_delay");
         int delayRequestTime = Integer.parseInt(delayRequest);
 
         if(delayRequestTime>0){

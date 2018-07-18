@@ -70,6 +70,11 @@ define(['./module'], function (services) {
                     var params = server.account.getAccountById_new();
                     var user = $rootScope.userCookie;
 
+                    if(window.location.href.indexOf('/myAccount') != -1 && user == undefined){
+                        window.location.replace(window.location.origin);
+                        return;
+                    }
+
                     Helper.enableLoader();
 
                     $.soap({

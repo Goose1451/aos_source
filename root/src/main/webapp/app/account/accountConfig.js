@@ -14,13 +14,11 @@ define([], function () {
             controllerAs: 'maCtrl',
             resolve: {
                 resolveParams: function ($q, accountService) {
-                    var defer = $q.defer()
+                    var defer = $q.defer();
                     accountService.getAccountDetails().then(
                         function (accountDetails) {
-
                             accountService.getShippingDetails(accountDetails).then(
                                 function (shippingDetails) {
-
                                     accountService.getAccountPaymentPreferences().then(
                                         function (paymentPreferences) {
                                             defer.resolve({

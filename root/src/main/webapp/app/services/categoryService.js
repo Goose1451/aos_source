@@ -66,7 +66,7 @@ define(['./module'], function (services) {
                     allData = res;
                     response.resolve(allData);
                 }).error(function (err) {
-                    alert('An error occurred, please try again')
+                    //alert('An error occurred, please try again')
                     Loger.Received(err);
                     response.reject('error in load cart (productCartService - loadCartProducts)');
                 });

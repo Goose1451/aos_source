@@ -23,6 +23,6 @@ if [ ! -f /initialized.txt ]; then # Run initialization logic
     eval $command
     touch /initialized.txt
 fi
-bash wait-for-it.sh "${POSTGRES_IP}"
+bash wait-for-it.sh "${POSTGRES_IP}" "${POSTGRES_PORT}"
 catalina.sh run
 tail -f /dev/null

@@ -24,7 +24,7 @@ define(['./module'], function (controllers) {
             /*
             uncomment this line for UFT typo demo
              */
-            //s.categories[3].categoryName = "Spakers"
+            //s.categories[3].categoryName = "Audio"
 
             var _nv = userService.nv_slowPage() ? "_nv" : "";
             var imagesBanner = [

@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.advantage.online.store</groupId>
         <artifactId>main_project</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
@@ -56,19 +56,19 @@
         <dependency><!-- Use root.WAR with classes - for sharing with WARs-->
             <groupId>com.advantage.online.store</groupId>
             <artifactId>root</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1.5-SNAPSHOT</version>
             <classifier>classes</classifier>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.advantage.online.store</groupId>
             <artifactId>common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.advantage.online.store</groupId>
             <artifactId>shared_resources</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1.5-SNAPSHOT</version>
             <!--<classifier>resources</classifier>-->
             <type>zip</type>
             <scope>provided</scope>

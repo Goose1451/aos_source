@@ -21,6 +21,10 @@ define(['./module'], function (controllers) {
             s.specialOffer = resolveParams.specialOffer;
             s.popularProducts = resolveParams.popularProducts;
 
+            /*
+            uncomment this line for UFT typo demo
+             */
+            //s.categories[3].categoryName = "Spakers"
 
             var _nv = userService.nv_slowPage() ? "_nv" : "";
             var imagesBanner = [

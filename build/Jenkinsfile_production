@@ -2,64 +2,64 @@
 
 
 def deliveryNumber() {
-def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
-matcher ? matcher[0][1] : null
+    def matcher = readFile('build/version.xml') =~ '<deliveryNumber>(.+)</deliveryNumber>'
+    matcher ? matcher[0][1] : null
 }
 
 def version() {
-def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
-matcher ? matcher[0][1] : null
+    def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
+    matcher ? matcher[0][1] : null
 }
 
-try{
-node('UbuntuDemoApp'){
+try {
+    node('UbuntuDemoApp') {
 
-if (env.Resumed == "true"){
- if (!fileExists("${WORKSPACE}/resumed_build_params.groovy"))
-   echo "cannot resume after build success."
- else 
-   load "${WORKSPACE}/resumed_build_params.groovy"
-}
+        if (env.Resumed == "true") {
+            if (!fileExists("${WORKSPACE}/resumed_build_params.groovy"))
+                echo "cannot resume after build success."
+            else
+                load "${WORKSPACE}/resumed_build_params.groovy"
+        }
 
-stage('Checkout'){
+        stage('Checkout') {
 
-env.aos_stageName="Checkout"
+            env.aos_stageName = "Checkout"
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
-  
-  env.Resumed = "false"
-  
-  checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'efc35e72-9a72-4102-9b83-f6b54683ca0b', url: 'https://github.houston.softwaregrp.net/nimbus/aos-source.git']]])
+            if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                currentBuild.result = 'SUCCESS'
+            } else {
 
-  sh 'git checkout master'
+                env.Resumed = "false"
 
-  load "${WORKSPACE}/build/machines_ip.groovy"
-  
-  env.aos_version = version()
-  if (aos_version) {
-    echo "Building version ${aos_version}"
-  }
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-source'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version 2.8.0-rc4 Linux', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'efc35e72-9a72-4102-9b83-f6b54683ca0b', url: 'https://github.houston.softwaregrp.net/nimbus/aos-source.git']]])
 
-  env.aos_delivery = deliveryNumber()
-  if (aos_delivery) {
-    echo "Building deliveryMumber ${aos_delivery}"
-  }
-}
-}
+                sh 'git checkout master'
 
-stage('Production'){
+                load "${WORKSPACE}/build/machines_ip.groovy"
 
-env.aos_stageName="Production"
+                env.aos_version = version()
+                if (aos_version) {
+                    echo "Building version ${aos_version}"
+                }
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+                env.aos_delivery = deliveryNumber()
+                if (aos_delivery) {
+                    echo "Building deliveryMumber ${aos_delivery}"
+                }
+            }
+        }
 
-  env.Resumed = "false"
+        stage('Production') {
 
-  sh '''#!/bin/bash
+            env.aos_stageName = "Production"
+
+            if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                currentBuild.result = 'SUCCESS'
+            } else {
+
+                env.Resumed = "false"
+
+                sh '''#!/bin/bash
 
   #copy the docker-compose to production machine
   echo "production_ip=$aos_production_ip"
@@ -75,34 +75,34 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   # docker compose pull the latest images, so if there is a newer image the service of that image will be stopped and recreated
   ssh "$aos_production_ip" \"sed -i '/image/ s/$/-dev:staging/' /root/docker-compose.yml && sed -i 's/8081/8082/g' /root/.env && /root/startup.sh\"
   '''
-}
-}
+            }
+        }
 
-stage('Production Tests'){
+        stage('Production Tests') {
 
-env.aos_stageName="Production_Tests"
+            env.aos_stageName = "Production_Tests"
 
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_production_tests == "false"){
- currentBuild.result = 'SUCCESS'
-}else{
+            if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_production_tests == "false") {
+                currentBuild.result = 'SUCCESS'
+            } else {
 
-  env.Resumed = "false"
+                env.Resumed = "false"
 
-  build job: 'demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Production'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_production_ip:8080/#/"]], propagate: true
-}
-}
+                build job: 'demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Production'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_production_ip:8080/#/"]], propagate: true
+            }
+        }
 
-stage('Promote Production tag to Dockerhub'){
+        stage('Promote Production tag to Dockerhub') {
 
-env.aos_stageName="Promote_to_Dockerhub"
+            env.aos_stageName = "Promote_to_Dockerhub"
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+            if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                currentBuild.result = 'SUCCESS'
+            } else {
 
-  env.Resumed = "false"
+                env.Resumed = "false"
 
-  sh '''
+                sh '''
   export http_proxy="http://proxy.il.hpecorp.net:8080"
   export https_proxy="http://proxy.il.hpecorp.net:8080"
   IMAGEID_6_wars=`docker images | grep "advantageonlineshopping/aos-main-app-dev" | grep -w staging | awk -F" " '{ print $3 }'`
@@ -114,55 +114,55 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   docker push advantageonlineshopping/aos-main-app-dev:production
   docker push advantageonlineshopping/aos-accountservice-dev:production
   '''
-}
-}
+            }
+        }
 
 
 
 
 
-try{
+        try {
 
-stage('Build Installer'){
+            stage('Build Installer') {
 
-env.aos_stageName="Build_Installer"
+                env.aos_stageName = "Build_Installer"
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+                if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                    currentBuild.result = 'SUCCESS'
+                } else {
 
-  env.Resumed = "false"
+                    env.Resumed = "false"
 
-  build job: 'demoapp_build_installer', propagate: false
-}
-}
+                    build job: 'demoapp_build_installer', propagate: false
+                }
+            }
 
 
-stage('Downloads latest snapshot Installer'){
+            stage('Downloads latest snapshot Installer') {
 
-env.aos_stageName="Downloads_latest_snapshot_Installer"
+                env.aos_stageName = "Downloads_latest_snapshot_Installer"
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+                if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                    currentBuild.result = 'SUCCESS'
+                } else {
 
-  env.Resumed = "false"
+                    env.Resumed = "false"
 
-  node('Windows2008R2'){
+                    node('Windows2008R2') {
 
-  checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-installer.git'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version LeanFT Windows', submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.houston.softwaregrp.net:nimbus/aos-installer.git']]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.houston.softwaregrp.net/nimbus/aos-installer.git'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'WipeWorkspace']], gitTool: 'Git version LeanFT Windows', submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.houston.softwaregrp.net:nimbus/aos-installer.git']]])
 
-  sh 'git checkout master'
+                        sh 'git checkout master'
 
-  env.aos_installer_delivery = deliveryNumber()
-  env.aos_installer_new_delivery = (aos_installer_delivery.toInteger() + 1).toString()
+                        env.aos_installer_delivery = deliveryNumber()
+                        env.aos_installer_new_delivery = (aos_installer_delivery.toInteger() + 1).toString()
 
-  echo "Installer delivery ${aos_installer_delivery}"
+                        echo "Installer delivery ${aos_installer_delivery}"
 
-  env.aos_description="Installer version: ${aos_version}.${aos_installer_delivery}"
-  //currentBuild.description = "Installer version: ${aos_version}.${aos_installer_delivery}"
+                        env.aos_description = "Installer version: ${aos_version}.${aos_installer_delivery}"
+                        //currentBuild.description = "Installer version: ${aos_version}.${aos_installer_delivery}"
 
-  sh '''
+                        sh '''
    pwd
    if [ ! -d "/c/LeanFTJavaRunner/installer_release" ];then
     echo "in 1"
@@ -176,40 +176,51 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
    unzip installer.zip
    rm -rf installer.zip
   '''
-  }
-}
-}
+                    }
+                }
+            }
 
-    stage('SignHP Installer'){
+            //currently AUJAS code sign fail
+            try{
+                stage('SignHP Installer') {
 
-    env.aos_stageName="SignHP_Installer"
+                    env.aos_stageName = "SignHP_Installer"
 
-    if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
-     currentBuild.result = 'SUCCESS'
-    }else{
+                    if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                        currentBuild.result = 'SUCCESS'
+                    } else {
 
-      env.Resumed = "false"
+                        env.Resumed = "false"
 
-      build job: 'demoapp_folder/demoapp_installer_signHp'
-    }
-}
+                        def signHP_installer = build job: 'demoapp_folder/demoapp_installer_signHp'
+                        result = srf_tests.result
+                        if (result.equals("SUCCESS")) {
+                        } else {
+                            sh "exit 1" // this fails the stage
+                        }
+                    }
+                }
+            } catch (e){
+                result = "FAIL" // make sure other exceptions are recorded as failure too
+            }
 
-stage('Upload Installer to latest release'){
 
-env.aos_stageName="Upload_Installer_to_latest_release"
+            stage('Upload Installer to latest release') {
 
-if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
- currentBuild.result = 'SUCCESS'
-}else{
+                env.aos_stageName = "Upload_Installer_to_latest_release"
 
-  env.Resumed = "false"
+                if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) {
+                    currentBuild.result = 'SUCCESS'
+                } else {
 
-  node('Windows2008R2'){
+                    env.Resumed = "false"
 
-  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'e1e6e164-d262-4718-93db-69a4b24caf0b',
-  usernameVariable: 'USERNAME', passwordVariable: 'NEXUS_DEPLOY_PASSWORD']]) {
+                    node('Windows2008R2') {
 
-  sh '''#!/bin/bash
+                        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'e1e6e164-d262-4718-93db-69a4b24caf0b',
+                                          usernameVariable: 'USERNAME', passwordVariable: 'NEXUS_DEPLOY_PASSWORD']]) {
+
+                            sh '''#!/bin/bash
   #declare parameters
   NEW_COMMIT_ID=`git log --format="%H" -n 1`
 
@@ -241,57 +252,57 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   git push origin master
 
   '''
-  }
-  }
-}
-}
+                        }
+                    }
+                }
+            }
 
-} catch (e) {
-     result = "FAIL" // make sure other exceptions are recorded as failure too
-  }
-
-
+        } catch (e) {
+            result = "FAIL" // make sure other exceptions are recorded as failure too
+        }
 
 
-currentBuild.description = "${aos_description}"
 
-mail (to: 'adm_demo_alerts@hpe.com',
-	subject: "Success: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
-	body: "Review the information at: ${env.JOB_URL}",
-	mimeType: 'text/html');
-	
-}	
-}catch(err){
-    node('UbuntuDemoApp'){
-	
-	if (env.aos_description != null)
-	 currentBuild.description = "${aos_description}"
-	 
-	env.aos_failed_stageName=env.aos_stageName
-	
-	dir(""){
 
-	echo sh(returnStdout: true, script: 'env | grep "aos_" >${WORKSPACE}/resumed_build_params.groovy')
-	
-	sh 'sed -i \'s/^/env./g\' ${WORKSPACE}/resumed_build_params.groovy'
-    sh 'sed -i \'s/$/"/g\' ${WORKSPACE}/resumed_build_params.groovy'
-    sh 'sed -i \'s/=/="/g\' ${WORKSPACE}/resumed_build_params.groovy'
-	
-    if (env.aos_stageName == "Production_Tests"){
-	 stage('Redeploy last successful production images'){
-	  sh '''
+        currentBuild.description = "${aos_description}"
+
+        mail(to: 'adm_demo_alerts@hpe.com',
+                subject: "Success: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
+                body: "Review the information at: ${env.JOB_URL}",
+                mimeType: 'text/html');
+
+    }
+} catch (err) {
+    node('UbuntuDemoApp') {
+
+        if (env.aos_description != null)
+            currentBuild.description = "${aos_description}"
+
+        env.aos_failed_stageName = env.aos_stageName
+
+        dir("") {
+
+            echo sh(returnStdout: true, script: 'env | grep "aos_" >${WORKSPACE}/resumed_build_params.groovy')
+
+            sh 'sed -i \'s/^/env./g\' ${WORKSPACE}/resumed_build_params.groovy'
+            sh 'sed -i \'s/$/"/g\' ${WORKSPACE}/resumed_build_params.groovy'
+            sh 'sed -i \'s/=/="/g\' ${WORKSPACE}/resumed_build_params.groovy'
+
+            if (env.aos_stageName == "Production_Tests") {
+                stage('Redeploy last successful production images') {
+                    sh '''
 	   ehco "production_ip=$aos_production_ip"
 	   ssh "$aos_production_ip" \"docker stack rm STACK\"
 	   sleep 30
 	   ssh "$aos_production_ip" \"sed -i 's/staging/production/g' /root/docker-compose.yml && /root/startup.sh\"
 	   '''
-	 }
-	}	
-    currentBuild.result = 'FAILURE'
-	mail (to: 'adm_demo_alerts@hpe.com',
-		subject: "Failed: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
-		body: "Review the information at: ${env.JOB_URL}",
-		mimeType: 'text/html');
-	}
-	}
+                }
+            }
+            currentBuild.result = 'FAILURE'
+            mail(to: 'adm_demo_alerts@hpe.com',
+                    subject: "Failed: '${env.JOB_NAME}' (${env.BUILD_NUMBER}) -Version: ${aos_version}, Delivery number ${aos_delivery}",
+                    body: "Review the information at: ${env.JOB_URL}",
+                    mimeType: 'text/html');
+        }
+    }
 }

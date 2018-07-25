@@ -193,7 +193,7 @@ try {
                         env.Resumed = "false"
 
                         def signHP_installer = build job: 'demoapp_folder/demoapp_installer_signHp'
-                        result = srf_tests.result
+                        result = signHP_installer.result
                         if (result.equals("SUCCESS")) {
                         } else {
                             sh "exit 1" // this fails the stage

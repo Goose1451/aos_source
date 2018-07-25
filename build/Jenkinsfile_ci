@@ -38,7 +38,6 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
   sh 'git checkout master'
   
   env.aos_build_main_wars=false
-  env.aos_build_accountservice_war=false
   env.aos_build_both_wars=false
   env.aos_copy_Nimbus_files=false
   commits = sh(returnStdout: true, script: 'git show -n 2 --pretty="format:" --name-only | awk -F/ \'{print $1}\'').trim()

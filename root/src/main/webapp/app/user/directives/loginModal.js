@@ -64,25 +64,27 @@ define(['./module'], function (directives) {
                                     return user;
                                 }
 
-                                userCookie.fillParams(user.loginUser, user.email, response);
+                                userCookie.fillParams(user.loginUser, user.loginPassword, user.email, response);
                                 $rootScope.userCookie = userCookie;
+                                var userKeyTrimmed = userCookie.getKey(userCookie).replace(/[^a-zA-Z ]/g, "");
 
                                 if (rememberMe) {
-                                    $cookie(userCookie.getKey(userCookie), userCookie, {
-                                        expirationUnit: 'minutes', expires: 60
-                                    });
-                                    $cookie('lastlogin', userCookie.getKey(userCookie));
+                                    $cookie(userKeyTrimmed, userCookie);
+                                    $cookie('lastLogin', userKeyTrimmed);
+                                    var userInfoString = JSON.stringify(userCookie);
+                                    localStorage.setItem('rememberMe', userInfoString);
                                     $scope.refreshTimeOut();
                                 }
                                 else {
                                     $cookie.remove("userCookie" + user.email);
+                                    localStorage.removeItem('rememberMe');
                                 }
 
                                 productsCartService.joinCartProducts().then(function (cart) {
                                     $scope.cart = cart;
                                 },function (error) {
                                     userService.singOut().then(function () {
-                                        $cookie.remove('lastlogin');
+                                        $cookie.remove('lastLogin');
                                         $rootScope.userCookie = undefined;
                                         $scope.loginUser = {email: '', loginPassword: '', loginUser: '',}
 

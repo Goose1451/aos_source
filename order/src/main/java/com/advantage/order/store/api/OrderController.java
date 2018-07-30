@@ -614,6 +614,7 @@ public class OrderController {
                 printAppPulseLogs();
                 ConnectException e = new ConnectException("An error occurred. Please try again later");
                 e.printStackTrace();
+                logger.error(e.getMessage(), e);
                 purchaseResponse = new OrderPurchaseResponse(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), "An error occurred. Please try again later");
                 return new ResponseEntity<>(purchaseResponse, HttpStatus.INTERNAL_SERVER_ERROR);
             }

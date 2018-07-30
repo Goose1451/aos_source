@@ -103,6 +103,13 @@ define(['./module'], function (controllers) {
                     }
 
                     enterInFocus = EnterInFocus.login;
+                    var userInfo = localStorage.getItem('rememberMe');
+                    if(userInfo){
+                        var parsedUserInfo = JSON.parse(userInfo);
+                        $scope.loginUser.loginUser = parsedUserInfo.name;
+                        $scope.loginUser.loginPassword = parsedUserInfo.userPassword;
+                        $scope.mainCtrl.rememberMe = true;
+                    }
 
                     Helper.mobileSectionClose();
                     $('#toolTipCart').css('display', 'none');
@@ -309,7 +316,8 @@ define(['./module'], function (controllers) {
                     even.stopPropagation();
                 }
                 userService.singOut().then(function () {
-                    $cookie.remove('lastlogin');
+                    $cookie.remove(userCookie.getKey($rootScope.userCookie).replace(/[^a-zA-Z ]/g, ""));
+                    $cookie.remove('lastLogin');
                     $rootScope.userCookie = undefined;
                     $scope.loginUser = {email: '', loginPassword: '', loginUser: ''};
 

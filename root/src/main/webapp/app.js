@@ -111,7 +111,7 @@ define([
                 }
             }
 
-            $rootScope.userCookieLastEntry = ipCookie('lastlogin');
+            $rootScope.userCookieLastEntry = ipCookie('lastLogin');
             if ($rootScope.userCookieLastEntry) {
                 var cookie = ipCookie($rootScope.userCookieLastEntry);
                 if (cookie) {

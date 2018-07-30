@@ -4,8 +4,9 @@
 
 var userCookie = userCookie || {};
 
-userCookie.fillParams = function(name, email, response){
+userCookie.fillParams = function(name, password, email, response){
       this.name = name;
+      this.userPassword = password;
       this.email = email;
       this.response = response;
 //    this.sessionId = sessionId;

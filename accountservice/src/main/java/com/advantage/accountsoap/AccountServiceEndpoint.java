@@ -504,6 +504,18 @@ public class AccountServiceEndpoint {
         return new DeletePaymentPreferenceResponse(response);
     }
 
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DeleteShippingAddressRequest")
+    @ResponsePayload
+    public DeleteShippingAddressResponse deleteShippingAddressResponse(@RequestPayload DeleteShippingAddressRequest request) throws TokenException {
+        logger.debug(AccountServiceEndpoint.class.getName() + ".deleteShippingAddress(deleteShippingAddressRequest) is calling method authorizeAsUser(..)");
+
+        AccountStatusResponse response = accountService.deleteShippingAddress(request.getAccountId());
+
+        return new DeleteShippingAddressResponse(response);
+    }
+
+
+
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "GetAccountFieldsRequest")
     @ResponsePayload
     public GetAccountFieldsResponse getAccountFields(@RequestPayload GetAccountFieldsRequest request){

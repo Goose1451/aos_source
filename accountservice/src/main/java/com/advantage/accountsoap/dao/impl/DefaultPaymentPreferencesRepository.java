@@ -53,7 +53,6 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
                 count++;
             }
         }
-
         return count;
     }
 

@@ -7,6 +7,7 @@ import com.advantage.accountsoap.dao.AddressRepository;
 import com.advantage.accountsoap.dao.CountryRepository;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.account.internal.AccountDto;
+import com.advantage.accountsoap.dto.address.AddressStatusResponse;
 import com.advantage.accountsoap.dto.payment.PaymentPreferencesDto;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.model.PaymentPreferences;
@@ -55,6 +56,9 @@ public class AccountService implements Injectable {
 
     @Autowired
     private PaymentPreferencesService paymentPreferencesService;
+
+    @Autowired
+    private AddressService addressService;
 
     private static final Logger logger = Logger.getLogger(AccountService.class);
 
@@ -368,6 +372,11 @@ public class AccountService implements Injectable {
     @Transactional
     public AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId) {
         return accountRepository.removePaymentPreferences(accountId, preferenceId);
+    }
+
+    @Transactional
+    public AccountStatusResponse deleteShippingAddress(long accountId) {
+        return accountRepository.deleteShippingAddress(accountId);
     }
 
     public AccountStatusResponse dbRestoreFactorySettings() {

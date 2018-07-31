@@ -9,6 +9,7 @@ import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.model.Country;
 import com.advantage.accountsoap.model.PaymentPreferences;
+import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.accountsoap.util.AccountPassword;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
 import com.advantage.accountsoap.util.JPAQueryHelper;
@@ -590,7 +591,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
         //entityManager.remove(account);
         account.setActive('N');
-        entityManager.persist(account);
+        entityManager.remove(account);
 
         return account;
     }
@@ -656,6 +657,28 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
                 .append(PaymentPreferences.class.getName())
                 .append(" WHERE ")
                 .append(PaymentPreferences.FIELD_USER_ID).append("=").append(accountId);
+
+        Query query = entityManager.createQuery(hql.toString());
+        int result = query.executeUpdate();
+
+        AccountStatusResponse accountStatusResponse;
+        if (result == 1) {
+            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
+        } else {
+            accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+        }
+
+        return accountStatusResponse;
+    }
+
+    @Override
+    public AccountStatusResponse deleteShippingAddress(long accountId) {
+
+
+        final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                .append(ShippingAddress.class.getName())
+                .append(" WHERE ")
+                .append(ShippingAddress.FIELD_USER_ID).append("=").append(accountId);
 
         Query query = entityManager.createQuery(hql.toString());
         int result = query.executeUpdate();

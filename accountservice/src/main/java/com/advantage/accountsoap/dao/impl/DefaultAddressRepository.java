@@ -2,8 +2,10 @@ package com.advantage.accountsoap.dao.impl;
 
 import com.advantage.accountsoap.dao.AbstractRepository;
 import com.advantage.accountsoap.dao.AddressRepository;
+import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.address.AddressDto;
 import com.advantage.accountsoap.model.Account;
+import com.advantage.accountsoap.model.PaymentPreferences;
 import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.accountsoap.services.AccountService;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +37,17 @@ public class DefaultAddressRepository extends AbstractRepository implements Addr
                 count++;
             }
         }
-
         return count;
     }
 
+    @Override
+    public ShippingAddress deleteShippingAddress(long userId) {
+
+        ShippingAddress entity = get(userId);
+        if (entity != null) delete(entity);
+
+        return entity;
+    }
     @Override
     public List<ShippingAddress> getAll() {
         List<ShippingAddress> addresses =

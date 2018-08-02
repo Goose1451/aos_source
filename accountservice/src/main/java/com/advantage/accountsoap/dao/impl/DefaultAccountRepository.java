@@ -707,7 +707,8 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         }
         try {
             String stringResponse = RestApiHelper.httpGet(deleteOrdersForUser , "account");
-
+            logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            logger.debug("stringResponse--"+stringResponse);
         } catch (IOException e) {
             e.printStackTrace();
         }

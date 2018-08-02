@@ -1,15 +1,9 @@
 package com.advantage.accountsoap.dao.impl;
 
 import com.advantage.accountsoap.config.AccountConfiguration;
-import com.advantage.accountsoap.dao.AbstractRepository;
-import com.advantage.accountsoap.dao.AccountRepository;
-import com.advantage.accountsoap.dao.AddressRepository;
-import com.advantage.accountsoap.dao.CountryRepository;
+import com.advantage.accountsoap.dao.*;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
-import com.advantage.accountsoap.model.Account;
-import com.advantage.accountsoap.model.Country;
-import com.advantage.accountsoap.model.PaymentPreferences;
-import com.advantage.accountsoap.model.ShippingAddress;
+import com.advantage.accountsoap.model.*;
 import com.advantage.accountsoap.util.AccountPassword;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
 import com.advantage.accountsoap.util.JPAQueryHelper;
@@ -19,7 +13,7 @@ import com.advantage.common.enums.AccountType;
 import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.Token;
 import com.advantage.common.security.TokenJWT;
-import com.advantage.root.util.StringHelper;
+import com.advantage.root.util.RestApiHelper;
 import com.advantage.root.util.ValidationHelper;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -33,6 +27,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @Qualifier("accountRepository")
@@ -308,6 +304,25 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         entityManager.persist(account);
 
         return 1;
+    }
+
+    @Override
+    public int deleteAccountPermanently(Account account) {
+        ArgumentValidationHelper.validateArgumentIsNotNull(account, "application user");
+
+        if (account == null) {
+            return 0;
+        }
+        final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                .append(Account.class.getName())
+                .append(" WHERE ")
+                .append(Account.FIELD_ID).append("=").append(account.getId());
+
+        Query query = entityManager.createQuery(hql.toString());
+        int result = query.executeUpdate();
+
+
+        return result;
     }
 
 
@@ -589,7 +604,6 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
             return null;
         }
 
-        //entityManager.remove(account);
         account.setActive('N');
         entityManager.remove(account);
 
@@ -632,18 +646,8 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         return new AccountStatusResponse(true, "Successfully", accountId);
     }
 
-    /*
     @Override
-    public Collection<PaymentPreferences> getPaymentPreferences(long accountId) {
-        Account account = get(accountId);
-        if (account == null) return null;
-
-        return account.getPaymentPreferences();
-    }
-    */
-
-    @Override
-    public AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId) {
+    public AccountStatusResponse removePaymentPreferences(long accountId) {
         //Account account = get(accountId);
         //if (account == null) return new AccountStatusResponse(false, "Account not fount", -1);
         //PaymentPreferences p = account.getPaymentPreferences()
@@ -671,24 +675,49 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         return accountStatusResponse;
     }
 
+//    @Override
+//    public AccountStatusResponse deleteShippingAddress(long accountId) {
+//
+//        final StringBuilder hql = new StringBuilder("DELETE FROM ")
+//                .append(ShippingAddress.class.getName())
+//                .append(" WHERE ")
+//                .append(ShippingAddress.FIELD_USER_ID).append("=").append(accountId);
+//
+//        Query query = entityManager.createQuery(hql.toString());
+//        int result = query.executeUpdate();
+//
+//        AccountStatusResponse accountStatusResponse;
+//        if (result == 1) {
+//            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
+//        } else {
+//            accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
+//        }
+//
+//        return accountStatusResponse;
+//    }
+
     @Override
     public AccountStatusResponse deleteShippingAddress(long accountId) {
 
-
-        final StringBuilder hql = new StringBuilder("DELETE FROM ")
-                .append(ShippingAddress.class.getName())
-                .append(" WHERE ")
-                .append(ShippingAddress.FIELD_USER_ID).append("=").append(accountId);
-
-        Query query = entityManager.createQuery(hql.toString());
-        int result = query.executeUpdate();
-
-        AccountStatusResponse accountStatusResponse;
-        if (result == 1) {
-            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
-        } else {
-            accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+        URL deleteOrdersForUser = null;
+        try {
+            deleteOrdersForUser = new URL("http://localhost:8080/order/api/v1/orders/history/users/926433014/3214517986");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
+        try {
+            String stringResponse = RestApiHelper.httpGet(deleteOrdersForUser , "account");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        AccountStatusResponse accountStatusResponse;
+        accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
+//        if (result == 1) {
+//            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
+//        } else {
+//            accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
+//        }
 
         return accountStatusResponse;
     }

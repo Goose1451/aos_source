@@ -41,7 +41,7 @@ public class ValidationHelper {
             "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     //  Contain 5-15 characters of: Digits 0-9, UPPER case (A-Z), lower case (a-z), underscore (_), dot (.) and hyphen (-)
-    private static final String LOGIN_USER_NAME_PATTERN = "^[A-Za-z0-9_.-]{5,15}$";
+    private static final String LOGIN_USER_NAME_PATTERN = "^[A-Za-z0-9_.-]{3,15}$";
 
     /**
      * <ul><code>Password</code> must be compliant with <b>AOS policy</b></ul>:

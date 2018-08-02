@@ -36,6 +36,8 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     int deleteAccount(Account account);
 
+    int deleteAccountPermanently(Account account);
+
     Account getAppUserByLogin(String login);
 
     AccountStatusResponse doLogin(String login, String password, String email);
@@ -48,7 +50,7 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     //Collection<PaymentPreferences> getPaymentPreferences(long accountId);
 
-    AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId);
+    AccountStatusResponse removePaymentPreferences(long accountId);
 
     AccountStatusResponse deleteShippingAddress(long accountId);
 

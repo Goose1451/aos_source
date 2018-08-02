@@ -1,8 +1,6 @@
 package com.advantage.accountsoap.dao;
 
-import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.address.AddressDto;
-import com.advantage.accountsoap.dto.address.DeleteShippingAddressResponse;
 import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.common.dao.DefaultCRUDOperations;
 
@@ -22,5 +20,5 @@ public interface AddressRepository extends DefaultCRUDOperations<ShippingAddress
 
     ShippingAddress update(ShippingAddress address);
 
-    ShippingAddress deleteShippingAddress(long accountId);
+    int deleteShippingAddress(long accountId);
 }

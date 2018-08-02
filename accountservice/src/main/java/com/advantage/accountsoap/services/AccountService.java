@@ -211,9 +211,18 @@ public class AccountService implements Injectable {
     @Transactional
     public AccountStatusResponse accountDelete(long accountId) throws TokenException {
         Account account = accountRepository.get(accountId);
-        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
 
         int result = accountRepository.deleteAccount(account);
+
+        AccountStatusResponse response = resultSolver(result,account);
+
+        return response;
+    }
+
+    private AccountStatusResponse resultSolver (int result, Account account){
+
+        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
+
         if (result == 1) {
             response.setSuccess(true);
             response.setReason("Account delete successful");
@@ -224,6 +233,41 @@ public class AccountService implements Injectable {
             response.setReason("Account delete failed");
             response.setUserId(account.getId());
             logger.warn("Account " + account.getId() + " delete failed");
+        }
+        return response;
+    }
+
+    @Transactional
+    public AccountStatusResponse accountPermanentDelete(long accountId) throws TokenException {
+
+        AddressStatusResponse addressStatusResponse = addressService.deleteShippingAddress(accountId);
+
+        Account account = accountRepository.get(accountId);
+        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
+
+        if(addressStatusResponse.isSuccess()) {
+            if(paymentPreferencesService.isPaymentPreferencesExist(accountId)){
+
+                if(removePaymentPreferences(accountId).isSuccess()){
+                    int result = accountRepository.deleteAccountPermanently(account);
+                    response = resultSolver(result,account);
+                }
+                else {
+
+                    response.setSuccess(false);
+                    response.setReason("Could not delete payment preference for some reason dust also failing at delete account permanently");
+                    response.setUserId(account.getId());
+                    logger.warn("Account " + account.getId() + " delete failed at delete payment preference");
+                }
+            }
+
+        }
+        else {
+
+            response.setSuccess(false);
+            response.setReason("Could not delete shipping address for some reason dust also failing at delete account permanently");
+            response.setUserId(account.getId());
+            logger.warn("Account " + account.getId() + " delete failed at delete shipping address");
         }
         return response;
     }
@@ -370,8 +414,8 @@ public class AccountService implements Injectable {
     }
 
     @Transactional
-    public AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId) {
-        return accountRepository.removePaymentPreferences(accountId, preferenceId);
+    public AccountStatusResponse removePaymentPreferences(long accountId) {
+        return accountRepository.removePaymentPreferences(accountId);
     }
 
     @Transactional

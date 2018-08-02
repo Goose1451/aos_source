@@ -863,7 +863,7 @@ public class OrderManagementService {
         long orderNumber = 0L;
         long orderTimestamp = -1L;
 
-        List<OrderLines> lines = new ArrayList<>();
+        List<OrderLines> lines;
         HistoryOrderLinesDto historyOrderLinesDto = new HistoryOrderLinesDto();
 
         if (userId == 0) {

@@ -71,8 +71,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="AccountPermanentDeleteRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="accountId" type="xs:long" form="qualified"/>
+        <xs:element name="base64Token" type="xs:string" form="qualified"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 
   <xs:element name="AccountDeleteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="StatusMessage" form="qualified">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="success" type="tns:responseReason" form="qualified"/>
+              <xs:element name="userId" type="xs:long" form="qualified"/>
+              <xs:element name="reason" type="xs:string" form="qualified"/>
+              <xs:element name="token" type="xs:string" form="qualified"/>
+              <xs:element name="sessionId" type="xs:string" form="qualified"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="AccountPermanentDeleteResponse">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="StatusMessage" form="qualified">

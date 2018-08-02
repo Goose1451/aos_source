@@ -2,10 +2,8 @@ package com.advantage.accountsoap.dao.impl;
 
 import com.advantage.accountsoap.dao.AbstractRepository;
 import com.advantage.accountsoap.dao.AddressRepository;
-import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.address.AddressDto;
 import com.advantage.accountsoap.model.Account;
-import com.advantage.accountsoap.model.PaymentPreferences;
 import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.accountsoap.services.AccountService;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
@@ -40,14 +38,27 @@ public class DefaultAddressRepository extends AbstractRepository implements Addr
         return count;
     }
 
+//    @Override
+//    public ShippingAddress deleteShippingAddress(long userId) {
+//
+//        ShippingAddress entity = get(userId);
+//        if (entity != null) delete(entity);
+//
+//        return entity;
+//    }
     @Override
-    public ShippingAddress deleteShippingAddress(long userId) {
+    public int deleteShippingAddress(long userId) {
 
-        ShippingAddress entity = get(userId);
-        if (entity != null) delete(entity);
+        final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                .append(ShippingAddress.class.getName())
+                .append(" WHERE ")
+                .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
 
-        return entity;
+        Query query = entityManager.createQuery(hql.toString());
+        int result = query.executeUpdate();
+        return result;
     }
+
     @Override
     public List<ShippingAddress> getAll() {
         List<ShippingAddress> addresses =

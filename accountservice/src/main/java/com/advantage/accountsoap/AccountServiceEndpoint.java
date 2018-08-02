@@ -321,6 +321,15 @@ public class AccountServiceEndpoint {
         return new AccountDeleteResponse(response);
     }
 
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "AccountPermanentDeleteRequest")
+    @ResponsePayload
+    public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException {
+        logger.debug(AccountServiceEndpoint.class.getName() + ".accountPermanentDelete(..) ");
+
+        AccountStatusResponse response = accountService.accountPermanentDelete(request.getAccountId());
+        return new AccountPermanentDeleteResponse(response);
+    }
+
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "EncodePasswordRequest")
     @ResponsePayload
     public EncodePasswordResponse encodePassword(@RequestPayload EncodePasswordRequest request) throws TokenException{
@@ -499,7 +508,7 @@ public class AccountServiceEndpoint {
         logger.debug(AccountServiceEndpoint.class.getName() + ".deletePaymentPreference(DeletePaymentPreferenceRequest) is calling method authorizeAsUser(..)");
         //  TODO-Benny: Verify that .NET and mobile version support this authorization
         //authorizeAsUser(request);
-        AccountStatusResponse response = accountService.removePaymentPreferences(request.getAccountId(), request.getId());
+        AccountStatusResponse response = accountService.removePaymentPreferences(request.getAccountId());
 
         return new DeletePaymentPreferenceResponse(response);
     }

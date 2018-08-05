@@ -71,10 +71,22 @@ public class DefaultHistoryOrderHeaderRepository extends AbstractRepository impl
     @Override
     @Transactional
     public boolean removeAllOrdersHeaders(long userId){
-        int index = entityManager.createNamedQuery(OrderHeader.QUERY_DELETE_ORDER_BY_USER_PK)
-                .setParameter(OrderHeader.PARAM_USER_ID, userId)
-                .executeUpdate();
-        return index != 0;
+        try {
+            entityManager.createNamedQuery(OrderHeader.QUERY_DELETE_ORDER_BY_USER_PK)
+                    .setParameter(OrderHeader.PARAM_USER_ID, userId)
+                    .executeUpdate();
+            List<OrderHeader> orderHeaders = entityManager.createNamedQuery(OrderHeader.QUERY_GET_ORDERS_BY_USER_ID, OrderHeader.class)
+                    .setParameter(OrderHeader.PARAM_USER_ID, userId)
+                    .getResultList();
+            if (orderHeaders.size() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
 }

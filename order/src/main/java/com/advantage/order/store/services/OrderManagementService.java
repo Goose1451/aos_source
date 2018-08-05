@@ -904,26 +904,32 @@ public class OrderManagementService {
         }
         return historyOrderLinesDto;
     }
-
-    public HistoryOrderLinesDto removeAllOrdersHistory(Long userId){
+    //Will return true if no orders appear for user, even if none were deleted.
+    public OrderHistoryRemoveDto removeAllOrdersHistory(Long userId){
         ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");
 
-        List<OrderLines> lines;
-        HistoryOrderLinesDto historyOrderLinesDto = new HistoryOrderLinesDto();
+
+        OrderHistoryRemoveDto orderHistoryRemoveDto = new OrderHistoryRemoveDto();
         boolean whereOrdersHeaderRemovedSuccessfully = false;
         boolean whereOrdersLinesRemovedSuccessfully = false;
-        if (userId == 0) {
-            lines = historyOrderLineRepository.getAll();
-        } else {
+
             whereOrdersHeaderRemovedSuccessfully = historyOrderHeaderRepository.removeAllOrdersHeaders(userId);
             whereOrdersLinesRemovedSuccessfully = historyOrderLineRepository.removeAllOrdersLinesForUser(userId);
+
+        if (whereOrdersHeaderRemovedSuccessfully == true && whereOrdersLinesRemovedSuccessfully == true) {
+
+            orderHistoryRemoveDto.setSuccessfulOrderHeaderDelete(true);
+            orderHistoryRemoveDto.setSuccessfulOrderLineDelete(true);
+            orderHistoryRemoveDto.setSuccess(true);
+            return orderHistoryRemoveDto;
         }
-        if (whereOrdersHeaderRemovedSuccessfully == false || whereOrdersLinesRemovedSuccessfully == false) {
-            return historyOrderLinesDto;
-            //return isOrdersHeaderWasRemoved;
+        else{
+
+            orderHistoryRemoveDto.setSuccessfulOrderHeaderDelete(whereOrdersHeaderRemovedSuccessfully);
+            orderHistoryRemoveDto.setSuccessfulOrderLineDelete(whereOrdersLinesRemovedSuccessfully);
+            orderHistoryRemoveDto.setSuccess(false);
+            return orderHistoryRemoveDto;
         }
 
-        return historyOrderLinesDto;
-        //return isOrdersHeaderWasRemoved;
     }
 }

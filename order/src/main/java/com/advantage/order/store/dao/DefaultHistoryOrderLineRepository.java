@@ -99,7 +99,7 @@ public class DefaultHistoryOrderLineRepository extends AbstractRepository implem
         List<OrderLines> lines = new ArrayList<>();
 
         try {
-            int index = entityManager.createNamedQuery(OrderLines.QUERY_DELETE_ORDERS_LINES_BY_USER_ID_PK)
+            entityManager.createNamedQuery(OrderLines.QUERY_DELETE_ORDERS_LINES_BY_USER_ID_PK)
                     .setParameter(OrderLines.PARAM_USER_ID, userId)
                     .executeUpdate();
             List<OrderLines> orderLines = entityManager.createNamedQuery(OrderLines.QUERY_GET_ORDERS_LINES_BY_USER_ID, OrderLines.class)
@@ -108,8 +108,8 @@ public class DefaultHistoryOrderLineRepository extends AbstractRepository implem
             if(orderLines.size() == 0 ){
                 return true;
             }
-
             else {return false;}
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;

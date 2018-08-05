@@ -20,5 +20,7 @@ public interface HistoryOrderLineRepository {
 
     List<OrderLines> removeOrder(long userId, long orderId);
 
+    boolean removeAllOrdersLinesForUser (long userId);
+
 
 }

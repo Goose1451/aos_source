@@ -899,10 +899,31 @@ public class OrderManagementService {
                             line.getProductColor(),
                             line.getPricePerItem(),
                             line.getQuantity());
-
                 }
             }
         }
         return historyOrderLinesDto;
+    }
+
+    public HistoryOrderLinesDto removeAllOrdersHistory(Long userId){
+        ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");
+
+        List<OrderLines> lines;
+        HistoryOrderLinesDto historyOrderLinesDto = new HistoryOrderLinesDto();
+        boolean whereOrdersHeaderRemovedSuccessfully = false;
+        boolean whereOrdersLinesRemovedSuccessfully = false;
+        if (userId == 0) {
+            lines = historyOrderLineRepository.getAll();
+        } else {
+            whereOrdersHeaderRemovedSuccessfully = historyOrderHeaderRepository.removeAllOrdersHeaders(userId);
+            whereOrdersLinesRemovedSuccessfully = historyOrderLineRepository.removeAllOrdersLinesForUser(userId);
+        }
+        if (whereOrdersHeaderRemovedSuccessfully == false || whereOrdersLinesRemovedSuccessfully == false) {
+            return historyOrderLinesDto;
+            //return isOrdersHeaderWasRemoved;
+        }
+
+        return historyOrderLinesDto;
+        //return isOrdersHeaderWasRemoved;
     }
 }

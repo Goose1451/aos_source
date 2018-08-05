@@ -21,4 +21,6 @@ public interface HistoryOrderHeaderRepository {
     List<OrderHeader> getOrdersHeaderByOrderIdAndUserId(long orderId,long userId);
 
     boolean removeOrder(long orderId,long userId);
+
+    boolean removeAllOrdersHeaders(long userId);
 }

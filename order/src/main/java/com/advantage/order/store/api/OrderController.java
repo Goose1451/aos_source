@@ -738,35 +738,16 @@ public class OrderController {
 
         return new ResponseEntity<>(historyOrderLinesDto, httpStatus);
     }
-//
-//    @RequestMapping(value = "/orders/history/users/{userId}/{orderId}", method = RequestMethod.DELETE)
-//    @ApiOperation(value = "Clear user shopping cart")
-//    @AuthorizeAsUser
-//    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", required = false, dataType = "string", paramType = "header", value = "JSON Web Token", defaultValue = "Bearer ")})
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
-//            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
-//    public ResponseEntity<HistoryOrderLinesDto> removeOrder(@PathVariable("userId") Long userId,
-//                                                               @PathVariable("orderId") Long orderId, HttpServletRequest request) {
-//        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
-//        if (cefData != null) {
-//            logger.trace("cefDataId=" + cefData.toString());
-//            cefData.setEventRequiredParameters(String.valueOf("/orders/history/users/{userId}/{orderId}".hashCode()),
-//                    "Clear user shopping cart", 5);
-//        } else {
-//            logger.warn("cefData is null");
-//        }
-//        HttpStatus httpStatus = HttpStatus.OK;
-//
-//        HistoryOrderLinesDto historyOrderLinesDto = orderManagementService.removeOrder(userId, orderId);
-//        return new ResponseEntity<>(historyOrderLinesDto, httpStatus);
-//    }
 
-    @RequestMapping(value = "/orders/history/users/{userId}/{orderId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/orders/history/users/{userId}/{orderId}", method = RequestMethod.DELETE)
     @ApiOperation(value = "Clear user shopping cart")
+    @AuthorizeAsUser
     @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", required = false, dataType = "string", paramType = "header", value = "JSON Web Token", defaultValue = "Bearer ")})
-    public ResponseEntity<HistoryOrderLinesDto> removeShinaOrder(@PathVariable("userId") Long userId,
-                                                            @PathVariable("orderId") Long orderId, HttpServletRequest request) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    public ResponseEntity<HistoryOrderLinesDto> removeOrder(@PathVariable("userId") Long userId,
+                                                               @PathVariable("orderId") Long orderId, HttpServletRequest request) {
         CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
         if (cefData != null) {
             logger.trace("cefDataId=" + cefData.toString());
@@ -778,6 +759,28 @@ public class OrderController {
         HttpStatus httpStatus = HttpStatus.OK;
 
         HistoryOrderLinesDto historyOrderLinesDto = orderManagementService.removeOrder(userId, orderId);
+        return new ResponseEntity<>(historyOrderLinesDto, httpStatus);
+    }
+
+    @RequestMapping(value = "/orders/history/users/{userId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Clear user shopping cart")
+    @AuthorizeAsUser
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", required = false, dataType = "string", paramType = "header", value = "JSON Web Token", defaultValue = "Bearer ")})
+    public ResponseEntity<HistoryOrderLinesDto> removeAllOrdersForUser(@PathVariable("userId") Long userId, HttpServletRequest request) {
+        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
+        if (cefData != null) {
+            logger.trace("cefDataId=" + cefData.toString());
+            cefData.setEventRequiredParameters(String.valueOf("/orders/history/users/{userId}".hashCode()),
+                    "Clear user shopping cart", 5);
+        } else {
+            logger.warn("cefData is null");
+        }
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        HistoryOrderLinesDto historyOrderLinesDto = orderManagementService.removeAllOrdersHistory(userId);
         return new ResponseEntity<>(historyOrderLinesDto, httpStatus);
     }
 

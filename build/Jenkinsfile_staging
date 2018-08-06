@@ -13,6 +13,13 @@ def matcher = readFile('build/version.xml') =~ '<version>(.+)</version>'
 matcher ? matcher[0][1] : null
 }
 
+def check_job_result(res){
+    if (result.equals("SUCCESS")) {
+    } else {
+        sh "exit 1" // this fails the stage
+    }
+}
+
 
 try{
 node('UbuntuDemoApp'){
@@ -31,52 +38,58 @@ if (env.Resumed == "true"){
 }
 
 
-stage('Android Tests'){
+try{
+    stage('Android Tests'){
 
-env.aos_stageName="Android_Tests"
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_android_tests == "false"){
- currentBuild.result = 'SUCCESS'
-}else{
+        env.aos_stageName="Android_Tests"
+        if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_android_tests == "false"){
+            currentBuild.result = 'SUCCESS'
+        }else{
 
-  env.Resumed = "false"
+            env.Resumed = "false"
 
-  build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Android'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"]]
+            def android_test = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Android'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"]]
+            check_job_result(android_test.result)
+        }
+    }
+}catch (e){
+    result = "FAIL" // make sure other exceptions are recorded as failure too
 }
-}
 
 
-stage('iOS Tests'){
-env.aos_stageName="iOS_Tests"
+try{
+    stage('iOS Tests'){
+        env.aos_stageName="iOS_Tests"
 
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
- currentBuild.result = 'SUCCESS'
-}else{
-  env.Resumed = "false"
+        if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_iOS_tests == "false"){
+            currentBuild.result = 'SUCCESS'
+        }else{
+            env.Resumed = "false"
 
-  build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Ios'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"]]
-}
+            def ios_test = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Ios'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"]]
+            check_job_result(ios_test.result)
+        }
+    }
+}catch(e){
+    result = "FAIL" // make sure other exceptions are recorded as failure too
 }
 
 
 try {
-stage('SRF Tests'){
+    stage('SRF Tests'){
 
-env.aos_stageName="SRF_Tests"
+        env.aos_stageName="SRF_Tests"
 
-if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_srf_tests == "false"){
- currentBuild.result = 'SUCCESS'
-}else{
+        if ((env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName) || env.run_srf_tests == "false"){
+            currentBuild.result = 'SUCCESS'
+        }else{
 
- env.Resumed = "false"
+            env.Resumed = "false"
 
- def srf_tests = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'CI'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"], [$class: 'StringParameterValue', name: 'EnvironmentType', value: 'SRF']], propagate: false
- result = srf_tests.result
-       if (result.equals("SUCCESS")) {
-       } else {
-          sh "exit 1" // this fails the stage
-       }
-}
-}
+            def srf_tests = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'CI'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"], [$class: 'StringParameterValue', name: 'EnvironmentType', value: 'SRF']], propagate: false
+            check_job_result(srf_tests.result)
+        }
+    }
 } catch (e) {
    result = "FAIL" // make sure other exceptions are recorded as failure too
 }

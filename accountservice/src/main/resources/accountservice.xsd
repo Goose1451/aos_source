@@ -109,7 +109,14 @@
               <xs:element name="reason" type="xs:string" form="qualified"/>
               <xs:element name="token" type="xs:string" form="qualified"/>
               <xs:element name="sessionId" type="xs:string" form="qualified"/>
-            </xs:sequence>
+              <xs:element name="OrderHeaderDelete" type="xs:boolean" form="qualified"/>
+              <xs:element name="OrderLinesDelete" type="xs:boolean" form="qualified"/>
+              <xs:element name="ShippingAddressDelete" type="xs:boolean" form="qualified"/>
+              <xs:element name="PaymentPreferenceDelete" type="xs:boolean" form="qualified"/>
+              <xs:element name="AccountDelete" type="xs:boolean" form="qualified"/>
+              <xs:element name="IsSuccess" type="xs:boolean" form="qualified"/>
+              <xs:element name="Reason" type="xs:string" form="qualified"/>
+           </xs:sequence>
           </xs:complexType>
         </xs:element>
       </xs:sequence>

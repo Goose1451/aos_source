@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OrderHistoryRemoveDto {
 
-    @JsonProperty("successfulOrderHeaderDelete ")
+    @JsonProperty("successfulOrderHeaderDelete")
     private boolean successfulOrderHeaderDelete;
 
-    @JsonProperty("successfulOrderLineDelete ")
+    @JsonProperty("successfulOrderLineDelete")
     private boolean successfulOrderLineDelete;
 
-    @JsonProperty("isSuccess ")
+    @JsonProperty("isSuccess")
     private boolean isSuccess;
 
     public OrderHistoryRemoveDto() {

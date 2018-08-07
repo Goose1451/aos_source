@@ -5,6 +5,8 @@ import com.advantage.accountsoap.config.Injectable;
 import com.advantage.accountsoap.dao.AccountRepository;
 import com.advantage.accountsoap.dao.AddressRepository;
 import com.advantage.accountsoap.dao.CountryRepository;
+import com.advantage.accountsoap.dto.DeleteOrderResponse;
+import com.advantage.accountsoap.dto.account.AccountPermanentDeleteResponse;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.account.internal.AccountDto;
 import com.advantage.accountsoap.dto.address.AddressStatusResponse;
@@ -13,6 +15,7 @@ import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.model.PaymentPreferences;
 import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.accountsoap.util.AccountPassword;
+import com.advantage.common.Url_resources;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.exceptions.token.ContentTokenException;
 import com.advantage.common.exceptions.token.TokenException;
@@ -22,9 +25,14 @@ import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.RestApiHelper;
 import com.advantage.root.util.StringHelper;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +41,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -237,40 +246,120 @@ public class AccountService implements Injectable {
         return response;
     }
 
-    @Transactional
-    public AccountStatusResponse accountPermanentDelete(long accountId) throws TokenException {
-
-        AddressStatusResponse addressStatusResponse = addressService.deleteShippingAddress(accountId);
+    private boolean deleteOrders(long accountId, String data) throws IOException{
 
         Account account = accountRepository.get(accountId);
-        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
+        String stringResponse = null;
+        URL deleteOrdersForUser = null;
+        String authorizationKey = encode64(account.getLoginName() + ":" + data);
+        URL orderApiUrl = Url_resources.getUrlOrder();
 
-        if(addressStatusResponse.isSuccess()) {
-            if(paymentPreferencesService.isPaymentPreferencesExist(accountId)){
+        try {
 
-                if(removePaymentPreferences(accountId).isSuccess()){
-                    int result = accountRepository.deleteAccountPermanently(account);
-                    response = resultSolver(result,account);
-                }
-                else {
+        deleteOrdersForUser = new URL(orderApiUrl + "orders/history/users/" + accountId);
+        stringResponse = RestApiHelper.httpGetWithAuthorization(deleteOrdersForUser, "account", "Authorization", "Basic " + authorizationKey);
+        logger.debug("stringResponse--" + stringResponse);
 
-                    response.setSuccess(false);
-                    response.setReason("Could not delete payment preference for some reason dust also failing at delete account permanently");
-                    response.setUserId(account.getId());
-                    logger.warn("Account " + account.getId() + " delete failed at delete payment preference");
-                }
+            switch (stringResponse) {
+                case "CONFLICT":
+                    return false;
+
+                case "NOT FOUND":
+                    return false;
+
+                case "FORBIDDEN":
+                    return false;
+
+                case "UNAUTHORIZED":
+                    return false;
+
             }
+        //Removing added value by apiHelper
+        String stringResponseEdited = "{\"" + stringResponse.substring(17);
+        ObjectMapper objectMapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        DeleteOrderResponse deleteOrderResponse = objectMapper.readValue(stringResponseEdited, DeleteOrderResponse.class);
 
+        if(deleteOrderResponse.isSuccess()){
+            return true;
         }
-        else {
+        else{
+            return false;
+        }
 
-            response.setSuccess(false);
-            response.setReason("Could not delete shipping address for some reason dust also failing at delete account permanently");
-            response.setUserId(account.getId());
-            logger.warn("Account " + account.getId() + " delete failed at delete shipping address");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return response;
+        return false;
     }
+
+
+    @Transactional
+    public AccountStatusResponse accountPermanentDelete(long accountId, String data) throws IOException {
+
+
+        AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+        accountPermanentDeleteResponse.setSuccess(false);
+        accountPermanentDeleteResponse.setReason("Fail to delete any account details");
+
+        try {
+            Account account = accountRepository.get(accountId);
+
+            if (deleteOrders(accountId, data)) {
+                accountPermanentDeleteResponse.setOrderHeaderDelete(true);
+                accountPermanentDeleteResponse.setOrderLinesDelete(true);
+
+                AddressStatusResponse addressStatusResponse = addressService.deleteShippingAddress(accountId);
+                if (addressStatusResponse.isSuccess()) {
+                    accountPermanentDeleteResponse.setShippingAddressDelete(true);
+
+                    if (paymentPreferencesService.deleteAllPaymentPreference(accountId).isSuccess()) {
+
+                        accountPermanentDeleteResponse.setPaymentPreferenceDelete(true);
+                        int resultDelete = accountRepository.deleteAccountPermanently(account);
+                        Account resultFind = getById(accountId);
+
+                        if (resultDelete == 1 && resultFind == null) {
+                            accountPermanentDeleteResponse.setSuccess(true);
+                            logger.warn(accountPermanentDeleteResponse);
+                            return accountPermanentDeleteResponse;
+
+                        } else {
+                            accountPermanentDeleteResponse.setSuccess(false);
+                            accountPermanentDeleteResponse.setAccountDelete(false);
+                            accountPermanentDeleteResponse.setReason("Could not delete account from account table, account was not deleted");
+                            logger.warn(accountPermanentDeleteResponse);
+                            return accountPermanentDeleteResponse;
+                        }
+
+                    } else {
+                        accountPermanentDeleteResponse.setPaymentPreferenceDelete(false);
+                        accountPermanentDeleteResponse.setSuccess(false);
+                        accountPermanentDeleteResponse.setReason("Couldn't delete all payment preference address, account was not deleted");
+                        logger.warn(accountPermanentDeleteResponse);
+                        return accountPermanentDeleteResponse;
+                    }
+
+                } else {
+                            accountPermanentDeleteResponse.setShippingAddressDelete(false);
+                            accountPermanentDeleteResponse.setSuccess(false);
+                            accountPermanentDeleteResponse.setReason("Couldn't delete shipping address, account was not deleted.");
+                            logger.warn(accountPermanentDeleteResponse);
+                            return accountPermanentDeleteResponse;
+                        }
+                    } else {
+                        accountPermanentDeleteResponse.setSuccess(false);
+                        accountPermanentDeleteResponse.setReason("Couldn't delete all orders");
+                        logger.warn(accountPermanentDeleteResponse);
+                        return accountPermanentDeleteResponse;
+                    }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return accountPermanentDeleteResponse;
+    }
+
 
     /**
      * Change the password of a registered user. This can happen in 1 of 2 ways: <br/>
@@ -442,6 +531,14 @@ public class AccountService implements Injectable {
         }
 
         return dtos;
+    }
+    private String encode64(String source){
+        return Base64
+                .getEncoder()
+                .encodeToString(source.getBytes());
+    }
+    public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
+        return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
     }
 
 }

@@ -55,7 +55,26 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
         }
         return count;
     }
+    @Override
+    public int deletePaymentPreferences(long userId) {
 
+        try {
+            final StringBuilder deletePaymentPreferences = new StringBuilder("DELETE FROM ")
+                    .append(PaymentPreferences.class.getName())
+                    .append(" WHERE ")
+                    .append(PaymentPreferences.FIELD_USER_ID).append("=").append(userId);
+            Query queryDelete = entityManager.createQuery(deletePaymentPreferences.toString());
+            int helper = queryDelete.executeUpdate();
+
+            if(get(userId) == null){
+                return 0;
+            }
+            else{return 1;}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
     @Override
     public PaymentPreferences delete(long userId, int paymentMethod) {
 

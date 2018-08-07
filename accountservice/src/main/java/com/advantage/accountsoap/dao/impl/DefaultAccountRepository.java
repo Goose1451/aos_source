@@ -4,6 +4,8 @@ import com.advantage.accountsoap.config.AccountConfiguration;
 import com.advantage.accountsoap.dao.*;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.model.*;
+import com.advantage.accountsoap.dao.PaymentPreferencesRepository;
+import com.advantage.accountsoap.services.PaymentPreferencesService;
 import com.advantage.accountsoap.util.AccountPassword;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
 import com.advantage.accountsoap.util.JPAQueryHelper;
@@ -37,7 +39,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
     private static final int TOTAL_ACCOUNTS_COUNT = 14;
     private static final int TOTAL_COUNTRIES_COUNT = 243;
-
+    DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository;
     private AccountStatusResponse accountStatusResponse;
     private String failureMessage;
     private static final Logger logger = Logger.getLogger(DefaultAccountRepository.class);
@@ -320,7 +322,6 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
         Query query = entityManager.createQuery(hql.toString());
         int result = query.executeUpdate();
-
 
         return result;
     }
@@ -646,55 +647,36 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         return new AccountStatusResponse(true, "Successfully", accountId);
     }
 
+    //Will return success if there are no payment preferences for the user
+    //even if non were deleted
     @Override
     public AccountStatusResponse removePaymentPreferences(long accountId) {
-        //Account account = get(accountId);
-        //if (account == null) return new AccountStatusResponse(false, "Account not fount", -1);
-        //PaymentPreferences p = account.getPaymentPreferences()
-        //        .stream()
-        //        .filter(x -> x.getAccountId() == preferenceId)
-        //        .findFirst().get();
-        //if(p == null)return new AccountStatusResponse(false, "Preference not fount", -1);
-        //account.getPaymentPreferences().remove(p);
 
-        final StringBuilder hql = new StringBuilder("DELETE FROM ")
-                .append(PaymentPreferences.class.getName())
-                .append(" WHERE ")
-                .append(PaymentPreferences.FIELD_USER_ID).append("=").append(accountId);
+        try {
+            final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                    .append(PaymentPreferences.class.getName())
+                    .append(" WHERE ")
+                    .append(PaymentPreferences.FIELD_USER_ID).append("=").append(accountId);
 
-        Query query = entityManager.createQuery(hql.toString());
-        int result = query.executeUpdate();
+            Query query = entityManager.createQuery(hql.toString());
+            query.executeUpdate();
+            AccountStatusResponse accountStatusResponse;
 
-        AccountStatusResponse accountStatusResponse;
-        if (result == 1) {
-            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
-        } else {
+            if(defaultPaymentPreferencesRepository.getPaymentPreferencesByUserId(accountId) == null){
+
+                accountStatusResponse = new AccountStatusResponse(true, "Payment preferences was deleted successfully", accountId);
+            }else {
+
+                accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+            }
+            return accountStatusResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
             accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+            return accountStatusResponse;
         }
-
-        return accountStatusResponse;
     }
-
-//    @Override
-//    public AccountStatusResponse deleteShippingAddress(long accountId) {
-//
-//        final StringBuilder hql = new StringBuilder("DELETE FROM ")
-//                .append(ShippingAddress.class.getName())
-//                .append(" WHERE ")
-//                .append(ShippingAddress.FIELD_USER_ID).append("=").append(accountId);
-//
-//        Query query = entityManager.createQuery(hql.toString());
-//        int result = query.executeUpdate();
-//
-//        AccountStatusResponse accountStatusResponse;
-//        if (result == 1) {
-//            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
-//        } else {
-//            accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
-//        }
-//
-//        return accountStatusResponse;
-//    }
 
     @Override
     public AccountStatusResponse deleteShippingAddress(long accountId) {

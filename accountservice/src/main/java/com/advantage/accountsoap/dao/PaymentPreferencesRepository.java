@@ -28,4 +28,6 @@ public interface PaymentPreferencesRepository {
     int delete(PaymentPreferences... entities);
 
     PaymentPreferences delete(long userId, int paymentMethod);
+
+    int deletePaymentPreferences(long userId);
 }

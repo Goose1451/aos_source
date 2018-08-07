@@ -173,6 +173,14 @@ public class PaymentPreferencesService implements Injectable{
     }
 
     @Transactional
+    public PaymentPreferencesStatusResponse deleteAllPaymentPreference(long userId) {
+        int result  = paymentPreferencesRepository.deletePaymentPreferences(userId);
+        if (result == 1 ) return  new PaymentPreferencesStatusResponse(false, "deletePaymentPreference: " + PaymentPreferences.MESSAGE_SAFE_PAY_DATA_FAILED_UPDATE, -1);
+
+        return  new PaymentPreferencesStatusResponse(true, PaymentPreferences.MESSAGE_SAFE_PAY_DATA_DELETED_SUCCESSFULLY, 0);
+    }
+
+    @Transactional
     public List<PaymentPreferencesDto> getPaymentPreferencesByUserId(long userId) {
         ArgumentValidationHelper.validateLongArgumentIsPositive(userId, "user id");
 

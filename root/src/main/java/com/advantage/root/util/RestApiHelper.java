@@ -102,6 +102,31 @@ public abstract class RestApiHelper {
         int responseCode = conn.getResponseCode();
 
         logger.debug("responseCode = " + responseCode);
+        String returnValue = responseSolver(responseCode, conn);
+
+        conn.disconnect();
+
+        return returnValue;
+    }
+
+    public static String httpGetWithAuthorization(URL url, String serviceName, String key, String value ) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        logger.debug("HttpURLConnection = " + conn.getURL().toString());
+        conn.setRequestProperty(HttpHeaders.USER_AGENT, "AdvantageService/" + serviceName);
+        conn.setRequestProperty(key, value);
+        int responseCode = conn.getResponseCode();
+
+        logger.debug("responseCode = " + responseCode);
+
+        String returnValue = responseSolver(responseCode, conn);
+
+        conn.disconnect();
+
+        return returnValue;
+    }
+
+    private static String responseSolver (int responseCode, HttpURLConnection conn) throws IOException{
+
         String returnValue;
         switch (responseCode) {
             case org.apache.http.HttpStatus.SC_OK:
@@ -118,17 +143,23 @@ public abstract class RestApiHelper {
                 break;
             case org.apache.http.HttpStatus.SC_CONFLICT:
                 //  Product not found
-                returnValue = "Not found";
+                returnValue = "CONFLICT";
                 break;
             case org.apache.http.HttpStatus.SC_NOT_FOUND:
-                returnValue = "Not found";
+                returnValue = "NOT FOUND";
+                break;
+            case org.apache.http.HttpStatus.SC_FORBIDDEN:
+                returnValue = "FORBIDDEN";
+                break;
+            case org.apache.http.HttpStatus.SC_UNAUTHORIZED:
+                returnValue = "UNAUTHORIZED";
                 break;
             default:
                 IOException e = new IOException(conn.getResponseMessage());
                 logger.fatal(e);
                 throw e;
         }
-        conn.disconnect();
+
         return returnValue;
     }
 }

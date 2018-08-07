@@ -18,10 +18,13 @@ import com.advantage.common.Constants;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.exceptions.token.TokenException;
 import com.advantage.common.exceptions.token.VerificationTokenException;
+import com.advantage.common.security.AuthorizeAsUser;
 import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.Token;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.StringHelper;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -29,6 +32,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -320,13 +324,16 @@ public class AccountServiceEndpoint {
         AccountStatusResponse response = accountService.accountDelete(request.getAccountId());
         return new AccountDeleteResponse(response);
     }
-
+    @AuthorizeAsUser
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "AccountPermanentDeleteRequest")
     @ResponsePayload
-    public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException {
+    public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException, IOException {
         logger.debug(AccountServiceEndpoint.class.getName() + ".accountPermanentDelete(..) ");
 
-        AccountStatusResponse response = accountService.accountPermanentDelete(request.getAccountId());
+        AccountStatusResponse response = accountService.accountPermanentDelete(request.getAccountId(),request.getData());
         return new AccountPermanentDeleteResponse(response);
     }
 

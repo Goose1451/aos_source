@@ -49,14 +49,23 @@ public class DefaultAddressRepository extends AbstractRepository implements Addr
     @Override
     public int deleteShippingAddress(long userId) {
 
-        final StringBuilder hql = new StringBuilder("DELETE FROM ")
-                .append(ShippingAddress.class.getName())
-                .append(" WHERE ")
-                .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
+        try {
+            final StringBuilder deleteShippingAddress = new StringBuilder("DELETE FROM ")
+                    .append(ShippingAddress.class.getName())
+                    .append(" WHERE ")
+                    .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
+            Query queryDelete = entityManager.createQuery(deleteShippingAddress.toString());
+            int helper = queryDelete.executeUpdate();
 
-        Query query = entityManager.createQuery(hql.toString());
-        int result = query.executeUpdate();
-        return result;
+            List<ShippingAddress> addressPerUserId = getByAccountId(userId);
+            if(addressPerUserId == null){
+                return 0;
+            }
+           else{return 1;}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
     }
 
     @Override

@@ -51,7 +51,7 @@ public class DefaultAddressRepository extends AbstractRepository implements Addr
 
         try {
             final StringBuilder deleteShippingAddress = new StringBuilder("DELETE FROM ")
-                    .append(ShippingAddress.class.getName())
+                    .append("ShippingAddress")
                     .append(" WHERE ")
                     .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
             Query queryDelete = entityManager.createQuery(deleteShippingAddress.toString());

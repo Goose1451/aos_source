@@ -60,6 +60,9 @@ public class AccountStatusResponse {
         this.setToken(token);
     }
 
+    public AccountStatusResponse(boolean success, long accountId, long accountId1) {
+    }
+
     /**
      * @return
      */

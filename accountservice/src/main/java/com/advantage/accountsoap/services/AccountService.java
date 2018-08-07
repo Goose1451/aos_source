@@ -302,6 +302,7 @@ public class AccountService implements Injectable {
         AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
         accountPermanentDeleteResponse.setSuccess(false);
         accountPermanentDeleteResponse.setReason("Fail to delete any account details");
+        accountPermanentDeleteResponse.setResponse(new AccountStatusResponse(true,accountId,accountId));
 
         try {
             Account account = accountRepository.get(accountId);

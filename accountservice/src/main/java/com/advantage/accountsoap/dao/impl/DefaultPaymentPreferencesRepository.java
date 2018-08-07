@@ -60,13 +60,13 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
 
         try {
             final StringBuilder deletePaymentPreferences = new StringBuilder("DELETE FROM ")
-                    .append(PaymentPreferences.class.getName())
+                    .append("PaymentPreferences")
                     .append(" WHERE ")
                     .append(PaymentPreferences.FIELD_USER_ID).append("=").append(userId);
             Query queryDelete = entityManager.createQuery(deletePaymentPreferences.toString());
             int helper = queryDelete.executeUpdate();
 
-            if(get(userId) == null){
+            if(getPaymentPreferencesByUserId(userId) == null){
                 return 0;
             }
             else{return 1;}

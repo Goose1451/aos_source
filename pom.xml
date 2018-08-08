@@ -143,6 +143,26 @@
                 </pluginManagement>
             </build>
         </profile>
+        <profile>
+            <id>DA</id>
+            <modules>
+                <module>pack_wars</module>
+            </modules>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-war-plugin</artifactId>
+                            <version>${plugin.maven.war.version}</version>
+                            <configuration>
+                                <failOnMissingWebXml>false</failOnMissingWebXml>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
     </profiles>
     <build>
         <!--<filters>-->

@@ -26,6 +26,12 @@
                 <resources.source.path>dev</resources.source.path>
             </properties>
         </profile>
+        <profile>
+            <id>DA</id>
+            <properties>
+                <resources.source.path>DA</resources.source.path>
+            </properties>
+        </profile>
     </profiles>
     <build>
         <finalName>res</finalName>

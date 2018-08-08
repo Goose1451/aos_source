@@ -20,6 +20,12 @@
                 <resources.source.path>prod</resources.source.path>
             </properties>
         </profile>
+		<profile>
+			<id>DA</id>
+			<properties>
+				<resources.source.path>DA</resources.source.path>
+			</properties>
+		</profile>
         <profile>
             <id>development</id>
             <properties>

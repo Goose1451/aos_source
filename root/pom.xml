@@ -13,6 +13,9 @@
     <profiles>
         <profile>
             <id>production</id>
+            <properties>
+                <filtering>true</filtering>
+            </properties>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -81,6 +84,9 @@
         </profile>
         <profile>
             <id>development</id>
+            <properties>
+                <filtering>true</filtering>
+            </properties>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -137,6 +143,77 @@
                 </pluginManagement>
             </build>
         </profile>
+        <profile>
+            <id>DA</id>
+            <properties>
+                <filtering>false</filtering>
+            </properties>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>exec-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>exec-npm-install</id>
+                                    <phase>generate-sources</phase>
+                                    <configuration>
+                                        <executable>npm.cmd</executable>
+                                        <arguments>
+                                            <argument>install</argument>
+                                        </arguments>
+                                        <workingDirectory>src/main/webapp</workingDirectory>
+                                    </configuration>
+                                    <goals>
+                                        <goal>exec</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>exec-bower-install</id>
+                                    <phase>generate-sources</phase>
+                                    <configuration>
+                                        <executable>bower.cmd</executable>
+                                        <arguments>
+                                            <argument>install</argument>
+                                        </arguments>
+                                        <workingDirectory>src/main/webapp</workingDirectory>
+                                    </configuration>
+                                    <goals>
+                                        <goal>exec</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>exec-grunt</id>
+                                    <phase>process-resources</phase>
+                                    <configuration>
+                                        <executable>grunt.cmd</executable>
+                                        <workingDirectory>src/main/webapp</workingDirectory>
+                                    </configuration>
+                                    <goals>
+                                        <goal>exec</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-war-plugin</artifactId>
+                            <version>2.6</version>
+                            <configuration>
+                                <warSourceExcludes>app/,node_modules/,target/,css/</warSourceExcludes>
+                                <failOnMissingWebXml>false</failOnMissingWebXml>
+                                <webResources>
+                                    <resource>
+                                        <directory>${basedir}/src/main/webapp/target</directory>
+                                    </resource>
+                                </webResources>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
     </profiles>
     <build>
         <finalName>ROOT</finalName>
@@ -180,7 +257,7 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/generated-resources</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>${filtering}</filtering>
                                     <!--<excludes>-->
                                     <!--<exclude>/*.*</exclude>-->
                                     <!--</excludes>-->
@@ -204,7 +281,7 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/generated-resources</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>${filtering}</filtering>
                                     <includes combine.self="override">
                                         <include>/log4j.properties</include>
                                     </includes>

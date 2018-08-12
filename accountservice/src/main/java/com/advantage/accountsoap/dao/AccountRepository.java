@@ -51,11 +51,11 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     AccountStatusResponse removePaymentPreferences(long accountId, long paymentMethod);
 
-    AccountStatusResponse deleteAllPaymentPreferences(long accountId);
+    void deleteAllPaymentPreferences(long accountId);
 
     AccountStatusResponse dbRestoreFactorySettings();
 
-    AccountStatusResponse deleteShippingAddress(long accountId);
+    void deleteShippingAddress(long accountId);
 
     AccountStatusResponse deleteUserOrders(long accountId,String data);
 }

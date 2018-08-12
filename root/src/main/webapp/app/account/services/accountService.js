@@ -233,6 +233,42 @@ define(['./module'], function (services) {
 
                     return defer.promise;
                 },
+                deleteAccount: function () {
+
+                    $("#loginMiniTitle").fadeOut(300);
+                    $("#loginMobileMiniTitle").fadeOut(300);
+                    $("#" + miniTitleId).fadeToggle(300);
+
+                    var defer = $q.defer();
+                    var params = server.account.deleteAccount();
+                    var user = $rootScope.userCookie;
+                    Helper.enableLoader();
+
+                    $.soap({
+                        url: params.path,
+                        method: params.method,
+                        namespaceURL: server.namespaceURL,
+                        SOAPAction: server.namespaceURL + params.method,
+                        data: {
+                            accountId: user.response.userId,
+                            base64Token: "Basic "+user.response.t_authorization,
+                        },
+                        success: function (soapResponse) {
+                            var response = soapResponse.toJSON(params.response);
+                            Helper.disableLoader();
+                            Loger.Received(response);
+                            defer.resolve(response);
+                        },
+                        error: function (response) {
+                            Loger.Received(response);
+                            Helper.disableLoader();
+                            defer.reject("Request failed! (getShippingDetails)");
+                        },
+                        enableLogging: true
+                    });
+
+                    return defer.promise;
+                },
 
                 changeUserPassword: function (accountId, passwords) {
 

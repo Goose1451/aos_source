@@ -451,13 +451,14 @@ public class AccountService implements Injectable {
         return accountRepository.removePaymentPreferences(accountId,paymentMethod);
     }
     @Transactional
-    public AccountStatusResponse deletePaymentPreferences(long accountId) {
-        return accountRepository.removePaymentPreferences(accountId);
+    public void deleteAllPaymentPreferences(long accountId) {
+        accountRepository.deleteAllPaymentPreferences(accountId);
     }
 
     @Transactional
-    public AccountStatusResponse deleteShippingAddress(long accountId) {
-        return accountRepository.deleteShippingAddress(accountId);
+    public void deleteShippingAddress(long accountId) {
+        accountRepository.deleteShippingAddress(accountId);
+
     }
     @Transactional
     public AccountStatusResponse deleteUserOrders(long accountId, String data) {

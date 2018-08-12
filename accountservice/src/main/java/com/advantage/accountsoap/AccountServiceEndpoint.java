@@ -333,12 +333,26 @@ public class AccountServiceEndpoint {
     public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException, IOException {
         logger.debug(AccountServiceEndpoint.class.getName() + ".accountPermanentDelete(..) ");
 
-        AccountStatusResponse response1 = accountService.removePaymentPreferences(request.getAccountId());
-        List<PaymentPreferencesDto> deleteCheck = paymentPreferencesService.getPaymentPreferencesByUserId(request.getAccountId());
-        AccountStatusResponse response2 = accountService.deleteShippingAddress(request.getAccountId());
-        AccountStatusResponse response3 = accountService.deleteUserOrders(request.getAccountId(), request.getData());
-        AccountStatusResponse response4 = accountService.accountPermanentDelete(request.getAccountId());
-        return new AccountPermanentDeleteResponse(response1);
+        accountService.deleteAllPaymentPreferences(request.getAccountId());
+        List<PaymentPreferencesDto> deleteCheckPP = paymentPreferencesService.getPaymentPreferencesByUserId(request.getAccountId());
+        accountService.deleteShippingAddress(request.getAccountId());
+        List<AddressDto> deleteCheckSA = addressService.getByAccountId(request.getAccountId());
+        AccountStatusResponse deleteOrdersResponse = accountService.deleteUserOrders(request.getAccountId(), request.getData());
+        AccountStatusResponse deleteAccountResponse = accountService.accountPermanentDelete(request.getAccountId());
+        if(deleteCheckPP == null && deleteCheckSA == null && deleteOrdersResponse.isSuccess()== true
+                && deleteAccountResponse.isSuccess()==true){
+            logger.info(deleteAccountResponse);
+            return new AccountPermanentDeleteResponse(deleteAccountResponse);
+        }
+        AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+        accountPermanentDeleteResponse.setSuccess(false);
+        accountPermanentDeleteResponse.setReason("One of these elements was not deleted " +
+                "Payment preferences list(should be null) = " +deleteCheckSA+"" +
+                "Shipping address list(should be null) = "+deleteCheckSA+"" +
+                "DeleteOrdersResponse is success = "+deleteOrdersResponse.isSuccess()+"" +
+                "DeleteAccountResponse is success = "+deleteAccountResponse);
+        logger.warn(accountPermanentDeleteResponse);
+        return accountPermanentDeleteResponse;
     }
 
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "EncodePasswordRequest")
@@ -519,20 +533,20 @@ public class AccountServiceEndpoint {
         logger.debug(AccountServiceEndpoint.class.getName() + ".deletePaymentPreference(DeletePaymentPreferenceRequest) is calling method authorizeAsUser(..)");
         //  TODO-Benny: Verify that .NET and mobile version support this authorization
         //authorizeAsUser(request);
-        AccountStatusResponse response = accountService.removePaymentPreferences(request.getAccountId());
+        AccountStatusResponse response = accountService.removePaymentPreferences(request.getAccountId(), request.getId());
 
         return new DeletePaymentPreferenceResponse(response);
     }
 
-    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DeleteShippingAddressRequest")
-    @ResponsePayload
-    public DeleteShippingAddressResponse deleteShippingAddressResponse(@RequestPayload DeleteShippingAddressRequest request) throws TokenException {
-        logger.debug(AccountServiceEndpoint.class.getName() + ".deleteShippingAddress(deleteShippingAddressRequest) is calling method authorizeAsUser(..)");
-
-        AccountStatusResponse response = accountService.deleteShippingAddress(request.getAccountId());
-
-        return new DeleteShippingAddressResponse(response);
-    }
+//    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DeleteShippingAddressRequest")
+//    @ResponsePayload
+//    public DeleteShippingAddressResponse deleteShippingAddressResponse(@RequestPayload DeleteShippingAddressRequest request) throws TokenException {
+//        logger.debug(AccountServiceEndpoint.class.getName() + ".deleteShippingAddress(deleteShippingAddressRequest) is calling method authorizeAsUser(..)");
+//
+//        //AccountStatusResponse response = accountService.deleteShippingAddress(request.getAccountId());
+//
+//        return new DeleteShippingAddressResponse(response);
+//    }
 
 
 

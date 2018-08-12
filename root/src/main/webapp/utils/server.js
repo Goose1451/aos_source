@@ -430,6 +430,16 @@ var server = {
             return wsdlToReturn;
         }
         ,
+        deleteAccount: function () {
+            var wsdlToReturn = {
+                path: wsdlPath,
+                method: 'AccountPermanentDeleteRequest',
+                response: 'accountPermanentDeleteResponse'
+            }
+            Loger.CallingWSDL(wsdlToReturn);
+            return wsdlToReturn;
+        }
+        ,
 
         accountUpdate: function () {
             var wsdlToReturn = {

@@ -681,9 +681,9 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
     //Will return success if there are no payment preferences for the user
     //even if non were deleted
     @Override
-    public AccountStatusResponse deleteAllPaymentPreferences(long accountId, long paymentMethod) {
+    public void deleteAllPaymentPreferences(long accountId) {
 
-        try {
+
             final StringBuilder hql = new StringBuilder("DELETE FROM ")
                     .append(PaymentPreferences.class.getName())
                     .append(" WHERE ")
@@ -691,61 +691,27 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
             Query query = entityManager.createQuery(hql.toString());
             query.executeUpdate();
-            AccountStatusResponse accountStatusResponse =new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
-            DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository = new DefaultPaymentPreferencesRepository();
 
-            List<PaymentPreferences> prefs = defaultPaymentPreferencesRepository.getPaymentPreferencesByUserId(accountId);
-            if(prefs == null){
-
-                accountStatusResponse.setSuccess(true);
-                accountStatusResponse.setReason("Successfully");
-            }else {
-
-                accountStatusResponse.setSuccess(false);
-            }
-            return accountStatusResponse;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            accountStatusResponse.setSuccess(false);
-            return accountStatusResponse;
-        }
     }
 
     @Override
-    public AccountStatusResponse deleteShippingAddress(long userId) {
+    public void deleteShippingAddress(long userId) {
 
-        try {
+
             final StringBuilder deleteShippingAddress = new StringBuilder("DELETE FROM ")
                     .append("ShippingAddress")
                     .append(" WHERE ")
                     .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
             Query queryDelete = entityManager.createQuery(deleteShippingAddress.toString());
 
-            int result = queryDelete.executeUpdate();
+            queryDelete.executeUpdate();
 
-            AccountStatusResponse accountStatusResponse;
-
-            if(defaultAddressRepository.getByAccountId(userId) == null){
-
-                accountStatusResponse = new AccountStatusResponse(true, "ShippingAddress were deleted successfully", userId);
-            }else {
-
-                accountStatusResponse = new AccountStatusResponse(false, "ShippingAddress not deleted", userId);
-            }
-            return accountStatusResponse;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            accountStatusResponse = new AccountStatusResponse(false, "ShippingAddress not deleted", userId);
-            return accountStatusResponse;
-        }
     }
 
     @Override
     public AccountStatusResponse deleteUserOrders(long userId, String data) {
 
-        Account account = accountRepository.get(userId);
+        Account account = get(userId);
         String stringResponse = null;
         URL deleteOrdersForUser = null;
         String authorizationKey = encode64(account.getLoginName() + ":" + data);

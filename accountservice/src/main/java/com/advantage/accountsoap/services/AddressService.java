@@ -84,12 +84,6 @@ public class AddressService implements Injectable{
 
         return add(accountId, dtos);
     }
-    @Transactional
-    public AddressStatusResponse deleteShippingAddress(long userId) {
-        int result = addressRepository.deleteShippingAddress(userId);
-        if (result == 0 ) return  new AddressStatusResponse(true, ShippingAddress.DELETE_SHIPPING_ADDRESS_SUCCESSFULLY);
-        return  new AddressStatusResponse(false, "deleteShippingAddress: Get shipping address by Id is more then 0 " + ShippingAddress.DELETE_SHIPPING_ADDRESS_FAIL);
-    }
 
     @Transactional
     public List<AddressDto> getAll() {

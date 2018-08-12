@@ -2,21 +2,24 @@ package com.advantage.accountsoap.dao.impl;
 
 import com.advantage.accountsoap.config.AccountConfiguration;
 import com.advantage.accountsoap.dao.*;
+import com.advantage.accountsoap.dto.DeleteOrderResponse;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.model.*;
-import com.advantage.accountsoap.dao.PaymentPreferencesRepository;
-import com.advantage.accountsoap.services.PaymentPreferencesService;
 import com.advantage.accountsoap.util.AccountPassword;
 import com.advantage.accountsoap.util.ArgumentValidationHelper;
 import com.advantage.accountsoap.util.JPAQueryHelper;
 import com.advantage.accountsoap.util.fs.FileSystemHelper;
 import com.advantage.common.Constants;
+import com.advantage.common.Url_resources;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.Token;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.RestApiHelper;
 import com.advantage.root.util.ValidationHelper;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,7 +32,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -40,7 +42,9 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
     private static final int TOTAL_ACCOUNTS_COUNT = 14;
     private static final int TOTAL_COUNTRIES_COUNT = 243;
     DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository;
+    DefaultAddressRepository defaultAddressRepository;
     private AccountStatusResponse accountStatusResponse;
+    private AccountRepository accountRepository;
     private String failureMessage;
     private static final Logger logger = Logger.getLogger(DefaultAccountRepository.class);
 
@@ -310,22 +314,30 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
     @Override
     public int deleteAccountPermanently(Account account) {
-        ArgumentValidationHelper.validateArgumentIsNotNull(account, "application user");
+        try {
+            ArgumentValidationHelper.validateArgumentIsNotNull(account, "application user");
 
-        if (account == null) {
-            return 0;
+            if (account == null) {
+                return 0;
+            }
+            long accountId = account.getId();
+            final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                    .append("Account")
+                    .append(" WHERE ")
+                    .append(Account.FIELD_ID).append("=").append(accountId);
+
+            Query query = entityManager.createQuery(hql.toString());
+
+            int result = query.executeUpdate();
+
+
+            return result;
+
+            } catch(Exception e){
+                e.printStackTrace();
+                return 1;
+            }
         }
-        final StringBuilder hql = new StringBuilder("DELETE FROM ")
-                .append(Account.class.getName())
-                .append(" WHERE ")
-                .append(Account.FIELD_ID).append("=").append(account.getId());
-
-        Query query = entityManager.createQuery(hql.toString());
-        int result = query.executeUpdate();
-
-        return result;
-    }
-
 
     @Override
     public List<Account> getAppUsersByCountry(Integer countryId) {
@@ -660,50 +672,105 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
             Query query = entityManager.createQuery(hql.toString());
             query.executeUpdate();
-            AccountStatusResponse accountStatusResponse;
+            AccountStatusResponse accountStatusResponse =new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+            DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository = new DefaultPaymentPreferencesRepository();
 
-            if(defaultPaymentPreferencesRepository.getPaymentPreferencesByUserId(accountId) == null){
+            List<PaymentPreferences> prefs = defaultPaymentPreferencesRepository.getPaymentPreferencesByUserId(accountId);
+            if(prefs == null){
 
-                accountStatusResponse = new AccountStatusResponse(true, "Payment preferences was deleted successfully", accountId);
+                accountStatusResponse.setSuccess(true);
+                accountStatusResponse.setReason("Successfully");
             }else {
 
-                accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+                accountStatusResponse.setSuccess(false);
             }
             return accountStatusResponse;
 
         } catch (Exception e) {
             e.printStackTrace();
-            accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+            accountStatusResponse.setSuccess(false);
+            return accountStatusResponse;
+        }
+    }
+    @Override
+    public AccountStatusResponse deleteShippingAddress(long userId) {
+
+        try {
+            final StringBuilder deleteShippingAddress = new StringBuilder("DELETE FROM ")
+                    .append("ShippingAddress")
+                    .append(" WHERE ")
+                    .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
+            Query queryDelete = entityManager.createQuery(deleteShippingAddress.toString());
+
+            int result = queryDelete.executeUpdate();
+
+            AccountStatusResponse accountStatusResponse;
+
+            if(defaultAddressRepository.getByAccountId(userId) == null){
+
+                accountStatusResponse = new AccountStatusResponse(true, "ShippingAddress were deleted successfully", userId);
+            }else {
+
+                accountStatusResponse = new AccountStatusResponse(false, "ShippingAddress not deleted", userId);
+            }
+            return accountStatusResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            accountStatusResponse = new AccountStatusResponse(false, "ShippingAddress not deleted", userId);
             return accountStatusResponse;
         }
     }
 
     @Override
-    public AccountStatusResponse deleteShippingAddress(long accountId) {
+    public AccountStatusResponse deleteUserOrders(long userId, String data) {
 
+        Account account = accountRepository.get(userId);
+        String stringResponse = null;
         URL deleteOrdersForUser = null;
+        String authorizationKey = encode64(account.getLoginName() + ":" + data);
+        URL orderApiUrl = Url_resources.getUrlOrder();
+
         try {
-            deleteOrdersForUser = new URL("http://localhost:8080/order/api/v1/orders/history/users/926433014/3214517986");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            String stringResponse = RestApiHelper.httpGet(deleteOrdersForUser , "account");
-            logger.debug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            logger.debug("stringResponse--"+stringResponse);
+
+            deleteOrdersForUser = new URL(orderApiUrl + "orders/history/users/" + userId);
+            stringResponse = RestApiHelper.httpGetWithAuthorization(deleteOrdersForUser, "account", "Authorization", "Basic " + authorizationKey);
+            logger.debug("stringResponse--" + stringResponse);
+
+            switch (stringResponse) {
+                case "CONFLICT":
+                    return new AccountStatusResponse(false, "UserOrders not deleted server returned: CONFLICT", userId);
+
+                case "NOT FOUND":
+                    return new AccountStatusResponse(false, "UserOrders not deleted server returned: NOT FOUND", userId);
+
+                case "FORBIDDEN":
+                    return new AccountStatusResponse(false, "UserOrders not deleted server returned: FORBIDDEN", userId);
+
+                case "UNAUTHORIZED":
+                    return new AccountStatusResponse(false, "UserOrders not deleted server returned: UNAUTHORIZED", userId);
+
+            }
+            //Removing added value by apiHelper
+            String stringResponseEdited = "{\"" + stringResponse.substring(17);
+            ObjectMapper objectMapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            DeleteOrderResponse deleteOrderResponse = objectMapper.readValue(stringResponseEdited, DeleteOrderResponse.class);
+
+            if(deleteOrderResponse.isSuccess()){
+                return new AccountStatusResponse(true, "UserOrders were deleted successfully", userId);
+            }
+            else{
+                return new AccountStatusResponse(true, "UserOrders were deleted successfully", userId);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        AccountStatusResponse accountStatusResponse;
-        accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
-//        if (result == 1) {
-//            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
-//        } else {
-//            accountStatusResponse = new AccountStatusResponse(false, "Shipping details not deleted :(", accountId);
-//        }
-
-        return accountStatusResponse;
+        return new AccountStatusResponse(false, "UserOrders not deleted server returned: UNAUTHORIZED", userId);
     }
+
 
     @Override
     public AccountStatusResponse dbRestoreFactorySettings() {
@@ -797,5 +864,11 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
         //return new AccountStatusResponse(true, "Restore factory settings ACCOUNT-SERVICE successful", 1);
         return new AccountStatusResponse(true, sb.toString(), 1);
+    }
+
+    private String encode64(String source){
+        return Base64
+                .getEncoder()
+                .encodeToString(source.getBytes());
     }
 }

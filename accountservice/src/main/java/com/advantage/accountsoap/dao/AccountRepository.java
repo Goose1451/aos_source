@@ -3,7 +3,6 @@ package com.advantage.accountsoap.dao;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.common.dao.DefaultCRUDOperations;
-import com.advantage.common.dto.CatalogResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -52,8 +51,9 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     AccountStatusResponse removePaymentPreferences(long accountId);
 
+    AccountStatusResponse dbRestoreFactorySettings();
+
     AccountStatusResponse deleteShippingAddress(long accountId);
 
-
-    AccountStatusResponse dbRestoreFactorySettings();
+    AccountStatusResponse deleteUserOrders(long accountId,String data);
 }

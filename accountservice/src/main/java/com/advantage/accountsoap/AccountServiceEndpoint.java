@@ -333,8 +333,12 @@ public class AccountServiceEndpoint {
     public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException, IOException {
         logger.debug(AccountServiceEndpoint.class.getName() + ".accountPermanentDelete(..) ");
 
-        AccountStatusResponse response = accountService.accountPermanentDelete(request.getAccountId(),request.getData());
-        return new AccountPermanentDeleteResponse(response);
+        AccountStatusResponse response1 = accountService.removePaymentPreferences(request.getAccountId());
+        List<PaymentPreferencesDto> deleteCheck = paymentPreferencesService.getPaymentPreferencesByUserId(request.getAccountId());
+        AccountStatusResponse response2 = accountService.deleteShippingAddress(request.getAccountId());
+        AccountStatusResponse response3 = accountService.deleteUserOrders(request.getAccountId(), request.getData());
+        AccountStatusResponse response4 = accountService.accountPermanentDelete(request.getAccountId());
+        return new AccountPermanentDeleteResponse(response1);
     }
 
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "EncodePasswordRequest")

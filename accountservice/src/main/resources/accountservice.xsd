@@ -105,10 +105,6 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="success" type="tns:responseReason" form="qualified"/>
-              <xs:element name="userId" type="xs:long" form="qualified"/>
-              <xs:element name="reason" type="xs:string" form="qualified"/>
-              <xs:element name="token" type="xs:string" form="qualified"/>
-              <xs:element name="sessionId" type="xs:string" form="qualified"/>
               <xs:element name="OrderHeaderDelete" type="xs:boolean" form="qualified"/>
               <xs:element name="OrderLinesDelete" type="xs:boolean" form="qualified"/>
               <xs:element name="ShippingAddressDelete" type="xs:boolean" form="qualified"/>

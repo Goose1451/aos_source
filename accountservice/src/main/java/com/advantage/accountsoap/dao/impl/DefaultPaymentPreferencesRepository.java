@@ -64,12 +64,12 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
                     .append(" WHERE ")
                     .append(PaymentPreferences.FIELD_USER_ID).append("=").append(userId);
             Query queryDelete = entityManager.createQuery(deletePaymentPreferences.toString());
-            int helper = queryDelete.executeUpdate();
+            queryDelete.executeUpdate();
 
-            if(getPaymentPreferencesByUserId(userId) == null){
+            if(getPaymentPreferencesByUserId(userId) ==null ){
                 return 0;
-            }
-            else{return 1;}
+            }else {return 1;}
+
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
@@ -92,6 +92,7 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
 
         return accounts.isEmpty() ? null : accounts;
     }
+
 
     @Override
     public PaymentPreferences get(long userId) {

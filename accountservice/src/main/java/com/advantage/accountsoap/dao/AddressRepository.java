@@ -20,5 +20,4 @@ public interface AddressRepository extends DefaultCRUDOperations<ShippingAddress
 
     ShippingAddress update(ShippingAddress address);
 
-    int deleteShippingAddress(long accountId);
 }

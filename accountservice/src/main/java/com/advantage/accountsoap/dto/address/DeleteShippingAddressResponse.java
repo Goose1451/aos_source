@@ -22,6 +22,10 @@ public class DeleteShippingAddressResponse {
         this.response = response;
     }
 
+    public DeleteShippingAddressResponse(AddressStatusResponse response) {
+
+    }
+
     public AccountStatusResponse getResponse() {
         return response;
     }

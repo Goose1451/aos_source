@@ -658,11 +658,30 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         entityManager.persist(account);
         return new AccountStatusResponse(true, "Successfully", accountId);
     }
+    @Override
+    public AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId) {
 
+        final StringBuilder hql = new StringBuilder("DELETE FROM ")
+                .append(PaymentPreferences.class.getName())
+                .append(" WHERE ")
+                .append(PaymentPreferences.FIELD_USER_ID).append("=").append(accountId);
+
+        Query query = entityManager.createQuery(hql.toString());
+        int result = query.executeUpdate();
+
+        AccountStatusResponse accountStatusResponse;
+        if (result == 1) {
+            accountStatusResponse = new AccountStatusResponse(true, "Successfully", accountId);
+        } else {
+            accountStatusResponse = new AccountStatusResponse(false, "Payment preferences not deleted", accountId);
+        }
+
+        return accountStatusResponse;
+    }
     //Will return success if there are no payment preferences for the user
     //even if non were deleted
     @Override
-    public AccountStatusResponse removePaymentPreferences(long accountId) {
+    public AccountStatusResponse deleteAllPaymentPreferences(long accountId, long paymentMethod) {
 
         try {
             final StringBuilder hql = new StringBuilder("DELETE FROM ")
@@ -692,6 +711,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
             return accountStatusResponse;
         }
     }
+
     @Override
     public AccountStatusResponse deleteShippingAddress(long userId) {
 

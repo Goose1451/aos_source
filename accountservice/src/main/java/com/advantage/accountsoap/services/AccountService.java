@@ -447,7 +447,11 @@ public class AccountService implements Injectable {
     }
 
     @Transactional
-    public AccountStatusResponse removePaymentPreferences(long accountId) {
+    public AccountStatusResponse removePaymentPreferences(long accountId, long paymentMethod) {
+        return accountRepository.removePaymentPreferences(accountId,paymentMethod);
+    }
+    @Transactional
+    public AccountStatusResponse deletePaymentPreferences(long accountId) {
         return accountRepository.removePaymentPreferences(accountId);
     }
 

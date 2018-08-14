@@ -461,8 +461,8 @@ public class AccountService implements Injectable {
 
     }
     @Transactional
-    public AccountStatusResponse deleteUserOrders(long accountId, String data) {
-        return accountRepository.deleteUserOrders(accountId, data);
+    public AccountStatusResponse deleteUserOrders(long accountId, String base64Token) {
+        return accountRepository.deleteUserOrders(accountId, base64Token);
     }
 
     public AccountStatusResponse dbRestoreFactorySettings() {

@@ -337,20 +337,25 @@ public class AccountServiceEndpoint {
         List<PaymentPreferencesDto> deleteCheckPP = paymentPreferencesService.getPaymentPreferencesByUserId(request.getAccountId());
         accountService.deleteShippingAddress(request.getAccountId());
         List<AddressDto> deleteCheckSA = addressService.getByAccountId(request.getAccountId());
-        AccountStatusResponse deleteOrdersResponse = accountService.deleteUserOrders(request.getAccountId(), request.getData());
+        AccountStatusResponse deleteOrdersResponse = accountService.deleteUserOrders(request.getAccountId(), request.getBase64Token());
         AccountStatusResponse deleteAccountResponse = accountService.accountPermanentDelete(request.getAccountId());
+
         if(deleteCheckPP == null && deleteCheckSA == null && deleteOrdersResponse.isSuccess()== true
                 && deleteAccountResponse.isSuccess()==true){
+
+            AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+            accountPermanentDeleteResponse.setReason("Account(orders, address, payment, account) deleted completely and permanently ");
+            accountPermanentDeleteResponse.setSuccess(true);
             logger.info(deleteAccountResponse);
-            return new AccountPermanentDeleteResponse(deleteAccountResponse);
+            return accountPermanentDeleteResponse;
         }
         AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
         accountPermanentDeleteResponse.setSuccess(false);
         accountPermanentDeleteResponse.setReason("One of these elements was not deleted " +
-                "Payment preferences list(should be null) = " +deleteCheckSA+"" +
-                "Shipping address list(should be null) = "+deleteCheckSA+"" +
-                "DeleteOrdersResponse is success = "+deleteOrdersResponse.isSuccess()+"" +
-                "DeleteAccountResponse is success = "+deleteAccountResponse);
+                "Payment preferences list(should be null) = " +deleteCheckSA+"  ." +
+                "Shipping address list(should be null) = "+deleteCheckSA+"  ." +
+                "DeleteOrdersResponse isSuccess = "+deleteOrdersResponse.isSuccess()+"  ." +
+                "DeleteAccountResponse isSuccess = "+deleteAccountResponse.isSuccess());
         logger.warn(accountPermanentDeleteResponse);
         return accountPermanentDeleteResponse;
     }

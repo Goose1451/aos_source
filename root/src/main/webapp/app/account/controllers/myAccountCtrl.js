@@ -44,6 +44,18 @@ define(['./module'], function (controllers) {
             s.allowOffersPromotionChanged = function(){
                 accountService.accountUpdate(s.accountDetails);
             }
+            s.deleteAccount = function(){
+
+                if (confirm("Press a button!")) {
+                   var responsePromise = accountService.deleteAccount();
+                   responsePromise.then(function(result) {
+
+                       // this is only run after getData() resolves
+                       var any  = result;
+                       console.log("result "+any);
+                   });
+                }
+            }
 
             Helper.forAllPage();
 

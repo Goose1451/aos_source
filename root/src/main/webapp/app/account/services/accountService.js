@@ -233,15 +233,13 @@ define(['./module'], function (services) {
 
                     return defer.promise;
                 },
-                deleteAccount: function () {
 
-                    $("#loginMiniTitle").fadeOut(300);
-                    $("#loginMobileMiniTitle").fadeOut(300);
-                    $("#" + miniTitleId).fadeToggle(300);
+                deleteAccount: function () {
 
                     var defer = $q.defer();
                     var params = server.account.deleteAccount();
                     var user = $rootScope.userCookie;
+
                     Helper.enableLoader();
 
                     $.soap({
@@ -262,7 +260,7 @@ define(['./module'], function (services) {
                         error: function (response) {
                             Loger.Received(response);
                             Helper.disableLoader();
-                            defer.reject("Request failed! (getShippingDetails)");
+                            defer.reject("Request deleteAccount failed! ");
                         },
                         enableLogging: true
                     });

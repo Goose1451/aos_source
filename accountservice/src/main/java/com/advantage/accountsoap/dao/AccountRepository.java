@@ -57,5 +57,5 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     void deleteShippingAddress(long accountId);
 
-    AccountStatusResponse deleteUserOrders(long accountId,String data);
+    AccountStatusResponse deleteUserOrders(long accountId,String base64Token);
 }

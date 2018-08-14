@@ -711,16 +711,15 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
     @Override
     public AccountStatusResponse deleteUserOrders(long userId, String data) {
 
-        Account account = get(userId);
+
         String stringResponse = null;
         URL deleteOrdersForUser = null;
-        String authorizationKey = encode64(account.getLoginName() + ":" + data);
         URL orderApiUrl = Url_resources.getUrlOrder();
 
         try {
 
             deleteOrdersForUser = new URL(orderApiUrl + "orders/history/users/" + userId);
-            stringResponse = RestApiHelper.httpGetWithAuthorization(deleteOrdersForUser, "account", "Authorization", "Basic " + authorizationKey);
+            stringResponse = RestApiHelper.httpGetWithAuthorization(deleteOrdersForUser, "account", "Authorization", data);
             logger.debug("stringResponse--" + stringResponse);
 
             switch (stringResponse) {
@@ -753,8 +752,9 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+            return new AccountStatusResponse(false, "UserOrders not deleted server returned: "+e, userId);
         }
-        return new AccountStatusResponse(false, "UserOrders not deleted server returned: UNAUTHORIZED", userId);
+        return new AccountStatusResponse(false, "UserOrders not deleted ", userId);
     }
 
 

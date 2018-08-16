@@ -5,7 +5,7 @@
 </nav>
 
 <section>
-    <article >
+    <article class="popup">
         <h3 class="roboto-regular sticky fixed fixedImportant" translate="MY_ACCOUNT"></h3>
 
         <div id="myAccountContainer">
@@ -177,6 +177,14 @@
                 <div icon-delete-account-svg
                      data-ng-click="deleteAccount()">
 
+                </div>
+            </div>
+
+            <div id="deleteAccountPopup" class="deleteAccountPopup close" role="dialog">
+                    <a id="popupOverlay" class="popupOverlay" >&times;</a>
+                    <div class="deleteAccountPopupContent">
+                        <h2>Are sure you want to delete account?</h2>
+                    </div>
                 </div>
             </div>
         </div>

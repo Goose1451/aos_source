@@ -46,15 +46,24 @@ define(['./module'], function (controllers) {
             }
             s.deleteAccount = function(){
 
-                if (confirm("Press a button!")) {
-                   var responsePromise = accountService.deleteAccount();
-                   responsePromise.then(function(result) {
+                $(".PopUp").fadeIn(100, function () {
+                    $(".PopUp > div:nth-child(1)").animate({"top": top}, 600);
+                    $("body").css({"left": "0px"})
+                });
+                $('.deleteAccountPopup').removeClass('close');
+                $('.deleteAccountPopup').addClass('show');
+                //
+                // $("body").addClass('overlayDelete');
 
-                       // this is only run after getData() resolves
-                       var any  = result;
-                       console.log("result "+any);
-                   });
-                }
+                // if (confirm("Press a button!")) {
+                //    var responsePromise = accountService.deleteAccount();
+                //    responsePromise.then(function(result) {
+                //
+                //        // this is only run after getData() resolves
+                //        var any  = result;
+                //        console.log("result "+any);
+                //    });
+                // }
             }
 
             Helper.forAllPage();

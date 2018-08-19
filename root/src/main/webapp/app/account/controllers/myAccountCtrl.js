@@ -16,6 +16,25 @@ define(['./module'], function (controllers) {
                     $timeout(checkLogin, 2000);
                 }
             }
+            $(document).click(function(event) {
+                if (!$(event.target).closest(".deleteAccountPopup,.deleteIcon").length) {
+                    $("body").find(".deleteAccountPopup").fadeOut(350);
+                }
+            });
+
+            s.closeDeleteDialogBox = function(){
+
+
+                $(".deleteAccountPopup").fadeOut(350);
+                $(".PopUp > div:nth-child(1)").animate({
+                    "top": "-150%"
+                }, 300, function () {
+                    $(".PopUp").fadeOut(100, function () {
+                        $("body").css("overflow-y", "scroll");
+                    });
+                });
+                }
+
 
             s.masterCredit4Digits = resolveParams.paymentPreferences &&
             resolveParams.paymentPreferences.masterCredit &&
@@ -50,9 +69,10 @@ define(['./module'], function (controllers) {
                     $(".PopUp > div:nth-child(1)").animate({"top": top}, 600);
                     $("body").css({"left": "0px"})
                 });
-                $('.deleteAccountPopup').removeClass('close');
-                $('.deleteAccountPopup').addClass('show');
-                //
+
+                $('.deleteAccountPopup').fadeIn(350);
+
+
                 // $("body").addClass('overlayDelete');
 
                 // if (confirm("Press a button!")) {

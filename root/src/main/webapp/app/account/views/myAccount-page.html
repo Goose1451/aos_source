@@ -173,21 +173,30 @@
                 </div>
             </div>
             <!--END NOTIFY ME ABOUT PROMOTIONS SECTION-->
-            <div>
+
+            <div class="deleteMainBtnContainer">
                 <div icon-delete-account-svg
-                     data-ng-click="deleteAccount()">
-
+                     data-ng-click="deleteAccount()"
+                     class="deleteIcon">
                 </div>
+                <div class="mastercart deleteBtnText">Delete Account<div/>
             </div>
+            <div id="deleteAccountPopup" class="deleteAccountPopup closeDelete" role="dialog">
 
-            <div id="deleteAccountPopup" class="deleteAccountPopup close" role="dialog">
-                    <a id="popupOverlay" class="popupOverlay" >&times;</a>
+                    <img src="../../css/images/logo.png" class="deletePopupImg">
+                    <div class="closeBtn loginPopUpCloseBtn" ng-click="closeDeleteDialogBox()"></div>
                     <div class="deleteAccountPopupContent">
-                        <h2>Are sure you want to delete account?</h2>
+                        <p>Are sure you want to delete account?</p>
                     </div>
+                <div class="deleteBtnContainer">
+                    <div class="deletePopupBtn deleteRed">yes</div>
+                    <div class="deletePopupBtn deleteGreen"
+                         ng-click="closeDeleteDialogBox()">no</div>
+                </div>
                 </div>
             </div>
         </div>
+
 
     </article>
 </section>

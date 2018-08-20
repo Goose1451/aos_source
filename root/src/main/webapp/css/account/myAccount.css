@@ -546,6 +546,10 @@
 
     margin-top: 10px;
 }
+.deleteBtnText:hover{
+
+    color: indianred;
+}
 .modificationOne{
     margin-top: 25px;
 }

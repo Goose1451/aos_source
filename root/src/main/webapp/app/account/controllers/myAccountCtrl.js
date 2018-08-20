@@ -6,8 +6,8 @@
 define(['./module'], function (controllers) {
     'use strict';
     controllers.controller('myAccountCtrl', ['$scope', '$timeout',
-        '$location', 'resolveParams', 'accountService',
-        function (s, $timeout, $location, resolveParams, accountService) {
+        '$location', 'resolveParams', 'accountService', 'ipCookie',
+        function (s, $timeout, $location, resolveParams, accountService, $cookie) {
 
             checkLogin();
             function checkLogin(){
@@ -17,7 +17,7 @@ define(['./module'], function (controllers) {
                 }
             }
             $(document).click(function(event) {
-                if (!$(event.target).closest(".deleteAccountPopup,.deleteIcon").length) {
+                if (!$(event.target).closest(".deleteAccountPopup,.deleteMainBtnContainer").length) {
                     $("body").find(".deleteAccountPopup").fadeOut(350);
                 }
             });
@@ -63,7 +63,7 @@ define(['./module'], function (controllers) {
             s.allowOffersPromotionChanged = function(){
                 accountService.accountUpdate(s.accountDetails);
             }
-            s.deleteAccount = function(){
+            s.deleteAccountUi = function(){
 
                 $(".PopUp").fadeIn(100, function () {
                     $(".PopUp > div:nth-child(1)").animate({"top": top}, 600);
@@ -72,18 +72,48 @@ define(['./module'], function (controllers) {
 
                 $('.deleteAccountPopup').fadeIn(350);
 
+            }
 
-                // $("body").addClass('overlayDelete');
+            s.deleteAccountConfirmed = function(){
 
-                // if (confirm("Press a button!")) {
-                //    var responsePromise = accountService.deleteAccount();
-                //    responsePromise.then(function(result) {
-                //
-                //        // this is only run after getData() resolves
-                //        var any  = result;
-                //        console.log("result "+any);
-                //    });
-                // }
+                s.closeDeleteDialogBox();
+
+                var responsePromise = accountService.deleteAccount();
+                responsePromise.then(function(result) {
+
+                    // this is only run after getData() resolves
+                    var isSuccess  = result.IsSuccess;
+                    console.log("result is success - "+isSuccess +"  Result outcome - "+ result.Reason );
+                    if(isSuccess){
+
+                        localStorage.removeItem('rememberMe');
+                        $cookie.remove($cookie('lastLogin'));
+
+                        $(".PopUp").fadeIn(100, function () {
+                            $(".PopUp > div:nth-child(1)").animate({"top": top}, 600);
+                            $("body").css({"left": "0px"})
+                        });
+
+                        $('.successfulDeleteMessage').fadeIn(350);
+
+                        setTimeout(function(){
+
+                            $(".successfulDeleteMessage").fadeOut(350);
+                            $(".PopUp > div:nth-child(1)").animate({
+                                "top": "-150%"
+                            }, 300, function () {
+                                $(".PopUp").fadeOut(100, function () {
+                                    $("body").css("overflow-y", "scroll");
+                                });
+                            });
+                            location.reload();
+
+                        }, 2000);
+
+
+                    }
+
+                });
             }
 
             Helper.forAllPage();

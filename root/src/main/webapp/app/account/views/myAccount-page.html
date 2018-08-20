@@ -173,29 +173,38 @@
                 </div>
             </div>
             <!--END NOTIFY ME ABOUT PROMOTIONS SECTION-->
-
-            <div class="deleteMainBtnContainer">
-                <div icon-delete-account-svg
-                     data-ng-click="deleteAccount()"
-                     class="deleteIcon">
-                </div>
-                <div class="mastercart deleteBtnText">Delete Account<div/>
-            </div>
-            <div id="deleteAccountPopup" class="deleteAccountPopup closeDelete" role="dialog">
-
-                    <img src="../../css/images/logo.png" class="deletePopupImg">
-                    <div class="closeBtn loginPopUpCloseBtn" ng-click="closeDeleteDialogBox()"></div>
-                    <div class="deleteAccountPopupContent">
-                        <p>Are sure you want to delete account?</p>
+                <div class="cube">
+                    <div class="deleteMainBtnContainer"
+                         data-ng-click="deleteAccountUi()">
+                            <div icon-delete-account-svg
+                                 class="deleteIcon">
+                            </div>
+                        <div class="mastercart deleteBtnText" style="padding-left:  10px;">Delete
+                        </div>
                     </div>
-                <div class="deleteBtnContainer">
-                    <div class="deletePopupBtn deleteRed">yes</div>
-                    <div class="deletePopupBtn deleteGreen"
-                         ng-click="closeDeleteDialogBox()">no</div>
-                </div>
                 </div>
             </div>
-        </div>
+                <div id="deleteAccountPopup" class="deleteAccountPopup closeDelete" role="dialog">
+
+                        <img src="../../css/images/logo.png" class="deletePopupImg">
+                        <div class="closeBtn loginPopUpCloseBtn" ng-click="closeDeleteDialogBox()"></div>
+                        <div class="deleteAccountPopupContent">
+                            <p>Are sure you want to delete account?</p>
+                        </div>
+                    <div class="deleteBtnContainer">
+                        <div class="deletePopupBtn deleteRed"
+                             data-ng-click="deleteAccountConfirmed()">yes</div>
+                        <div class="deletePopupBtn deleteGreen"
+                             ng-click="closeDeleteDialogBox()">no</div>
+                    </div>
+                </div>
+                <div class="successfulDeleteMessage closeDelete" >
+                    <img src="../../css/images/logo.png" class="deletePopupImg modificationOne">
+                    <div class="deleteAccountPopupContent modificationTwo">
+                        <p>Account deleted successfully</p>
+                    </div>
+
+                </div>
 
 
     </article>

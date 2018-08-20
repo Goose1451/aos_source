@@ -438,6 +438,25 @@
     border-radius: 5px;
 
 }
+.successfulDeleteMessage {
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 400px;
+    max-width: 100%;
+
+    height: 200px;
+    max-height: 100%;
+
+    z-index: 10000;
+
+    background: #fff;
+    border-radius: 5px;
+
+}
 
 .deleteAccountPopupContent {
 
@@ -516,21 +535,22 @@
 }
 
 .deleteIcon{
-    float: left;
+
+    margin-left: -28px;
 }
 
 .deleteMainBtnContainer{
-    height: 100px;
-    width: 200px;
-    display: inline-block;
-    left: 43%;
-    margin-top: 70px;
-    position: relative;
-}
 
+}
 .deleteBtnText{
 
-    margin-top: 33px;
+    margin-top: 10px;
 }
-
+.modificationOne{
+    margin-top: 25px;
+}
+.modificationTwo{
+    margin-top: 25px;
+    margin-left: 70px;
+}
 

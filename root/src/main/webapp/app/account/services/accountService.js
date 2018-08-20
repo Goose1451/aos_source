@@ -236,11 +236,11 @@ define(['./module'], function (services) {
 
                 deleteAccount: function () {
 
+                    Helper.enableLoader();
+
                     var defer = $q.defer();
                     var params = server.account.deleteAccount();
                     var user = $rootScope.userCookie;
-
-                    Helper.enableLoader();
 
                     $.soap({
                         url: params.path,

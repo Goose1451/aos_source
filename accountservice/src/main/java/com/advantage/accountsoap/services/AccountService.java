@@ -256,6 +256,9 @@ public class AccountService implements Injectable {
         AccountStatusResponse response = new AccountStatusResponse(false, "Initial", 0);
         AccountType currentUserAccountType;
         long currentUserId;
+        if(oldPassword == null || oldPassword.isEmpty()) {
+            oldPassword = account.getPassword();
+        }
         if (SecurityTools.isBasic(base64Token)) {
             currentUserId = accountId;
             currentUserAccountType = AccountType.valueOfCode(account.getAccountType());

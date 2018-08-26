@@ -87,6 +87,7 @@ define(['./module'], function (controllers) {
             s._saveMasterCredit = function () {
 
                 var response;
+                s.card.number = s.card.number.replace(/\s/g,'');
                 if (!alreadyHaveMasterCreditCart) {
                     response = accountService.addMasterCreditMethod(s.card)
                 }

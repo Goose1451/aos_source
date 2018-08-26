@@ -189,6 +189,7 @@ define(['./module'], function (directives) {
 
                         s.payNow_masterCredit = function () {
                             if (s.saveMasterCredit) {
+                                s.card.number = s.card.number.replace(/\s/g,'');
                                 if (!alreadyHaveMasterCreditCart) {
                                     accountService.addMasterCreditMethod(s.card).then(function(success){
                                         s.doPayment();

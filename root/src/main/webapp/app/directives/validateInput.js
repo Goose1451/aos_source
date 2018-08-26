@@ -238,6 +238,8 @@ define(['./module'], function (directives) {
             text: "text",
             textarea: "textarea",
             select: "select",
+            password: "password",
+            creditCard: "creditCard",
             checkbox: "checkbox"
         };
 
@@ -281,6 +283,16 @@ define(['./module'], function (directives) {
 
                 ctrl.compareTo;
                 s.validations = [];
+                $('#creditCard').on('keyup', function(e){
+                    var val = $(this).val();
+                    var newval = '';
+                    val = val.replace(/\s/g, '');
+                    for(var i=0; i < val.length; i++) {
+                        if(i%4 == 0 && i > 0) newval = newval.concat(' ');
+                        newval = newval.concat(val[i]);
+                    }
+                    $(this).val(newval);
+                });
 
                 ctrl.getListValidations = function () {
                     var li = "";
@@ -713,7 +725,8 @@ define(['./module'], function (directives) {
                                 case Keys.secCardNumber:
                                     //if (!(s.secModel.length == validation.exactly - 4 && (input.val() - 0) == input.val() &&
                                     //input.val().indexOf('-') == -1 &&  input.val().indexOf('+') == -1)) {
-                                    if (!(new RegExp(validation.regex).test(s.secModel) && s.secModel.length == validation.exactly - 4)) {
+                                    var trimmedSecModel = s.secModel.replace(/\s/g,'');
+                                    if (!(new RegExp(validation.regex).test(trimmedSecModel) && trimmedSecModel.length == validation.exactly - 4)) {
                                         if (changeHint) {
                                             return setInvalidTextToShow(validation.error);
                                         }
@@ -784,7 +797,8 @@ define(['./module'], function (directives) {
                                         }
                                         break;
                                     case Keys.secCardNumber:
-                                        if (!(new RegExp(validation.regex).test(s.secModel) && s.secModel.length == validation.exactly - 4)) {
+                                        var trimmedSecModel = s.secModel.replace(/\s/g,'');
+                                        if (!(new RegExp(validation.regex).test(trimmedSecModel) && trimmedSecModel.length == validation.exactly - 4)) {
                                             showValidation(i);
                                             validInput = false;
                                         }
@@ -929,6 +943,9 @@ define(['./module'], function (directives) {
                                 "height": "auto",
                                 "margin": "0px 0"
                             });
+                            break;
+                        case Types.creditCard:
+                            input = $("<input id='creditCard' name='" + a.aHint.replace(/\s/g, "_").toLowerCase() + partOfName + "' data-ng-model='secModel' />");
                             break;
                         default:
                             if (a.aHint == null) {

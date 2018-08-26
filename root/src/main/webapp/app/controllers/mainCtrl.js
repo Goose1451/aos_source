@@ -25,7 +25,6 @@ define(['./module'], function (controllers) {
 
             categoryService.loadServer().then(function () {
 
-
                 $(document).on({
                     keydown: function (event) {
                         var code = event.keyCode || event.which;

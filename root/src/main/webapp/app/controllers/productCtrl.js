@@ -260,8 +260,10 @@ define(['./module'], function (controllers) {
                 s.firstImageToShow = colors.find(function (color) {
                     return color.code == imageUrlInProductImages.substring(0, 6);
                 });
+                //Damaged images products.
                 if (!s.firstImageToShow){
                     s.colorSelected = colors[0];
+                    $("#rightPics").addClass('hide');
                 }else {
                     //Sorting the image from category page to be the be image to show and first in 'colors'.
                     colors = $filter('filter')(colors, function (color) {
@@ -269,8 +271,8 @@ define(['./module'], function (controllers) {
                     })
                     colors.unshift(s.firstImageToShow);
                     s.colorSelected = colors[0];
-                    //Setting the 'organized' array to be use in the view.
                     s.colors = colors;
+                    $("#badPics").addClass('hide');
                 }
 
             }

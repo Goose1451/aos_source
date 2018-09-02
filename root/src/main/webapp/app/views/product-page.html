@@ -78,6 +78,7 @@
 
                         <div ng-show="!firstImageToShow">
                             <span title="{{color.name}}"
+                                  id="badPics"
                                   data-ng-repeat="color in [] | sortArrayByColorName:product.colors"
                                   class="productColor"
                                   data-ng-hide="color.code == 'ABCDEF'" data-ng-style="color.code == 'FFFFFF' ?
@@ -89,6 +90,7 @@
                         </div>
                         <div ng-show="firstImageToShow">
                             <span title="{{color.name}}"
+                                  id="rightPics"
                                   data-ng-repeat="color in colors"
                                   class="productColor"
                                   data-ng-hide="color.code == 'ABCDEF'" data-ng-style="color.code == 'FFFFFF' ?

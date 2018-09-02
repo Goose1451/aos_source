@@ -252,7 +252,27 @@ define(['./module'], function (controllers) {
 
             if (!resolveParams.selectedColor && s.product.colors.length > 0) {
                 var colors = Helper.sortArrayByColorName(s.product.colors);
-                s.colorSelected = colors[0];
+                //From here to line 267 we organize the color array to start with the color in the
+                //category section.
+                var imageUrlInProductImages = s.product.images.find(function(image) {
+                    return image.substring(8)== s.imageUrl;
+                });
+                s.firstImageToShow = colors.find(function (color) {
+                    return color.code == imageUrlInProductImages.substring(0, 6);
+                });
+                if (!s.firstImageToShow){
+                    s.colorSelected = colors[0];
+                }else {
+                    //Sorting the image from category page to be the be image to show and first in 'colors'.
+                    colors = $filter('filter')(colors, function (color) {
+                        return color.name != s.firstImageToShow.name;
+                    })
+                    colors.unshift(s.firstImageToShow);
+                    s.colorSelected = colors[0];
+                    //Setting the 'organized' array to be use in the view.
+                    s.colors = colors;
+                }
+
             }
             else {
                 for (var i = 0; i < s.product.colors.length; i++) {
@@ -344,6 +364,9 @@ define(['./module'], function (controllers) {
 
             s.changeImage = function (img) {
                 s.imageUrl = img;
+            };
+            s.nothing = function (color) {
+                console.log("kksdkksd  -"+color);
             };
 
             s.setColor = function (color) {

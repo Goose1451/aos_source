@@ -263,7 +263,8 @@ define(['./module'], function (controllers) {
                 //Damaged images products.
                 if (!s.firstImageToShow){
                     s.colorSelected = colors[0];
-                    $("#rightPics").addClass('hide');
+                    //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
+                    $(".rabbit").removeClass('rabbit');
                 }else {
                     //Sorting the image from category page to be the be image to show and first in 'colors'.
                     colors = $filter('filter')(colors, function (color) {
@@ -272,7 +273,7 @@ define(['./module'], function (controllers) {
                     colors.unshift(s.firstImageToShow);
                     s.colorSelected = colors[0];
                     s.colors = colors;
-                    $("#badPics").addClass('hide');
+                    $(".bunny").removeClass('bunny');
                 }
 
             }

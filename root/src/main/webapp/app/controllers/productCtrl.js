@@ -216,9 +216,9 @@
 define(['./module'], function (controllers) {
     'use strict';
     controllers.controller('productCtrl', ['$scope', 'resolveParams', '$state', '$filter',
-        '$rootScope', '$timeout', 'categoryService', '$sce',
+        '$rootScope', '$timeout', 'categoryService', '$sce', '$document',
 
-        function (s, resolveParams, $state, $filter, $rootScope, $timeout, categoryService, $sce) {
+        function (s, resolveParams, $state, $filter, $rootScope, $timeout, categoryService, $sce, document) {
 
             s.pageState = resolveParams.pageState;
             var resolveParams_selectedColor = resolveParams.selectedColor;
@@ -264,7 +264,12 @@ define(['./module'], function (controllers) {
                 if (!s.firstImageToShow){
                     s.colorSelected = colors[0];
                     //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
-                    $(".rabbit").removeClass('rabbit');
+                    angular.element(document).ready(function () {
+                        $timeout(function () {
+                            angular.element(".rabbit").removeClass("rabbit");
+                        }, 2000);
+                    });
+
                 }else {
                     //Sorting the image from category page to be the be image to show and first in 'colors'.
                     colors = $filter('filter')(colors, function (color) {
@@ -273,7 +278,13 @@ define(['./module'], function (controllers) {
                     colors.unshift(s.firstImageToShow);
                     s.colorSelected = colors[0];
                     s.colors = colors;
-                    $(".bunny").removeClass('bunny');
+                    //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
+                    angular.element(document).ready(function () {
+                        $timeout(function () {
+                            angular.element(".bunny").removeClass("bunny");
+                        }, 2000);
+                    });
+
                 }
 
             }
@@ -367,9 +378,6 @@ define(['./module'], function (controllers) {
 
             s.changeImage = function (img) {
                 s.imageUrl = img;
-            };
-            s.nothing = function (color) {
-                console.log("kksdkksd  -"+color);
             };
 
             s.setColor = function (color) {

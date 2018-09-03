@@ -268,6 +268,7 @@ define(['./module'], function (controllers) {
                         $timeout(function () {
                             angular.element(".rabbit").removeClass("rabbit");
                         }, 2000);
+                        //comment for commit!
                     });
 
                 }else {

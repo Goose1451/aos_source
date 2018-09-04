@@ -465,6 +465,8 @@
     margin-top: 20px;
     margin-bottom: 50px;
     margin-left: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 
     /* spacing as needed */
     padding: 5px 5px 5px 5px;
@@ -473,18 +475,6 @@
     overflow: auto;
 
     z-index: 10000;
-}
-
-.popupOverlay {
-
-    z-index: 10000;
-
-    position: fixed;
-
-    left: 0;
-
-    rgba(0, 0, 0, 0.7);
-
 }
 
 .closeDelete {
@@ -538,28 +528,22 @@
 
     margin-left: -28px;
 }
+.deleteIcon:hover{
+
+   color: white;
+}
 
 .deleteMainBtnContainer{
 
-    margin-top: 20px;
-    padding-left: 3px;
-    transition: all .2s ease-in-out;
-
-}
-.deleteMainBtnContainer:hover{
-
-    transform: scale(1.02);
+    margin-top: 60px;
+    margin-left: 40%;
+    border-width: 1.5px;
 }
 
 .deleteBtnText{
 
-    margin-top: 10px;
-    margin-left: -15px;
 }
-.deleteBtnText:hover{
 
-    color: indianred;
-}
 .modificationOne{
     margin-top: 25px;
 }

@@ -266,7 +266,9 @@ define(['./module'], function (controllers) {
                     //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
                     angular.element(document).ready(function () {
                         $timeout(function () {
-                            angular.element(document.getElementsByClassName('rabbit')).removeClass('rabbit');
+                            var someVar = document.getElementsByClassName('rabbit');
+                            log(someVar);
+                            angular.element(someVar).removeClass('rabbit');
                         }, 2000);
 
                     });
@@ -282,7 +284,9 @@ define(['./module'], function (controllers) {
                     //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
                     angular.element(document).ready(function () {
                         $timeout(function () {
-                            angular.element(document.getElementsByClassName('bunny')).removeClass('bunny');
+                            var someVar = document.getElementsByClassName('bunny');
+                            log(someVar);
+                            angular.element(someVar).removeClass('bunny');
                         }, 2000);
                     });
 //comment to commence build.

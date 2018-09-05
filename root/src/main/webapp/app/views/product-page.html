@@ -79,7 +79,7 @@
                         <!--Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.-->
                         <div ng-show="!firstImageToShow">
                             <span title="{{color.name}}"
-                                  id="bunny"
+                                  id="rabbit"
                                   data-ng-repeat="color in [] | sortArrayByColorName:product.colors"
                                   class="rabbit productColor"
                                   data-ng-hide="color.code == 'ABCDEF'" data-ng-style="color.code == 'FFFFFF' ?
@@ -91,7 +91,7 @@
                         </div>
                         <div ng-show="firstImageToShow">
                             <span title="{{color.name}}"
-                                  id="rabbit"
+                                  id="bunny"
                                   data-ng-repeat="color in colors"
                                   class="bunny productColor"
                                   data-ng-hide="color.code == 'ABCDEF'" data-ng-style="color.code == 'FFFFFF' ?

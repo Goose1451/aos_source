@@ -216,9 +216,9 @@
 define(['./module'], function (controllers) {
     'use strict';
     controllers.controller('productCtrl', ['$scope', 'resolveParams', '$state', '$filter',
-        '$rootScope', '$timeout', 'categoryService', '$sce', '$document',
+        '$rootScope', '$timeout', 'categoryService', '$sce', '$document', '$window',
 
-        function (s, resolveParams, $state, $filter, $rootScope, $timeout, categoryService, $sce, document) {
+        function (s, resolveParams, $state, $filter, $rootScope, $timeout, categoryService, $sce, document, $window) {
 
             s.pageState = resolveParams.pageState;
             var resolveParams_selectedColor = resolveParams.selectedColor;
@@ -266,8 +266,8 @@ define(['./module'], function (controllers) {
                     //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
                     angular.element(document).ready(function () {
                         $timeout(function () {
-                            var someVar = document.getElementsByClassName('rabbit');
-                            log(someVar);
+                            var someVar = document[0].getElementById('rabbit');
+                            console.log("something--"+someVar);
                             angular.element(someVar).removeClass('rabbit');
                         }, 2000);
 
@@ -284,8 +284,8 @@ define(['./module'], function (controllers) {
                     //Testing issue over here. Since there are two identical elements here  'leanFT ' gets confused, this is the reason for this classes.
                     angular.element(document).ready(function () {
                         $timeout(function () {
-                            var someVar = document.getElementsByClassName('bunny');
-                            log(someVar);
+                            var someVar = document[0].getElementById('bunny');
+                            console.log("something--"+someVar);
                             angular.element(someVar).removeClass('bunny');
                         }, 2000);
                     });

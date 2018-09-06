@@ -267,7 +267,6 @@ define(['./module'], function (controllers) {
                     angular.element(document).ready(function () {
                         $timeout(function () {
                             var someVar = document[0].getElementById('rabbit');
-                            console.log("something--"+someVar);
                             angular.element(someVar).removeClass('rabbit');
                         }, 2000);
 
@@ -285,7 +284,6 @@ define(['./module'], function (controllers) {
                     angular.element(document).ready(function () {
                         $timeout(function () {
                             var someVar = document[0].getElementById('bunny');
-                            console.log("something--"+someVar);
                             angular.element(someVar).removeClass('bunny');
                         }, 2000);
                     });

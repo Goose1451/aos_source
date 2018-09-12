@@ -18,10 +18,13 @@ import com.advantage.common.Constants;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.exceptions.token.TokenException;
 import com.advantage.common.exceptions.token.VerificationTokenException;
+import com.advantage.common.security.AuthorizeAsUser;
 import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.Token;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.StringHelper;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -29,6 +32,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -320,6 +324,41 @@ public class AccountServiceEndpoint {
         AccountStatusResponse response = accountService.accountDelete(request.getAccountId());
         return new AccountDeleteResponse(response);
     }
+    @AuthorizeAsUser
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "AccountPermanentDeleteRequest")
+    @ResponsePayload
+    public AccountPermanentDeleteResponse accountPermanentDelete(@RequestPayload AccountPermanentDeleteRequest request) throws TokenException, IOException {
+        logger.debug(AccountServiceEndpoint.class.getName() + ".accountPermanentDelete(..) ");
+
+        accountService.deleteAllPaymentPreferences(request.getAccountId());
+        List<PaymentPreferencesDto> deleteCheckPP = paymentPreferencesService.getPaymentPreferencesByUserId(request.getAccountId());
+        accountService.deleteShippingAddress(request.getAccountId());
+        List<AddressDto> deleteCheckSA = addressService.getByAccountId(request.getAccountId());
+        AccountStatusResponse deleteOrdersResponse = accountService.deleteUserOrders(request.getAccountId(), request.getBase64Token());
+        AccountStatusResponse deleteAccountResponse = accountService.accountPermanentDelete(request.getAccountId());
+
+        if(deleteCheckPP == null && deleteCheckSA == null && deleteOrdersResponse.isSuccess()== true
+                && deleteAccountResponse.isSuccess()==true){
+
+            AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+            accountPermanentDeleteResponse.setReason("Account(orders, address, payment, account) deleted completely and permanently ");
+            accountPermanentDeleteResponse.setSuccess(true);
+            logger.info(deleteAccountResponse);
+            return accountPermanentDeleteResponse;
+        }
+        AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+        accountPermanentDeleteResponse.setSuccess(false);
+        accountPermanentDeleteResponse.setReason("One of these elements was not deleted " +
+                "Payment preferences list(should be null) = " +deleteCheckSA+"  ." +
+                "Shipping address list(should be null) = "+deleteCheckSA+"  ." +
+                "DeleteOrdersResponse isSuccess = "+deleteOrdersResponse.isSuccess()+"  ." +
+                "DeleteAccountResponse isSuccess = "+deleteAccountResponse.isSuccess());
+        logger.warn(accountPermanentDeleteResponse);
+        return accountPermanentDeleteResponse;
+    }
 
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "EncodePasswordRequest")
     @ResponsePayload
@@ -503,6 +542,18 @@ public class AccountServiceEndpoint {
 
         return new DeletePaymentPreferenceResponse(response);
     }
+
+//    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DeleteShippingAddressRequest")
+//    @ResponsePayload
+//    public DeleteShippingAddressResponse deleteShippingAddressResponse(@RequestPayload DeleteShippingAddressRequest request) throws TokenException {
+//        logger.debug(AccountServiceEndpoint.class.getName() + ".deleteShippingAddress(deleteShippingAddressRequest) is calling method authorizeAsUser(..)");
+//
+//        //AccountStatusResponse response = accountService.deleteShippingAddress(request.getAccountId());
+//
+//        return new DeleteShippingAddressResponse(response);
+//    }
+
+
 
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "GetAccountFieldsRequest")
     @ResponsePayload

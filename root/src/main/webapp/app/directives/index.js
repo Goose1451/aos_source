@@ -32,6 +32,8 @@ define([
     './icon-search-svg-mobile',
     './icon-home-svg',
     './icon-home-svg-mobile',
+    './icon-delete-account-svg',
+    './icon-new-delete-button-svg',
     './virtualFooter',
     './check-height',
     './orderSearch',

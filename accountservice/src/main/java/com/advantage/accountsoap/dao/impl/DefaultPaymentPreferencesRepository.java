@@ -53,10 +53,28 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
                 count++;
             }
         }
-
         return count;
     }
+    @Override
+    public int deletePaymentPreferences(long userId) {
 
+        try {
+            final StringBuilder deletePaymentPreferences = new StringBuilder("DELETE FROM ")
+                    .append("PaymentPreferences")
+                    .append(" WHERE ")
+                    .append(PaymentPreferences.FIELD_USER_ID).append("=").append(userId);
+            Query queryDelete = entityManager.createQuery(deletePaymentPreferences.toString());
+            queryDelete.executeUpdate();
+
+            if(getPaymentPreferencesByUserId(userId) ==null ){
+                return 0;
+            }else {return 1;}
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
     @Override
     public PaymentPreferences delete(long userId, int paymentMethod) {
 
@@ -74,6 +92,7 @@ public class DefaultPaymentPreferencesRepository extends AbstractRepository impl
 
         return accounts.isEmpty() ? null : accounts;
     }
+
 
     @Override
     public PaymentPreferences get(long userId) {

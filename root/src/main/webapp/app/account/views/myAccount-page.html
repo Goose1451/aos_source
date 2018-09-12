@@ -5,7 +5,7 @@
 </nav>
 
 <section>
-    <article >
+    <article class="popup">
         <h3 class="roboto-regular sticky fixed fixedImportant" translate="MY_ACCOUNT"></h3>
 
         <div id="myAccountContainer">
@@ -171,12 +171,42 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <!--END NOTIFY ME ABOUT PROMOTIONS SECTION-->
+                <div class="cube">
+                    <button class="deleteMainBtnContainer a-button ng-scope"
+                         data-ng-click="deleteAccountUi()">
+                            <!--<div icon-new-delete-button-svg-->
+                                 <!--class="deleteIcon">-->
+                            <!--</div>-->
 
+                        <div class="deleteBtnText">Delete Account<!--style="padding-left:  10px;"-->
+                        </div>
+                    </button>
+                </div>
+            </div>
+                <div id="deleteAccountPopup" class="deleteAccountPopup closeDelete" role="dialog">
 
-        </div>
+                        <img src="../../css/images/logo.png" class="deletePopupImg">
+                        <div class="closeBtn loginPopUpCloseBtn" ng-click="closeDeleteDialogBox()"></div>
+                        <div class="deleteAccountPopupContent">
+                            <p>Are sure you want to delete account?</p>
+                        </div>
+                    <div class="deleteBtnContainer">
+                        <div class="deletePopupBtn deleteRed"
+                             data-ng-click="deleteAccountConfirmed()">yes</div>
+                        <div class="deletePopupBtn deleteGreen"
+                             ng-click="closeDeleteDialogBox()">no</div>
+                    </div>
+                </div>
+                <div class="successfulDeleteMessage closeDelete" >
+                    <img src="../../css/images/logo.png" class="deletePopupImg modificationOne">
+                    <div class="deleteAccountPopupContent modificationTwo">
+                        <p>Account deleted successfully</p>
+                    </div>
+
+                </div>
+
 
     </article>
 </section>

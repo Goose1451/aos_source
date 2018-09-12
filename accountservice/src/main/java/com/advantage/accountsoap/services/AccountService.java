@@ -4,14 +4,18 @@ import com.advantage.accountsoap.config.BeansManager;
 import com.advantage.accountsoap.config.Injectable;
 import com.advantage.accountsoap.dao.AccountRepository;
 import com.advantage.accountsoap.dao.AddressRepository;
-import com.advantage.accountsoap.dao.CountryRepository;
+import com.advantage.accountsoap.dto.DeleteOrderResponse;
+import com.advantage.accountsoap.dto.account.AccountPermanentDeleteResponse;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.dto.account.internal.AccountDto;
+import com.advantage.accountsoap.dto.address.AddressDto;
 import com.advantage.accountsoap.dto.payment.PaymentPreferencesDto;
+import com.advantage.accountsoap.dto.payment.PaymentPreferencesStatusResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.model.PaymentPreferences;
 import com.advantage.accountsoap.model.ShippingAddress;
 import com.advantage.accountsoap.util.AccountPassword;
+import com.advantage.common.Url_resources;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.exceptions.token.ContentTokenException;
 import com.advantage.common.exceptions.token.TokenException;
@@ -21,19 +25,22 @@ import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.RestApiHelper;
 import com.advantage.root.util.StringHelper;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AccountService implements Injectable {
@@ -55,6 +62,9 @@ public class AccountService implements Injectable {
 
     @Autowired
     private PaymentPreferencesService paymentPreferencesService;
+
+    @Autowired
+    private AddressService addressService;
 
     private static final Logger logger = Logger.getLogger(AccountService.class);
 
@@ -204,12 +214,22 @@ public class AccountService implements Injectable {
         return accountRepository.get(id);
     }
 
+
     @Transactional
     public AccountStatusResponse accountDelete(long accountId) throws TokenException {
         Account account = accountRepository.get(accountId);
-        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
 
         int result = accountRepository.deleteAccount(account);
+
+        AccountStatusResponse response = resultSolver(result,account);
+
+        return response;
+    }
+
+    private AccountStatusResponse resultSolver (int result, Account account){
+
+        AccountStatusResponse response = new AccountStatusResponse(false, "", account.getId());
+
         if (result == 1) {
             response.setSuccess(true);
             response.setReason("Account delete successful");
@@ -222,6 +242,67 @@ public class AccountService implements Injectable {
             logger.warn("Account " + account.getId() + " delete failed");
         }
         return response;
+    }
+
+    private boolean deleteOrders(long accountId, String data) throws IOException{
+
+        Account account = accountRepository.get(accountId);
+        String stringResponse = null;
+        URL deleteOrdersForUser = null;
+        String authorizationKey = encode64(account.getLoginName() + ":" + data);
+        URL orderApiUrl = Url_resources.getUrlOrder();
+
+        try {
+
+        deleteOrdersForUser = new URL(orderApiUrl + "orders/history/users/" + accountId);
+        stringResponse = RestApiHelper.httpGetWithAuthorization(deleteOrdersForUser, "account", "Authorization", "Basic " + authorizationKey);
+        logger.debug("stringResponse--" + stringResponse);
+
+            switch (stringResponse) {
+                case "CONFLICT":
+                    return false;
+
+                case "NOT FOUND":
+                    return false;
+
+                case "FORBIDDEN":
+                    return false;
+
+                case "UNAUTHORIZED":
+                    return false;
+
+            }
+        //Removing added value by apiHelper
+        String stringResponseEdited = "{\"" + stringResponse.substring(17);
+        ObjectMapper objectMapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        DeleteOrderResponse deleteOrderResponse = objectMapper.readValue(stringResponseEdited, DeleteOrderResponse.class);
+
+        if(deleteOrderResponse.isSuccess()){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Transactional
+    public AccountStatusResponse accountPermanentDelete(long accountId){
+
+            Account account = accountRepository.get(accountId);
+
+            int result = accountRepository.deleteAccountPermanently(account);
+
+            AccountStatusResponse response = resultSolver(result,account);
+
+            return response;
+
     }
 
     /**
@@ -369,8 +450,22 @@ public class AccountService implements Injectable {
     }
 
     @Transactional
-    public AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId) {
-        return accountRepository.removePaymentPreferences(accountId, preferenceId);
+    public AccountStatusResponse removePaymentPreferences(long accountId, long paymentMethod) {
+        return accountRepository.removePaymentPreferences(accountId,paymentMethod);
+    }
+    @Transactional
+    public void deleteAllPaymentPreferences(long accountId) {
+        accountRepository.deleteAllPaymentPreferences(accountId);
+    }
+
+    @Transactional
+    public void deleteShippingAddress(long accountId) {
+        accountRepository.deleteShippingAddress(accountId);
+
+    }
+    @Transactional
+    public AccountStatusResponse deleteUserOrders(long accountId, String base64Token) {
+        return accountRepository.deleteUserOrders(accountId, base64Token);
     }
 
     public AccountStatusResponse dbRestoreFactorySettings() {
@@ -392,6 +487,14 @@ public class AccountService implements Injectable {
         }
 
         return dtos;
+    }
+    private String encode64(String source){
+        return Base64
+                .getEncoder()
+                .encodeToString(source.getBytes());
+    }
+    public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
+        return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
     }
 
 }

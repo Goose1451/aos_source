@@ -91,4 +91,28 @@ public class DefaultHistoryOrderLineRepository extends AbstractRepository implem
             return null;
         }
     }
+
+    @Override
+    @Transactional
+    public boolean removeAllOrdersLinesForUser(long userId){
+        ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");
+        List<OrderLines> lines = new ArrayList<>();
+
+        try {
+            entityManager.createNamedQuery(OrderLines.QUERY_DELETE_ORDERS_LINES_BY_USER_ID_PK)
+                    .setParameter(OrderLines.PARAM_USER_ID, userId)
+                    .executeUpdate();
+            List<OrderLines> orderLines = entityManager.createNamedQuery(OrderLines.QUERY_GET_ORDERS_LINES_BY_USER_ID, OrderLines.class)
+                    .setParameter(OrderLines.PARAM_USER_ID, userId)
+                    .getResultList();
+            if(orderLines.size() == 0 ){
+                return true;
+            }
+            else {return false;}
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 }

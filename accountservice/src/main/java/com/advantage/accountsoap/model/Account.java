@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name= "account")
 @NamedQueries({
         @NamedQuery(
                 name = Account.QUERY_GET_ALL,

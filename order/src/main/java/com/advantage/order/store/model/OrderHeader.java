@@ -31,9 +31,9 @@ import javax.persistence.*;
                 "where " + OrderHeader.FIELD_ORDER_NUMBER + " = :" + OrderHeader.PARAM_ORDER_NUMBER
         )
         , @NamedQuery(
-        name = OrderHeader.QUERY_DELETE_ORDER_BY_ORDER_PK,
+        name = OrderHeader.QUERY_DELETE_ORDER_BY_USER_PK,
         query = "delete from OrderHeader o " +
-                "where " + OrderHeader.FIELD_ORDER_NUMBER + " = :" + OrderHeader.PARAM_ORDER_NUMBER
+                "where " + OrderHeader.FIELD_USER_ID + " = :" + OrderHeader.PARAM_USER_ID
 )
 })
 public class OrderHeader {
@@ -43,6 +43,7 @@ public class OrderHeader {
     public static final String QUERY_GET_ORDER_BY_PK_COLUMNS = "orderHeader.getOrderByPkColumns";
     public static final String QUERY_GET_ORDER_BY_ORDER = "orderHeader.getOrderByOrderID";
     public static final String QUERY_DELETE_ORDER_BY_ORDER_PK = "orderHeader.deleteOrder";
+    public static final String QUERY_DELETE_ORDER_BY_USER_PK = "OrderHeader.deleteHeaderOrderByUserId";
 
     public static final String FIELD_USER_ID = "user_id";
     public static final String FIELD_ORDER_NUMBER = "order_number";
@@ -335,5 +336,24 @@ public class OrderHeader {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrderLines that = (OrderLines) o;
+
+        if (getUserId() != that.getUserId()) return false;
+        if (getOrderNumber() != that.getOrderNumber()) return false;
+        else{return false;}
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getUserId() ^ (getUserId() >>> 32));
+        result = 31 * result + (int) (getOrderNumber() ^ (getOrderNumber() >>> 32));
+        return result;
     }
 }

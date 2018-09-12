@@ -234,6 +234,40 @@ define(['./module'], function (services) {
                     return defer.promise;
                 },
 
+                deleteAccount: function () {
+
+                    Helper.enableLoader();
+
+                    var defer = $q.defer();
+                    var params = server.account.deleteAccount();
+                    var user = $rootScope.userCookie;
+
+                    $.soap({
+                        url: params.path,
+                        method: params.method,
+                        namespaceURL: server.namespaceURL,
+                        SOAPAction: server.namespaceURL + params.method,
+                        data: {
+                            accountId: user.response.userId,
+                            base64Token: "Basic "+user.response.t_authorization,
+                        },
+                        success: function (soapResponse) {
+                            var response = soapResponse.toJSON(params.response);
+                            Helper.disableLoader();
+                            Loger.Received(response);
+                            defer.resolve(response);
+                        },
+                        error: function (response) {
+                            Loger.Received(response);
+                            Helper.disableLoader();
+                            defer.reject("Request deleteAccount failed! ");
+                        },
+                        enableLogging: true
+                    });
+
+                    return defer.promise;
+                },
+
                 changeUserPassword: function (accountId, passwords) {
 
                     var defer = $q.defer();

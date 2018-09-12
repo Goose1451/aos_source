@@ -863,7 +863,7 @@ public class OrderManagementService {
         long orderNumber = 0L;
         long orderTimestamp = -1L;
 
-        List<OrderLines> lines = new ArrayList<>();
+        List<OrderLines> lines;
         HistoryOrderLinesDto historyOrderLinesDto = new HistoryOrderLinesDto();
 
         if (userId == 0) {
@@ -899,10 +899,37 @@ public class OrderManagementService {
                             line.getProductColor(),
                             line.getPricePerItem(),
                             line.getQuantity());
-
                 }
             }
         }
         return historyOrderLinesDto;
+    }
+    //Will return true if no orders appear for user, even if none were deleted.
+    public OrderHistoryRemoveDto removeAllOrdersHistory(Long userId){
+        ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");
+
+
+        OrderHistoryRemoveDto orderHistoryRemoveDto = new OrderHistoryRemoveDto();
+        boolean whereOrdersHeaderRemovedSuccessfully = false;
+        boolean whereOrdersLinesRemovedSuccessfully = false;
+
+            whereOrdersHeaderRemovedSuccessfully = historyOrderHeaderRepository.removeAllOrdersHeaders(userId);
+            whereOrdersLinesRemovedSuccessfully = historyOrderLineRepository.removeAllOrdersLinesForUser(userId);
+
+        if (whereOrdersHeaderRemovedSuccessfully == true && whereOrdersLinesRemovedSuccessfully == true) {
+
+            orderHistoryRemoveDto.setSuccessfulOrderHeaderDelete(true);
+            orderHistoryRemoveDto.setSuccessfulOrderLineDelete(true);
+            orderHistoryRemoveDto.setSuccess(true);
+            return orderHistoryRemoveDto;
+        }
+        else{
+
+            orderHistoryRemoveDto.setSuccessfulOrderHeaderDelete(whereOrdersHeaderRemovedSuccessfully);
+            orderHistoryRemoveDto.setSuccessfulOrderLineDelete(whereOrdersLinesRemovedSuccessfully);
+            orderHistoryRemoveDto.setSuccess(false);
+            return orderHistoryRemoveDto;
+        }
+
     }
 }

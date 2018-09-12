@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Qualifier("addressRepository")
@@ -34,9 +37,38 @@ public class DefaultAddressRepository extends AbstractRepository implements Addr
                 count++;
             }
         }
-
         return count;
     }
+
+//    @Override
+//    public ShippingAddress deleteShippingAddress(long userId) {
+//
+//        ShippingAddress entity = get(userId);
+//        if (entity != null) delete(entity);
+//
+//        return entity;
+//    }
+//    @Override
+//    public int deleteShippingAddress(long userId) {
+//
+//        try {
+//            final StringBuilder deleteShippingAddress = new StringBuilder("DELETE FROM ")
+//                    .append("ShippingAddress")
+//                    .append(" WHERE ")
+//                    .append(ShippingAddress.FIELD_USER_ID).append("=").append(userId);
+//            Query queryDelete = entityManager.createQuery(deleteShippingAddress.toString());
+//
+//            int result = queryDelete.executeUpdate();
+//
+//            List<ShippingAddress> addresses = new ArrayList<>(accountService.getById(userId).getAddresses());
+//
+//            return addresses.isEmpty() ? 0 : 1;
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return 1;
+//        }
+//    }
 
     @Override
     public List<ShippingAddress> getAll() {

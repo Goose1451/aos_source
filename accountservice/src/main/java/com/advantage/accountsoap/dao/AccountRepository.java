@@ -3,7 +3,6 @@ package com.advantage.accountsoap.dao;
 import com.advantage.accountsoap.dto.account.AccountStatusResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.common.dao.DefaultCRUDOperations;
-import com.advantage.common.dto.CatalogResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -36,6 +35,8 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     int deleteAccount(Account account);
 
+    int deleteAccountPermanently(Account account);
+
     Account getAppUserByLogin(String login);
 
     AccountStatusResponse doLogin(String login, String password, String email);
@@ -48,7 +49,13 @@ public interface AccountRepository extends DefaultCRUDOperations<Account> {
 
     //Collection<PaymentPreferences> getPaymentPreferences(long accountId);
 
-    AccountStatusResponse removePaymentPreferences(long accountId, long preferenceId);
+    AccountStatusResponse removePaymentPreferences(long accountId, long paymentMethod);
+
+    void deleteAllPaymentPreferences(long accountId);
 
     AccountStatusResponse dbRestoreFactorySettings();
+
+    void deleteShippingAddress(long accountId);
+
+    AccountStatusResponse deleteUserOrders(long accountId,String base64Token);
 }

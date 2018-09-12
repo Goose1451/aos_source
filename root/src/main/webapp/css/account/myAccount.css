@@ -419,13 +419,136 @@
     }
 }
 
+.deleteAccountPopup {
 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
+    width: 400px;
+    max-width: 100%;
 
+    height: 200px;
+    max-height: 100%;
 
+    z-index: 10000;
 
+    background: #fff;
+    border-radius: 5px;
 
+}
+.successfulDeleteMessage {
 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
+    width: 400px;
+    max-width: 100%;
 
+    height: 200px;
+    max-height: 100%;
+
+    z-index: 10000;
+
+    background: #fff;
+    border-radius: 5px;
+
+}
+
+.deleteAccountPopupContent {
+
+    font-size: 15px;
+
+    margin-top: 20px;
+    margin-bottom: 50px;
+    margin-left: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+
+    /* spacing as needed */
+    padding: 5px 5px 5px 5px;
+
+    /* let it scroll */
+    overflow: auto;
+
+    z-index: 10000;
+}
+
+.closeDelete {
+
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+.deletePopupImg{
+
+    margin-left: 34%;
+    margin-top: 12px;
+    width: 115px;
+}
+
+.deleteBtnContainer{
+
+}
+.deletePopupBtn{
+
+    text-align: center;
+
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    text-transform: uppercase;
+    color: #fff;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    transition: background-color .2s;
+}
+
+.deleteRed{
+
+    background: #fc7169;
+    float: left;
+    width: 50%;
+    border-radius: 0 0 0 0.2em;
+}
+
+.deleteGreen{
+
+    background: #35a785;
+    border-radius: 0 0 0.3em 0;
+}
+
+.deleteIcon{
+
+    margin-left: -28px;
+}
+.deleteIcon:hover{
+
+   color: white;
+}
+
+.deleteMainBtnContainer{
+
+    margin-top: 60px;
+    margin-left: 40%;
+    border-width: 1.5px;
+}
+
+.deleteBtnText{
+
+}
+
+.modificationOne{
+    margin-top: 25px;
+}
+.modificationTwo{
+    margin-top: 25px;
+    margin-left: 70px;
+}
 

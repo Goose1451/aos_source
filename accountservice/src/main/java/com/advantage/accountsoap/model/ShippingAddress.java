@@ -16,6 +16,9 @@ import javax.persistence.*;
 })
 public class ShippingAddress {
     public static final String QUERY_GET_ALL = "accountAddress.getAll";
+    public static final String DELETE_SHIPPING_ADDRESS_FAIL = "Fail to delete shipping address";
+    public static final String DELETE_SHIPPING_ADDRESS_SUCCESSFULLY = "Successfully deleted shipping address";
+    public static final String FIELD_USER_ID = "user_id";
     public static final String QUERY_GET_BY_USER_ID = "accountAddress.getByAccountId";
     public static final String PARAM_USER_ID = "PARAM_USER_ID";
 

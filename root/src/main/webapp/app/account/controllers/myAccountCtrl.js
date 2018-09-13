@@ -96,7 +96,7 @@ define(['./module'], function (controllers) {
 
                         $('.successfulDeleteMessage').fadeIn(350);
 
-                        setTimeout(function(){
+                       setTimeout(function(){
 
                             $(".successfulDeleteMessage").fadeOut(350);
                             $(".PopUp > div:nth-child(1)").animate({
@@ -109,10 +109,7 @@ define(['./module'], function (controllers) {
                             location.reload();
 
                         }, 2000);
-
-
-                    }
-
+                   }
                 });
             }
 

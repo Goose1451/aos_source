@@ -12,10 +12,7 @@ import com.advantage.order.store.dao.HistoryOrderHeaderRepository;
 import com.advantage.order.store.dao.OrderManagementRepository;
 import com.advantage.order.store.dao.ShoppingCartRepository;
 import com.advantage.order.store.dto.*;
-import com.advantage.order.store.model.Feature1779OrdersHistory;
-import com.advantage.order.store.model.OrderHeader;
-import com.advantage.order.store.model.OrderLines;
-import com.advantage.order.store.model.ShoppingCart;
+import com.advantage.order.store.model.*;
 import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.JsonHelper;
 import com.advantage.root.util.RestApiHelper;
@@ -827,10 +824,18 @@ public class OrderManagementService {
         //  region Generate_memory_leak
         String stringValue = RestApiHelper.getDemoAppConfigParameterValue("Generate_memory_leak");
         if ((stringValue != null) && (!stringValue.isEmpty()) && (!stringValue.equals("0"))) {
-            Feature1779OrdersHistory ordersHistory = new Feature1779OrdersHistory(Integer.valueOf(stringValue).intValue());
+            logger.info("Generating Memory Leak!!!!");
+            Feature1779OrdersHistoryLeak ordersHistory = new Feature1779OrdersHistoryLeak();
+            try {
+                ordersHistory.StartLeaking();
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                e.printStackTrace();
+            }
 
-            ordersHistory.generateMemoryLeak(Integer.valueOf(stringValue).intValue());
+//            ordersHistory.generateMemoryLeak(Integer.valueOf(stringValue).intValue());
         }
+
         //  endregion
 
         return historyOrderLinesDto;

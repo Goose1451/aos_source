@@ -12,35 +12,40 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "",
         namespace = WebServiceConfig.NAMESPACE_URI,
         propOrder = {
-                "isSuccess",
-                "reason"
+                "response"
         })
 @XmlRootElement(name = "AccountPermanentDeleteResponse", namespace = WebServiceConfig.NAMESPACE_URI)
 public class AccountPermanentDeleteResponse {
-    @XmlElement(name = "IsSuccess", namespace = WebServiceConfig.NAMESPACE_URI, required = true)
-    private boolean isSuccess;
-    @XmlElement(name = "Reason", namespace = WebServiceConfig.NAMESPACE_URI)
-    private String reason;
 
-    public AccountPermanentDeleteResponse() {
+
+    @XmlElement(name = "StatusMessage", namespace = WebServiceConfig.NAMESPACE_URI, required = true)
+    private AccountStatusResponse response;
+
+    /**
+     * Gets the value of the statusMessage property.
+     *
+     * @return
+     *     possible object is
+     *     {@link AccountStatusResponse }
+     *
+     */
+    public AccountStatusResponse getStatusMessage() {
+        return response;
+    }
+
+    /**
+     * Sets the value of the statusMessage property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link AccountStatusResponse }
+     *
+     */
+    public void setStatusMessage(AccountStatusResponse value) {
+        this.response = value;
     }
 
 
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public boolean getIsSuccess() {
-        return isSuccess;
-    }
-
-    public void setSuccess(boolean success) {
-        this.isSuccess = success;
-    }
 
 
 }

@@ -357,7 +357,6 @@ public class DefaultProductRepository extends AbstractRepository implements Prod
     public List<Product> getAll() {
         List<Product> products = entityManager.createNamedQuery(Product.QUERY_GET_ALL, Product.class)
                 .getResultList();
-        products.forEach(product -> System.out.println(product.getProductName()));
         return products.isEmpty() ? null : products;
     }
 

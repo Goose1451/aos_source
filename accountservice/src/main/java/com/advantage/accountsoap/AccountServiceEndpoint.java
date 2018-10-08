@@ -344,19 +344,23 @@ public class AccountServiceEndpoint {
                 && deleteAccountResponse.isSuccess()==true){
 
             AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
-            accountPermanentDeleteResponse.setReason("Account(orders, address, payment, account) deleted completely and permanently ");
-            accountPermanentDeleteResponse.setSuccess(true);
+            AccountStatusResponse accountStatusResponse = new AccountStatusResponse();
+            accountStatusResponse.setReason("Account(orders, address, payment, account) deleted completely and permanently ");
+            accountStatusResponse.setSuccess(true);
             logger.info(deleteAccountResponse);
+            accountPermanentDeleteResponse.setStatusMessage(accountStatusResponse);
             return accountPermanentDeleteResponse;
         }
-        AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
-        accountPermanentDeleteResponse.setSuccess(false);
-        accountPermanentDeleteResponse.setReason("One of these elements was not deleted " +
+        AccountStatusResponse accountStatusResponse = new AccountStatusResponse();
+        accountStatusResponse.setSuccess(false);
+        accountStatusResponse.setReason("One of these elements was not deleted " +
                 "Payment preferences list(should be null) = " +deleteCheckSA+"  ." +
                 "Shipping address list(should be null) = "+deleteCheckSA+"  ." +
                 "DeleteOrdersResponse isSuccess = "+deleteOrdersResponse.isSuccess()+"  ." +
                 "DeleteAccountResponse isSuccess = "+deleteAccountResponse.isSuccess());
-        logger.warn(accountPermanentDeleteResponse);
+        logger.warn(accountStatusResponse);
+        AccountPermanentDeleteResponse accountPermanentDeleteResponse = new AccountPermanentDeleteResponse();
+        accountPermanentDeleteResponse.setStatusMessage(accountStatusResponse);
         return accountPermanentDeleteResponse;
     }
 

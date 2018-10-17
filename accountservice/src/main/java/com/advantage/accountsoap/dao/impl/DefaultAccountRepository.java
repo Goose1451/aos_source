@@ -830,7 +830,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
             entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Regev", "Binyamin", "beni.regev", "Qe7uwt2v!", countryMap.get(128), "054-7654321", "Jerusalem", "Jerusalem", "Holly Land", "9876543", "nakdimon@ben-guryon.com", false));
             entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Mercury", "Admin User", "Mercury", "Mercury", countryMap.get(10l), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "mercury@hpe.com", true));
-            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(10l), "(480) 222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(10l), "480-222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
 
             if (this.getAll().size() == TOTAL_ACCOUNTS_COUNT) {
                 sb.append("Account").append(Constants.COMMA).append(Constants.SPACE);

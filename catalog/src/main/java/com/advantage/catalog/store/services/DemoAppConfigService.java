@@ -508,6 +508,12 @@ public class DemoAppConfigService {
         logger.warn("updateParametersValues(...) - Resetting \"DB_call_delay\"");
         this.updateParameterValue("DB_call_delay", "0");
 
+        logger.warn("updateParametersValues(...) - Resetting \"Max_concurrent_users\"");
+        this.updateParameterValue("Max_concurrent_users", "0");
+
+        logger.warn("updateParametersValues(...) - Resetting \"Add_to_cart_time_delay\"");
+        this.updateParameterValue("Add_to_cart_time_delay", "0");
+
         logger.warn("updateParametersValues(...) - Resetting \"User_alternate_WSDL\"");
         this.updateParameterValue("User_alternate_WSDL", "No");
 

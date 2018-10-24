@@ -38,8 +38,8 @@ public final class Feature1779OrdersHistoryLeak {
         Thread thread = new LongRunningThread();
         try {
             thread.start();
-            System.out.println("Running, press any key to stop.");
-            System.in.read();
+            logger.warn("Memory Leak Thread started");
+            
         } finally {
             running = false;
             thread.join();
@@ -63,7 +63,7 @@ public final class Feature1779OrdersHistoryLeak {
      * in a loop.
      */
     static final class LongRunningThread extends Thread {
-        @Override public void run() {
+        @Override public void start() {
             while(running) {
                 try {
                     loadAndDiscard();

@@ -15,6 +15,8 @@ import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.services.*;
 import com.advantage.accountsoap.util.AccountPassword;
 import com.advantage.common.Constants;
+import com.advantage.common.cef.CefHttpModel;
+import com.advantage.common.dto.CatalogResponse;
 import com.advantage.common.enums.AccountType;
 import com.advantage.common.exceptions.token.TokenException;
 import com.advantage.common.exceptions.token.VerificationTokenException;
@@ -23,15 +25,21 @@ import com.advantage.common.security.SecurityTools;
 import com.advantage.common.security.Token;
 import com.advantage.common.security.TokenJWT;
 import com.advantage.root.util.StringHelper;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
@@ -416,6 +424,29 @@ public class AccountServiceEndpoint {
             return new CountrySearchResponse(countries);
         }
     }
+    //  region /Restore Database Factory Settings
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "dbRestoreFactorySettings")
+    public ResponseEntity<AccountStatusResponse> dbRestoreFactorySettings(HttpServletRequest request) {
+        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
+        if (cefData != null) {
+            logger.trace("cefDataId=" + cefData.toString());
+            cefData.setEventRequiredParameters(String.valueOf("/account/Restore_db_factory_settings".hashCode()),
+                    "Restore Database factory settings", 5);
+        } else {
+            logger.warn("cefData is null");
+        }
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        AccountStatusResponse response = accountService.dbRestoreFactorySettings();
+        if (!response.isSuccess()) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+
+            return new ResponseEntity<>(response, httpStatus);
+        }
+
+        return new ResponseEntity<>(response, httpStatus);
+    }
+    //  endregion. Test account service separate build..
 
     //endregion
     //region Address

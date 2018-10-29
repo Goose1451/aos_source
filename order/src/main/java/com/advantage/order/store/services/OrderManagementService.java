@@ -20,10 +20,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -692,6 +689,15 @@ public class OrderManagementService {
     currently order saved by unique orderID
     if change to unique per user the option get by userID and orderID available
      */
+
+    public ResponseEntity<String> dbRestoreFactorySettings (){
+
+        boolean result = orderManagementRepository.restoreToDefaultDb();
+
+        ResponseEntity<String> response = new ResponseEntity<String> ("SUCCESS", HttpStatus.OK);
+
+        return response;
+    }
     public HistoryOrderResponseDto getOrdersHistory(Long userId, Long orderId) {
 
         ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");

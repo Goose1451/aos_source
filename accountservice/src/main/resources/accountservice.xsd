@@ -721,6 +721,29 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:element name="RestoreDbToFactorySettingRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="field" type="xs:string" form="qualified"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RestoreDbToFactorySettingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="StatusMessage" form="qualified">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="success" type="tns:responseReason" form="qualified"/>
+              <xs:element name="reason" type="xs:string" form="qualified"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
   <xs:element name="GetAccountFieldsRequest">
     <xs:complexType>
       <xs:sequence>

@@ -825,6 +825,29 @@ public class OrderController {
         return new ResponseEntity<HistoryOrderHeaderDto>(hohd, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/order/Restore_db_factory_settings", method = RequestMethod.GET)
+    @ApiOperation(value = "Restore Database factory settings")
+    public ResponseEntity<String> dbRestoreFactorySettings(HttpServletRequest request) {
+//        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
+//        if (cefData != null) {
+//            logger.trace("cefDataId=" + cefData.toString());
+//            cefData.setEventRequiredParameters(String.valueOf("/catalog/Restore_db_factory_settings".hashCode()),
+//                    "Restore Database factory settings", 5);
+//        } else {
+//            logger.warn("cefData is null");
+//        }
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        ResponseEntity<String> response = orderManagementService.dbRestoreFactorySettings();
+        if (false==true) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+
+            return new ResponseEntity<String>("FAILED", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+    }
+
     boolean checkServicesStatus(){
 
         // catalog

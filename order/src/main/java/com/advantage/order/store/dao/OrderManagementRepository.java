@@ -18,4 +18,6 @@ public interface OrderManagementRepository {
 
     void updateUserOrderTrackingNumber(long userId, long orderNumber, long shippingTrackingNumber);
 
+    boolean restoreToDefaultDb ();
+
 }

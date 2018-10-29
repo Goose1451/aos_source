@@ -1,5 +1,6 @@
 package com.advantage.accountsoap;
 
+import accountservice.store.online.advantage.com.RestoreDbToFactorySettingResponse;
 import com.advantage.accountsoap.dto.account.GetAccountFieldsRequest;
 import com.advantage.accountsoap.dto.account.GetAccountFieldsResponse;
 import com.advantage.accountsoap.config.WebServiceConfig;
@@ -11,6 +12,7 @@ import com.advantage.accountsoap.dto.account.internal.AccountDtoNew;
 import com.advantage.accountsoap.dto.address.*;
 import com.advantage.accountsoap.dto.country.*;
 import com.advantage.accountsoap.dto.payment.*;
+import com.advantage.accountsoap.dto.payment.UpdateMasterCreditMethodResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.services.*;
 import com.advantage.accountsoap.util.AccountPassword;
@@ -425,26 +427,27 @@ public class AccountServiceEndpoint {
         }
     }
     //  region /Restore Database Factory Settings
-    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "dbRestoreFactorySettings")
-    public ResponseEntity<AccountStatusResponse> dbRestoreFactorySettings(HttpServletRequest request) {
-        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
-        if (cefData != null) {
-            logger.trace("cefDataId=" + cefData.toString());
-            cefData.setEventRequiredParameters(String.valueOf("/account/Restore_db_factory_settings".hashCode()),
-                    "Restore Database factory settings", 5);
-        } else {
-            logger.warn("cefData is null");
-        }
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "RestoreDbToFactorySettingRequest")
+    @ResponsePayload
+    public RestoreDbToFactorySettingResponse RestoreDbToFactorySetting(@RequestPayload RestoreDbToFactorySettingRequest request) {
+//        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
+//        if (cefData != null) {
+//            logger.trace("cefDataId=" + cefData.toString());
+//            cefData.setEventRequiredParameters(String.valueOf("/account/Restore_db_factory_settings".hashCode()),
+//                    "Restore Database factory settings", 5);
+//        } else {
+//            logger.warn("cefData is null");
+//        }
         HttpStatus httpStatus = HttpStatus.OK;
 
         AccountStatusResponse response = accountService.dbRestoreFactorySettings();
         if (!response.isSuccess()) {
             httpStatus = HttpStatus.BAD_REQUEST;
-
-            return new ResponseEntity<>(response, httpStatus);
+            RestoreDbToFactorySettingResponse restoreResponse = new RestoreDbToFactorySettingResponse();
+            return restoreResponse;
         }
 
-        return new ResponseEntity<>(response, httpStatus);
+        return new RestoreDbToFactorySettingResponse();
     }
     //  endregion. Test account service separate build..
 

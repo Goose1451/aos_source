@@ -82,8 +82,8 @@ define(['./module'], function (controllers) {
                 responsePromise.then(function(result) {
 
                     // this is only run after getData() resolves
-                    var isSuccess  = result.IsSuccess;
-                    console.log("result is success - "+isSuccess +"  Result outcome - "+ result.Reason );
+                    var isSuccess  = result.StatusMessage.success;
+                    console.log("result is success - "+isSuccess +"  Result outcome - "+ result.StatusMessage.reason );
                     if(isSuccess){
 
                         localStorage.removeItem('rememberMe');

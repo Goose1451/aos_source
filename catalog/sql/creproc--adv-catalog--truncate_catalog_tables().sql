@@ -7,7 +7,7 @@ BEGIN
    RAISE INFO 'Truncate CATALOG tables...';
 
    --TRUNCATE TABLE category, attribute, category_attributes_filter RESTART IDENTITY CASCADE;
-   TRUNCATE TABLE category, category_attributes_filter RESTART IDENTITY CASCADE;
+   TRUNCATE TABLE category, attribute, category_attributes_filter RESTART IDENTITY CASCADE;
    
    RAISE INFO 'Truncate CATALOG tables...Done!';
 

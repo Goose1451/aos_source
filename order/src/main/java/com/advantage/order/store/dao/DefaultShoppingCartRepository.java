@@ -112,11 +112,7 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
 
         if(delayRequestTime>0){
 
-            try {
-                Thread.sleep(delayRequestTime * 1000);
-            } catch (InterruptedException e) {
-                logger.fatal(e);
-            }
+            addTimeDelay(delayRequestTime);
         }
 
         entityManager.persist(shoppingCart);
@@ -137,6 +133,14 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
         ArgumentValidationHelper.validateNumberArgumentIsPositive(quantity, "quantity");
 
         ShoppingCart shoppingCart = this.find(userId, productId, color);
+
+        String delayRequest = RestApiHelper.getDemoAppConfigParameterValue("Add_to_cart_time_delay");
+        int delayRequestTime = Integer.parseInt(delayRequest);
+
+        if(delayRequestTime>0){
+
+            addTimeDelay(delayRequestTime);
+        }
 
         if (shoppingCart != null) {
             //  Product with color was found in user cart
@@ -161,6 +165,16 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
 
         //return shoppingCart;
         return shoppingCartResponse;
+    }
+
+    private void addTimeDelay(int timeToDelay){
+
+        try {
+            Thread.sleep(timeToDelay * 1000);
+            logger.info("Add time delay activated with "+timeToDelay+ " milliseconds");
+        } catch (InterruptedException e) {
+            logger.fatal(e);
+        }
     }
 
     @Override

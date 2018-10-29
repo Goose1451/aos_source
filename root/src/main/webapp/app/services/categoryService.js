@@ -335,19 +335,25 @@ define(['./module'], function (services) {
 
                             if(services_properties['single_machine_deployment'] === 'true'){
                                 var hostKey = window.location.hostname;
+                                var protocol = window.location.protocol;
+                                var useHttpsPort = services_properties['secured_deployment'] === 'true'
 
-                                server.setKey("http://" + hostKey + ":" +
-                                    services_properties['catalog_service_url_port'] + "/");
+                                server.setKey(protocol + "//" + hostKey +
+                                    (useHttpsPort ? "" : ":" +
+                                    services_properties['catalog_service_url_port'])+ "/");
 
-                                server.setCatalogKey("http://" + hostKey + ":" +
-                                    services_properties['catalog_service_url_port'] + "/" + services_properties['catalog_service_url_suffix'] + "/");
+                                server.setCatalogKey(protocol + "//" + hostKey +
+                                    (useHttpsPort ? "" : ":" +
+                                    services_properties['catalog_service_url_port']) + "/" + services_properties['catalog_service_url_suffix'] + "/");
 
-                                server.setOrderKey("http://" + hostKey + ":" +
-                                    services_properties['order_service_url_port'] + "/" + services_properties['order_service_url_suffix'] + "/");
+                                server.setOrderKey(protocol + "//" + hostKey +
+                                    (useHttpsPort ? "" : ":" +
+                                    services_properties['order_service_url_port']) + "/" + services_properties['order_service_url_suffix'] + "/");
 
-                                server.setWsdlPath("http://" +
-                                    hostKey + ":" +
-                                    services_properties['account_soapservice_url_port'] + "/" +
+                                server.setWsdlPath(protocol + "//" +
+                                    hostKey +
+                                    (useHttpsPort ? "" : ":" +
+                                    services_properties['account_soapservice_url_port']) + "/" +
                                     services_properties['account_soapservice_url_suffix'] + "/");
 
                             }

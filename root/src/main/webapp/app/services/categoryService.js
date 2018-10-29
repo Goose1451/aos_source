@@ -336,23 +336,23 @@ define(['./module'], function (services) {
                             if(services_properties['single_machine_deployment'] === 'true'){
                                 var hostKey = window.location.hostname;
                                 var protocol = window.location.protocol;
-                                var useHttpsPort = services_properties['secured_deployment'] === 'true'
+                                var reverseProxy = services_properties['reverse_proxy'] === 'true'
 
                                 server.setKey(protocol + "//" + hostKey +
-                                    (useHttpsPort ? "" : ":" +
+                                    (reverseProxy ? "" : ":" +
                                     services_properties['catalog_service_url_port'])+ "/");
 
                                 server.setCatalogKey(protocol + "//" + hostKey +
-                                    (useHttpsPort ? "" : ":" +
+                                    (reverseProxy ? "" : ":" +
                                     services_properties['catalog_service_url_port']) + "/" + services_properties['catalog_service_url_suffix'] + "/");
 
                                 server.setOrderKey(protocol + "//" + hostKey +
-                                    (useHttpsPort ? "" : ":" +
+                                    (reverseProxy ? "" : ":" +
                                     services_properties['order_service_url_port']) + "/" + services_properties['order_service_url_suffix'] + "/");
 
                                 server.setWsdlPath(protocol + "//" +
                                     hostKey +
-                                    (useHttpsPort ? "" : ":" +
+                                    (reverseProxy ? "" : ":" +
                                     services_properties['account_soapservice_url_port']) + "/" +
                                     services_properties['account_soapservice_url_suffix'] + "/");
 

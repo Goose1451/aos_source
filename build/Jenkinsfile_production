@@ -291,8 +291,9 @@ try {
             if (env.aos_stageName == "Production_Tests") {
                 stage('Redeploy last successful production images') {
                     sh '''
-	   ehco "production_ip=$aos_production_ip"
+	   echo "production_ip=$aos_production_ip"
 	   ssh "$aos_production_ip" \"docker stack rm STACK\"
+	   echo "sleeping for 30 seconds"
 	   sleep 30
 	   ssh "$aos_production_ip" \"sed -i 's/staging/production/g' /root/docker-compose.yml && /root/startup.sh\"
 	   '''

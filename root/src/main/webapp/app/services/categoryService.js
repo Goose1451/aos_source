@@ -355,10 +355,10 @@ define(['./module'], function (services) {
                                     services_properties['account_soapservice_url_port']) + "/" +
                                     services_properties['account_soapservice_url_suffix'] + "/");
 
-                            } if(reverseProxy === 'true'){
+                            } if(reverseProxy){
                                 server.setKey(protocol + "//" + hostKey + "/");
-                                server.setCatalogKey(protocol + "//" + hostKey + "/");
-                                server.setOrderKey(protocol + "//" + hostKey + "/");
+                                server.setCatalogKey(protocol + "//" + hostKey + "/"  + services_properties['catalog_service_url_suffix'] + "/");
+                                server.setOrderKey(protocol + "//" + hostKey + "/"  + services_properties['order_service_url_suffix'] + "/");
                                 server.setWsdlPath(protocol + "//" + hostKey + "/" +
                                     services_properties['account_soapservice_url_suffix'] + "/");
                             }

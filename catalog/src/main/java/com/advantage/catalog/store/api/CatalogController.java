@@ -27,12 +27,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.http.HTTPException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -864,13 +866,15 @@ public class CatalogController {
 
     @ApiOperation(value = "AppPulse API that mimic a failed facebook login")
     @RequestMapping(value = "/facebookLogin", method = RequestMethod.POST)
-    public ResponseEntity<ErrorResponseDto> getColorAttributeByProductIdAndColorCode(HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDto> facebookLogin(HttpServletRequest request) {
         CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
         if (cefData != null) {
             logger.trace("cefDataId=" + cefData.toString());
         } else {
             logger.warn("cefData is null");
         }
+        HTTPException e = new HTTPException(403);
+        logger.error(e.getMessage(), e);
         ErrorResponseDto erd = new ErrorResponseDto(false, "Sorry, connecting to Facebook is currently unavailable. Please try again later.");
         return new ResponseEntity<>(erd, HttpStatus.FORBIDDEN);
     }

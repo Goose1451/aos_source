@@ -26,6 +26,11 @@ if [[ "$i" == "order" || "$i" == "catalog" ]];then
    sed -i "s/=localhost/=${POSTGRES_IP}/g" ./WEB-INF/classes/properties/internal_config_for_env.properties
    sed -i "s/=5432/=${POSTGRES_PORT}/g" ./WEB-INF/classes/properties/internal_config_for_env.properties
 fi
+if [ "$reverse_proxy" == "true" ];then
+  echo "using nginx--------"
+  sed -i 's/reverse\.proxy=false/reverse\.proxy=true/g' "${path_to_services}"
+  sed -i 's/single\.machine\.deployment=false/single\.machine\.deployment=true/g' "${path_to_services}"
+fi
 cd ..
 done
 

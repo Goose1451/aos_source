@@ -65,7 +65,7 @@ try {
   echo "production_ip=$aos_production_ip"
   ssh "$aos_production_ip" \"docker stack rm STACK\"
   sed -i 's/LOCAL/AMAZON/g' "./Nimbus_aos/aos_distributed/.env"
-  sed -i 's/reverse\\_proxy=false/reverse\\_proxy=true/g' "./Nimbus_aos/aos_distributed/.env"
+  sed -i 's/reverse_proxy=false/reverse_proxy=true/g' "./Nimbus_aos/aos_distributed/.env_private"
   scp "./Nimbus_aos/aos_distributed/docker-compose.yml" root@$aos_production_ip:/root
   scp "./Nimbus_aos/aos_distributed/startup.sh" root@$aos_production_ip:/root
   scp "./Nimbus_aos/aos_distributed/.env" root@$aos_production_ip:/root

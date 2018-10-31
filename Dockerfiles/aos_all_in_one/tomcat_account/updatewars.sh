@@ -19,7 +19,7 @@ sed -i 's/\.\./\/opt/g' "./WEB-INF/classes/log4j.properties"
 if [ "$reverse_proxy" == "true" ];then
   echo "using nginx--------"
   sed -i 's/reverse\.proxy=false/reverse\.proxy=true/g' "./WEB-INF/classes/properties/services.properties"
-  sed -i 's/single\.machine\.deployment=false/single\.machine\.deployment=true/g' "./WEB-INF/classes/properties/services.properties"
+  #sed -i 's/single\.machine\.deployment=false/single\.machine\.deployment=true/g' "./WEB-INF/classes/properties/services.properties"
 fi
 
 cd ../

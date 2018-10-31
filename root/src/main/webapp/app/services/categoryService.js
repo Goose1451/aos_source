@@ -333,11 +333,10 @@ define(['./module'], function (services) {
                                 services_properties[Object.keys(jsonObj)] = jsonObj[Object.keys(jsonObj)];
                             });
 
+                            var reverseProxy = services_properties['reverse_proxy'] === 'true';
+                            var hostKey = window.location.hostname;
+                            var protocol = window.location.protocol;
                             if(services_properties['single_machine_deployment'] === 'true'){
-                                var hostKey = window.location.hostname;
-                                var protocol = window.location.protocol;
-                                var reverseProxy = services_properties['reverse_proxy'] === 'true'
-
                                 server.setKey(protocol + "//" + hostKey +
                                     (reverseProxy ? "" : ":" +
                                     services_properties['catalog_service_url_port'])+ "/");
@@ -356,6 +355,12 @@ define(['./module'], function (services) {
                                     services_properties['account_soapservice_url_port']) + "/" +
                                     services_properties['account_soapservice_url_suffix'] + "/");
 
+                            } if(reverseProxy === 'true'){
+                                server.setKey(protocol + "//" + hostKey + "/");
+                                server.setCatalogKey(protocol + "//" + hostKey + "/");
+                                server.setOrderKey(protocol + "//" + hostKey + "/");
+                                server.setWsdlPath(protocol + "//" + hostKey + "/" +
+                                    services_properties['account_soapservice_url_suffix'] + "/");
                             }
                             else{
                                 server.setKey("http://" + services_properties['catalog_service_url_host'] + ":" +

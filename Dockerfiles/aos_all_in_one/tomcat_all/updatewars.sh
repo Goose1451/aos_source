@@ -29,7 +29,7 @@ fi
 if [ "$reverse_proxy" == "true" ];then
   echo "using nginx--------"
   sed -i 's/reverse\.proxy=false/reverse\.proxy=true/g' "${path_to_services}"
-  sed -i 's/single\.machine\.deployment=false/single\.machine\.deployment=true/g' "${path_to_services}"
+  #sed -i 's/single\.machine\.deployment=false/single\.machine\.deployment=true/g' "${path_to_services}"
 fi
 cd ..
 done

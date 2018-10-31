@@ -690,11 +690,16 @@ public class OrderManagementService {
     if change to unique per user the option get by userID and orderID available
      */
 
-    public ResponseEntity<String> dbRestoreFactorySettings (){
+    public RestoreDefaultDBSettingsResponse dbRestoreFactorySettings (){
 
         boolean result = orderManagementRepository.restoreToDefaultDb();
 
-        ResponseEntity<String> response = new ResponseEntity<String> ("SUCCESS", HttpStatus.OK);
+        if(!result){
+            RestoreDefaultDBSettingsResponse response = new RestoreDefaultDBSettingsResponse(false, "internal error check server logs ");
+            return response;
+        }
+
+        RestoreDefaultDBSettingsResponse response = new RestoreDefaultDBSettingsResponse(true, "default setting restored");
 
         return response;
     }

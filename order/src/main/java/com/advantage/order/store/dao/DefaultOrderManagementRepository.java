@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -178,6 +179,7 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
                     orderNumber);
         }
     }
+    @Transactional
     @Override
     public boolean restoreToDefaultDb () {
 
@@ -199,15 +201,15 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
         System.out.println("Database Restore Factory Settings - CATALOG schema truncated successfully");
         //  endregion
         //Check all tables have 0 rows.
-        if (historyOrderHeaderRepository.getAll().size() == 0){
+        if (historyOrderHeaderRepository.getAll().size() != 0){
             logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_header'");
             return false;
         }
-        if (historyOrderLineRepository.getAll().size() == 0){
+        if (historyOrderLineRepository.getAll().size() != 0){
             logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_lines'");
             return false;
         }
-        if (shoppingCartRepository.getAll().size() == 0){
+        if (shoppingCartRepository.getAll().size() != 0){
             logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'shopping_cart'");
             return false;
         }
@@ -215,7 +217,7 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
             System.out.println("Database Restore Factory Settings successful - adv_order");
             logger.info("Database Restore Factory Settings successful - adv_order");
 
-            return false;
+            return true;
         }
 
     private void validatePaymentMethod(final String paymentMethod, final String argumentInformativeName) {

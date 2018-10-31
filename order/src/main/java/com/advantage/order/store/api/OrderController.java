@@ -827,7 +827,7 @@ public class OrderController {
 
     @RequestMapping(value = "/order/Restore_db_factory_settings", method = RequestMethod.GET)
     @ApiOperation(value = "Restore Database factory settings")
-    public ResponseEntity<String> dbRestoreFactorySettings(HttpServletRequest request) {
+    public RestoreDefaultDBSettingsResponse dbRestoreFactorySettings(HttpServletRequest request) {
 //        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
 //        if (cefData != null) {
 //            logger.trace("cefDataId=" + cefData.toString());
@@ -838,14 +838,15 @@ public class OrderController {
 //        }
         HttpStatus httpStatus = HttpStatus.OK;
 
-        ResponseEntity<String> response = orderManagementService.dbRestoreFactorySettings();
-        if (false==true) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+        RestoreDefaultDBSettingsResponse response = orderManagementService.dbRestoreFactorySettings();
+        if (!response.isSuccess()) {
 
-            return new ResponseEntity<String>("FAILED", HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.info("RestoreDefaultDBSettings fail ");
+            return new RestoreDefaultDBSettingsResponse(false, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+
         }
-
-        return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        logger.info("RestoreDefaultDBSettings completed successfully  ");
+        return new RestoreDefaultDBSettingsResponse(true, HttpStatus.OK.toString());
     }
 
     boolean checkServicesStatus(){

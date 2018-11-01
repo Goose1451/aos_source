@@ -278,8 +278,8 @@ var english = {
     'ABOUT': 'About',
     'AOS_VERSIONS': 'AOS Versions',
     'THE_APP_IS_AVAILABLE_IN_3_FORM_FACTORS': 'THE APPLICATION IS AVAILABLE IN 3 FORM FACTORS:',
-    'ABOUT_FIRST_PARAGRAPH': 'The ADM demo application provides one stop shop to demonstrate all ADM solutions:',
-    'ABOUT_SECOND_PARAGRAPH': 'ALM, OCTANE, UFT, LeanFT, Mobile Center, LR, PC, StormRunner, NV, SV, BPT and Sprinter, and anything new we will build in the future.',
+    'ABOUT_FIRST_PARAGRAPH': 'Advantage Online Shopping (AOS) is a fictional company used by Micro Focus as the “application under test” during customer-facing product demonstrations.',
+    'ABOUT_SECOND_PARAGRAPH': 'Its primary assets are a fully-functional website and a mobile client, each designed using modern programming practices, focusing on high quality and scalability.  AOS is built using DevOps practices, specifically Agile backlog management and continuous testing, including functional, non-functional, performance and security testing. ',
     "PRODUCT_QUANTITY_ERROR_MESSAGE" : "Oops! We only have {0} in stock. We updated your order accordingly"
 
 };

@@ -1,8 +1,6 @@
 
 package com.advantage.accountsoap.dto.account;
 
-import com.advantage.accountsoap.config.WebServiceConfig;
-
 import javax.xml.bind.annotation.*;
 
 
@@ -16,7 +14,7 @@ import javax.xml.bind.annotation.*;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="field" type="{http://www.w3.org/2001/XMLSchema}string" form="qualified"/>
+ *         &lt;element name="base64Token" type="{http://www.w3.org/2001/XMLSchema}string" form="qualified"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,36 +25,36 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "field"
+    "base64Token"
 })
-@XmlRootElement(name = "RestoreDbToFactorySettingRequest", namespace = WebServiceConfig.NAMESPACE_URI)
-public class RestoreDbToFactorySettingRequest {
+@XmlRootElement(name = "RestoreDBToFactorySettingRequest", namespace = "com.advantage.online.store.accountservice")
+public class RestoreDBToFactorySettingRequest {
 
-    @XmlElement(namespace = WebServiceConfig.NAMESPACE_URI, required = true)
-    protected String field;
+    @XmlElement(namespace = "com.advantage.online.store.accountservice", required = true)
+    protected String base64Token;
 
     /**
-     * Gets the value of the field property.
+     * Gets the value of the base64Token property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getField() {
-        return field;
+    public String getBase64Token() {
+        return base64Token;
     }
 
     /**
-     * Sets the value of the field property.
+     * Sets the value of the base64Token property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setField(String value) {
-        this.field = value;
+    public void setBase64Token(String value) {
+        this.base64Token = value;
     }
 
 }

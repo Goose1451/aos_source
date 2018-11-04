@@ -41,8 +41,8 @@ import java.util.*;
 @Repository
 public class DefaultAccountRepository extends AbstractRepository implements AccountRepository {
 
-    private static final int TOTAL_ACCOUNTS_COUNT = 14;
-    private static final int TOTAL_COUNTRIES_COUNT = 243;
+    private static final int TOTAL_ACCOUNTS_COUNT = 5;
+    private static final int TOTAL_COUNTRIES_COUNT = 241;
     DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository;
     DefaultAddressRepository defaultAddressRepository;
     private AccountStatusResponse accountStatusResponse;
@@ -762,25 +762,19 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
     public AccountStatusResponse dbRestoreFactorySettings() {
 
         SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
-
         Session session = sessionFactory.openSession();
-
         Transaction transaction = session.beginTransaction();
-
         //  region TRUNCATE_ACCOUNT_SERVICE_TABLES()
         String resultTruncate = (String) entityManager.createNativeQuery("SELECT truncate_account_tables()")
                 .getSingleResult();
         transaction.commit();
         session.flush();
         session.close();
-
         StringBuilder sb = new StringBuilder("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully. ");
         System.out.println("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully");
         logger.info("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully");
         //  endregion
-
         sb.append("Database Restore Factory Settings: ");
-
         //  region COUNTRY
         Map<Long, Country> countryMap = new HashMap<>();
         try {
@@ -795,19 +789,17 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
                 entityManager.persist(country);
                 countryMap.put(country.getId(), country);
             }
-            //return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'country'", -1);
 
-
-//            if (countryRepository.getAll().size() == TOTAL_COUNTRIES_COUNT) {
-//                sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
-//                System.out.println("Database Restore Factory Settings successful - table 'country'");
-//                logger.info("Database Restore Factory Settings successful - table 'country'");
-//            } else {
-//                sb.append("Table 'Country' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
-//                System.out.println("Database Restore Factory Settings - table 'country' - FAILED");
-//                logger.error("Database Restore Factory Settings - table 'country' - FAILED");
-//                return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'country'", -1);
-//            }
+            if (countryRepository.getAllCountries().size() == TOTAL_COUNTRIES_COUNT) {
+                sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
+                System.out.println("Database Restore Factory Settings successful - table 'country'");
+                logger.info("Database Restore Factory Settings successful - table 'country'");
+            } else {
+                sb.append("Table 'Country' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
+                System.out.println("Database Restore Factory Settings - table 'country' - FAILED");
+                logger.error("Database Restore Factory Settings - table 'country' - FAILED");
+                return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'country'", -1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             sb.append("Table 'Country' - FAILED with Exception").append(Constants.COMMA).append(Constants.SPACE);
@@ -819,22 +811,22 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
 
         //  region ACCOUNT
         try {
-            session.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Mercury", "Admin User", "Mercury", "Mercury", countryMap.get(10L), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "mercury@hpe.com", true));
-            session.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(40L), "480-222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
-//            session.persist(new Account(AccountType.USER.getAccountTypeCode(), "Gilat", "Naor", "gilat", "gG123", countryMap.get(128L), "052-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "d0r1@gmail.com", true));
-//            session.persist(new Account(AccountType.USER.getAccountTypeCode(), "Bukhantsov", "Kostya", "kostya", "kostya", countryMap.get(10L), "052-22222222", "Jerusalem1", "Jerusalem", "address", "9876543", "kostya@gmail.com", true));
-//            session.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Brown", "John", "AppPulse", "AppPulse1", countryMap.get(40L), "617-527-5555", "MA", "Newton", "826 Morseland Ave.", "02458", "AppPlusedemo@aos.ad", true));
-//
-//            if (this.getAll().size() == TOTAL_ACCOUNTS_COUNT) {
-//                sb.append("Account").append(Constants.COMMA).append(Constants.SPACE);
-//                System.out.println("Database Restore Factory Settings successful - table 'account'");
-//                logger.info("Database Restore Factory Settings successful - table 'account'");
-//            } else {
-//                sb.append("Table 'account' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
-//                System.out.println("Database Restore Factory Settings - table 'account' - FAILED");
-//                logger.error("Database Restore Factory Settings - table 'account' - FAILED");
-//                return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'account'", -1);
-//            }
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Mercury", "Admin User", "Mercury", "Mercury", countryMap.get(10L), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "mercury@hpe.com", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(40L), "480-222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
+            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Gilat", "Naor", "gilat", "gG123", countryMap.get(128L), "052-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "d0r1@gmail.com", true));
+            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Bukhantsov", "Kostya", "kostya", "kostya", countryMap.get(10L), "052-22222222", "Jerusalem1", "Jerusalem", "address", "9876543", "kostya@gmail.com", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Brown", "John", "AppPulse", "AppPulse1", countryMap.get(40L), "617-527-5555", "MA", "Newton", "826 Morseland Ave.", "02458", "AppPlusedemo@aos.ad", true));
+
+            if (this.getAll().size() == TOTAL_ACCOUNTS_COUNT) {
+                sb.append("Account").append(Constants.COMMA).append(Constants.SPACE);
+                System.out.println("Database Restore Factory Settings successful - table 'account'");
+                logger.info("Database Restore Factory Settings successful - table 'account'");
+            } else {
+                sb.append("Table 'account' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
+                System.out.println("Database Restore Factory Settings - table 'account' - FAILED");
+                logger.error("Database Restore Factory Settings - table 'account' - FAILED");
+                return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'account'", -1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sb.append("Table 'Account' - FAILED with Exception").append(Constants.COMMA).append(Constants.SPACE);
@@ -842,9 +834,6 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
             logger.error("Database Restore Factory Settings - table 'account' - FAILED with Exception");
             return new AccountStatusResponse(false, "Restore factory settings FAILED - ACCOUNT table", -1);
         }
-
-
-        //return new AccountStatusResponse(true, "Restore factory settings ACCOUNT-SERVICE successful", 1);
         return new AccountStatusResponse(true, sb.toString(), 1);
     }
 

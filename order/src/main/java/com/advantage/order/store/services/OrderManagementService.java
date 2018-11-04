@@ -3,7 +3,6 @@ package com.advantage.order.store.services;
 import ShipExServiceClient.*;
 import com.advantage.common.Constants;
 import com.advantage.common.Url_resources;
-import com.advantage.common.dto.ProductDto;
 import com.advantage.common.enums.PaymentMethodEnum;
 import com.advantage.common.enums.ResponseEnum;
 import com.advantage.common.utils.LoggerUtils;
@@ -690,16 +689,16 @@ public class OrderManagementService {
     if change to unique per user the option get by userID and orderID available
      */
 
-    public RestoreDefaultDBSettingsResponse dbRestoreFactorySettings (){
+    public RestoredefaultDBsettingsResponse dbRestoreFactorySettings (){
 
         boolean result = orderManagementRepository.restoreToDefaultDb();
 
         if(!result){
-            RestoreDefaultDBSettingsResponse response = new RestoreDefaultDBSettingsResponse(false, "internal error check server logs ");
+            RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(false, "internal error check server logs ");
             return response;
         }
 
-        RestoreDefaultDBSettingsResponse response = new RestoreDefaultDBSettingsResponse(true, "default setting restored");
+        RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(true, "default setting restored");
 
         return response;
     }

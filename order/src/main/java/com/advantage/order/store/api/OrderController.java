@@ -7,7 +7,6 @@ import com.advantage.common.Url_resources;
 import com.advantage.common.cef.CefHttpModel;
 import com.advantage.common.dto.AppUserDto;
 import com.advantage.common.dto.DemoAppConfigParameter;
-import com.advantage.common.dto.ErrorResponseDto;
 import com.advantage.common.dto.ProductDto;
 import com.advantage.common.security.AuthorizeAsUser;
 import com.advantage.common.utils.SoapApiHelper;
@@ -23,36 +22,24 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.NodeList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -827,7 +814,7 @@ public class OrderController {
 
     @RequestMapping(value = "/order/Restore_db_factory_settings", method = RequestMethod.GET)
     @ApiOperation(value = "Restore Database factory settings")
-    public RestoreDefaultDBSettingsResponse dbRestoreFactorySettings(HttpServletRequest request) {
+    public RestoredefaultDBsettingsResponse dbRestoreFactorySettings(HttpServletRequest request) {
 //        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
 //        if (cefData != null) {
 //            logger.trace("cefDataId=" + cefData.toString());
@@ -838,15 +825,15 @@ public class OrderController {
 //        }
         HttpStatus httpStatus = HttpStatus.OK;
 
-        RestoreDefaultDBSettingsResponse response = orderManagementService.dbRestoreFactorySettings();
+        RestoredefaultDBsettingsResponse response = orderManagementService.dbRestoreFactorySettings();
         if (!response.isSuccess()) {
 
             logger.info("RestoreDefaultDBSettings fail ");
-            return new RestoreDefaultDBSettingsResponse(false, HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            return new RestoredefaultDBsettingsResponse(false, HttpStatus.INTERNAL_SERVER_ERROR.toString());
 
         }
         logger.info("RestoreDefaultDBSettings completed successfully  ");
-        return new RestoreDefaultDBSettingsResponse(true, HttpStatus.OK.toString());
+        return new RestoredefaultDBsettingsResponse(true, HttpStatus.OK.toString());
     }
 
     boolean checkServicesStatus(){

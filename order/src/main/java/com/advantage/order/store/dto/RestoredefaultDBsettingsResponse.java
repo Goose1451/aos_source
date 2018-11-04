@@ -1,11 +1,11 @@
 package com.advantage.order.store.dto;
 
-public class RestoreDefaultDBSettingsResponse {
+public class RestoredefaultDBsettingsResponse {
 
     private boolean success;
     private String details;
 
-    public RestoreDefaultDBSettingsResponse(boolean success, String details) {
+    public RestoredefaultDBsettingsResponse(boolean success, String details) {
         this.success = success;
         this.details = details;
     }

@@ -1,6 +1,5 @@
 package com.advantage.accountsoap;
 
-import accountservice.store.online.advantage.com.RestoreDbToFactorySettingResponse;
 import com.advantage.accountsoap.dto.account.GetAccountFieldsRequest;
 import com.advantage.accountsoap.dto.account.GetAccountFieldsResponse;
 import com.advantage.accountsoap.config.WebServiceConfig;
@@ -427,27 +426,32 @@ public class AccountServiceEndpoint {
         }
     }
     //  region /Restore Database Factory Settings
-    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "RestoreDbToFactorySettingRequest")
+//    @AuthorizeAsUser
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+//            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "RestoreDBToFactorySettingRequest")
     @ResponsePayload
-    public RestoreDbToFactorySettingResponse RestoreDbToFactorySetting(@RequestPayload RestoreDbToFactorySettingRequest request) {
-//        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
-//        if (cefData != null) {
-//            logger.trace("cefDataId=" + cefData.toString());
-//            cefData.setEventRequiredParameters(String.valueOf("/account/Restore_db_factory_settings".hashCode()),
-//                    "Restore Database factory settings", 5);
-//        } else {
-//            logger.warn("cefData is null");
-//        }
+    public RestoreDBToFactorySettingResponse RestoreDbToFactorySetting(@RequestPayload RestoreDBToFactorySettingRequest request) {
+
         HttpStatus httpStatus = HttpStatus.OK;
 
         AccountStatusResponse response = accountService.dbRestoreFactorySettings();
+        RestoreDBToFactorySettingResponse restoreResponse;
+
         if (!response.isSuccess()) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            RestoreDbToFactorySettingResponse restoreResponse = new RestoreDbToFactorySettingResponse();
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+             restoreResponse = new RestoreDBToFactorySettingResponse();
+            restoreResponse.setReason(response.getReason());
+            restoreResponse.setHttpStatus(httpStatus.toString());
+            restoreResponse.setSuccess(response.isSuccess());
             return restoreResponse;
         }
-
-        return new RestoreDbToFactorySettingResponse();
+        restoreResponse = new RestoreDBToFactorySettingResponse();
+        restoreResponse.setReason(response.getReason());
+        restoreResponse.setHttpStatus(httpStatus.toString());
+        restoreResponse.setSuccess(response.isSuccess());
+        return restoreResponse;
     }
     //  endregion. Test account service separate build..
 

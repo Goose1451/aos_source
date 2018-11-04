@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.advantage.online.store</groupId>
     <artifactId>main_project</artifactId>
-    <version>1.1.5-SNAPSHOT</version>
+    <version>1.1.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>main_project</name>
 

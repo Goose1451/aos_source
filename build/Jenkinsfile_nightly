@@ -62,19 +62,19 @@ try {
                 sh '''#!/bin/bash
 
   #copy the docker-compose to production machine
-  echo "production_ip=$aos_production_ip"
-  ssh "$aos_production_ip" \"docker stack rm STACK\"
+  echo "production_ip=$aos_nightly_ip"
+  ssh "$aos_nightly_ip" \"docker stack rm STACK\"
   sed -i 's/LOCAL/AMAZON/g' "./Nimbus_aos/aos_distributed/.env"
   sed -i 's/reverse_proxy=false/reverse_proxy=true/g' "./Nimbus_aos/aos_distributed/.env_private"
-  scp "./Nimbus_aos/aos_distributed/docker-compose.yml" root@$aos_production_ip:/root
-  scp "./Nimbus_aos/aos_distributed/startup.sh" root@$aos_production_ip:/root
-  scp "./Nimbus_aos/aos_distributed/.env" root@$aos_production_ip:/root
-  scp "./Nimbus_aos/aos_distributed/.env_private" root@$aos_production_ip:/root
+  scp "./Nimbus_aos/aos_distributed/docker-compose.yml" root@$aos_nightly_ip:/root
+  scp "./Nimbus_aos/aos_distributed/startup.sh" root@$aos_nightly_ip:/root
+  scp "./Nimbus_aos/aos_distributed/.env" root@$aos_nightly_ip:/root
+  scp "./Nimbus_aos/aos_distributed/.env_private" root@$aos_nightly_ip:/root
   
-  ssh "$aos_production_ip" \"chmod +x /root/startup.sh\"
+  ssh "$aos_nightly_ip" \"chmod +x /root/startup.sh\"
   
   # docker compose pull the latest images, so if there is a newer image the service of that image will be stopped and recreated
-  ssh "$aos_production_ip" \"sed -i '/image/ s/$/-dev:staging/' /root/docker-compose.yml && sed -i 's/8081/8082/g' /root/.env && /root/startup.sh\"
+  ssh "$aos_nightly_ip" \"sed -i '/image/ s/$/-dev:staging/' /root/docker-compose.yml && sed -i 's/8081/8082/g' /root/.env && /root/startup.sh\"
   '''
             }
         }
@@ -292,11 +292,11 @@ try {
             if (env.aos_stageName == "Production_Tests") {
                 stage('Redeploy last successful production images') {
                     sh '''
-	   echo "production_ip=$aos_production_ip"
-	   ssh "$aos_production_ip" \"docker stack rm STACK\"
+	   echo "production_ip=$aos_nightly_ip"
+	   ssh "$aos_nightly_ip" \"docker stack rm STACK\"
 	   echo "sleeping for 30 seconds"
 	   sleep 30
-	   ssh "$aos_production_ip" \"sed -i 's/staging/production/g' /root/docker-compose.yml && /root/startup.sh\"
+	   ssh "$aos_nightly_ip" \"sed -i 's/staging/production/g' /root/docker-compose.yml && /root/startup.sh\"
 	   '''
                 }
             }

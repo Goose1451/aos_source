@@ -89,7 +89,7 @@ try {
 
                 env.Resumed = "false"
 
-                build job: 'demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Production'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_production_ip:8080/#/"]], propagate: true
+                build job: 'demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'Production'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_nightly_ip/#/"]], propagate: true
             }
         }
 

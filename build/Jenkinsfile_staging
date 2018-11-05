@@ -294,7 +294,7 @@ if (env.Resumed == "true" && env.aos_failed_stageName != env.aos_stageName){
    println trigger_production
    if (trigger_production == 'yes') {
     println "in"
-    build job: 'demoapp_folder/demoapp_build_pipeline_production', wait: false
+    build job: 'demoapp_folder/demoapp_build_pipeline_nightly', wait: false
    }
   }
 }

@@ -94,10 +94,6 @@ fi
 	sed -i "s/latest/${Release_version}/g" "./Nimbus_aos/aos_distributed/.env"
 	sed -i 's/reverse_proxy=false/reverse_proxy=true/g' "./Nimbus_aos/aos_distributed/.env_private"
 	sed -i '/advantageonlineshopping/ s/$/:${TAG}/' ./Nimbus_aos/aos_distributed/docker-compose.yml
-	scp "./Nimbus_aos/aos_distributed/docker-compose.yml" root@$aos_production_ip:/root
-	scp "./Nimbus_aos/aos_distributed/startup.sh" root@$aos_production_ip:/root
-	scp "./Nimbus_aos/aos_distributed/.env" root@$aos_production_ip:/root
-	scp "./Nimbus_aos/aos_distributed/.env_private" root@$aos_production_ip:/root
 
 
 #end of changing production to use swarm (distributed)******************************

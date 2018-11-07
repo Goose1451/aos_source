@@ -254,10 +254,16 @@ define(['./module'], function (controllers) {
                 var colors = Helper.sortArrayByColorName(s.product.colors);
                 //From here to line 267 we organize the color array to start with the color in the
                 //category section.
-                var imageUrlInProductImages = s.product.images.find(function(image) {
+                // var imageUrlInProductImages = s.product.images.find(function(image) {
+                //     return image.substring(8)== s.imageUrl;
+                // });
+                var imageUrlInProductImages = altFind(s.product.images, function(image) {
                     return image.substring(8)== s.imageUrl;
                 });
-                s.firstImageToShow = colors.find(function (color) {
+                // s.firstImageToShow = colors.find(function (color) {
+                //     return color.code == imageUrlInProductImages.substring(0, 6);
+                // });
+                s.firstImageToShow = altFind(colors, function(color) {
                     return color.code == imageUrlInProductImages.substring(0, 6);
                 });
                 //Damaged images products.
@@ -296,6 +302,16 @@ define(['./module'], function (controllers) {
                     if (s.product.colors[i].code == resolveParams.selectedColor) {
                         s.colorSelected = s.product.colors[i];
                         break;
+                    }
+                }
+            }
+
+
+            function altFind(list, callback) {
+                for (var i = 0; i < list.length; i++) {
+                    var match = callback(list[i]);
+                    if (match) {
+                        return list[i];
                     }
                 }
             }

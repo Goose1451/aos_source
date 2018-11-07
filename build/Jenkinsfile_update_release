@@ -141,9 +141,9 @@ ssh "$production_ip" "docker stack rm STACK"
 sleep 120
 ssh "$production_ip" \"chmod +x /root/aos_release/startup.sh && cd /root/aos_release && ./startup.sh\"
 
-sleep 120
+#sleep 120
 #install trace on main & account
-ssh "$production_ip" \"chmod +x /root/install_trace.sh && /root/install_trace.sh "main-app" "${Release_version}" && /root/install_trace.sh "accountservice" "${Release_version}" \"
+#ssh "$production_ip" \"chmod +x /root/install_trace.sh && /root/install_trace.sh "main-app" "${Release_version}" && /root/install_trace.sh "accountservice" "${Release_version}" \"
 
 """
 }

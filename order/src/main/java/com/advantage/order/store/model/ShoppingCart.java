@@ -22,12 +22,16 @@ import java.util.Date;
                         " order by s.lastUpdate DESC"
         )
         , @NamedQuery(
+        name = ShoppingCart.QUERY_GET_CART_ALL,
+        query = "select s from ShoppingCart s "
+        )
+        , @NamedQuery(
         name = ShoppingCart.QUERY_GET_CART_BY_PK_COLUMNS,
         query = "select s from ShoppingCart s " +
                 "where " + ShoppingCart.FIELD_USER_ID + " = :" + ShoppingCart.PARAM_USER_ID +
                 " AND " + ShoppingCart.FIELD_PRODUCT_ID + " = :" + ShoppingCart.PARAM_PRODUCT_ID +
                 " AND " + ShoppingCart.FIELD_COLOR_ID + " = :" + ShoppingCart.PARAM_COLOR_ID
-        )
+)
 })
 public class ShoppingCart {
 
@@ -50,6 +54,7 @@ public class ShoppingCart {
 
     public static final String QUERY_GET_CARTS_BY_USER_ID = "shoppingCart.getCartsByUserId";
     public static final String QUERY_GET_CART_BY_PK_COLUMNS = "shoppingCart.getCartsByPkColumns";
+    public static final String QUERY_GET_CART_ALL = "shoppingCart.getCartsAll";
 
     public static final String FIELD_USER_ID = "user_id";
     public static final String FIELD_PRODUCT_ID = "product_id";

@@ -16,6 +16,7 @@ import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -183,42 +184,47 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
     @Override
     public boolean restoreToDefaultDb () {
 
-        SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+        try {
+            SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
 
-        Session session = sessionFactory.openSession();
+            Session session = sessionFactory.openSession();
 
-        Transaction transaction = session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
-        //  region TRUNCATE_CATALOG_TABLES()
-        String resultTruncate = (String) entityManager.createNativeQuery("SELECT public.truncate_order_tables()")
-                .getSingleResult();
-        transaction.commit();
-        session.flush();
-        session.close();
+            //  region TRUNCATE_CATALOG_TABLES()
+            String resultTruncate = (String) entityManager.createNativeQuery("SELECT public.truncate_order_tables()")
+                    .getSingleResult();
+            transaction.commit();
+            session.flush();
+            session.close();
 
-        StringBuilder sb = new StringBuilder("Database Restore Factory Settings - CATALOG schema truncated successfully. ");
-        logger.info("Database Restore Factory Settings - CATALOG schema truncated successfully.");
-        System.out.println("Database Restore Factory Settings - CATALOG schema truncated successfully");
-        //  endregion
-        //Check all tables have 0 rows.
-        if (historyOrderHeaderRepository.getAll().size() != 0){
-            logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_header'");
-            return false;
-        }
-        if (historyOrderLineRepository.getAll().size() != 0){
-            logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_lines'");
-            return false;
-        }
-        if (shoppingCartRepository.getAll().size() != 0){
-            logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'shopping_cart'");
-            return false;
-        }
+            StringBuilder sb = new StringBuilder("Database Restore Factory Settings - CATALOG schema truncated successfully. ");
+            logger.info("Database Restore Factory Settings - CATALOG schema truncated successfully.");
+            System.out.println("Database Restore Factory Settings - CATALOG schema truncated successfully");
+            //  endregion
+            //Check all tables have 0 rows.
+            if (historyOrderHeaderRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_header'");
+                return false;
+            }
+            if (historyOrderLineRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_lines'");
+                return false;
+            }
+            if (shoppingCartRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'shopping_cart'");
+                return false;
+            }
             sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings successful - adv_order");
             logger.info("Database Restore Factory Settings successful - adv_order");
 
             return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
         }
+    }
 
     private void validatePaymentMethod(final String paymentMethod, final String argumentInformativeName) {
 

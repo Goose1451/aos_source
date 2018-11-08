@@ -426,10 +426,10 @@ public class AccountServiceEndpoint {
         }
     }
     //  region /Restore Database Factory Settings
-//    @AuthorizeAsUser
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
-//            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    @AuthorizeAsUser
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "RestoreDBToFactorySettingRequest")
     @ResponsePayload
     public RestoreDBToFactorySettingResponse RestoreDbToFactorySetting(@RequestPayload RestoreDBToFactorySettingRequest request) {

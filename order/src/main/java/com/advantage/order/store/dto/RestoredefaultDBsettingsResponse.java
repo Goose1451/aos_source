@@ -1,8 +1,12 @@
 package com.advantage.order.store.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RestoredefaultDBsettingsResponse {
 
+    @JsonProperty("success")
     private boolean success;
+    @JsonProperty("details")
     private String details;
 
     public RestoredefaultDBsettingsResponse(boolean success, String details) {

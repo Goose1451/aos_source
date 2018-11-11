@@ -834,7 +834,7 @@ public class OrderController {
         logger.info("RestoreDefaultDBSettings completed successfully  ");
         return new ResponseEntity<RestoredefaultDBsettingsResponse>(response, httpStatus);
     }
-
+//comment for git
     boolean checkServicesStatus(){
 
         // catalog

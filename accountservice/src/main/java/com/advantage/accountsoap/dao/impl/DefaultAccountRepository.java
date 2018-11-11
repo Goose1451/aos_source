@@ -27,20 +27,22 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-
+@Component
 @Qualifier("accountRepository")
 @Repository
 public class DefaultAccountRepository extends AbstractRepository implements AccountRepository {
 
-    private static final int TOTAL_ACCOUNTS_COUNT = 14;
-    private static final int TOTAL_COUNTRIES_COUNT = 243;
+    private static final int TOTAL_ACCOUNTS_COUNT = 5;
+    private static final int TOTAL_COUNTRIES_COUNT = 241;
     DefaultPaymentPreferencesRepository defaultPaymentPreferencesRepository;
     DefaultAddressRepository defaultAddressRepository;
     private AccountStatusResponse accountStatusResponse;
@@ -757,29 +759,22 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         return new AccountStatusResponse(false, "UserOrders not deleted ", userId);
     }
 
-
-    @Override
     public AccountStatusResponse dbRestoreFactorySettings() {
 
         SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
-
         Session session = sessionFactory.openSession();
-
         Transaction transaction = session.beginTransaction();
-
         //  region TRUNCATE_ACCOUNT_SERVICE_TABLES()
-        String resultTruncate = (String) entityManager.createNativeQuery("SELECT public.truncate_account_service_tables()")
+        String resultTruncate = (String) entityManager.createNativeQuery("SELECT truncate_account_tables()")
                 .getSingleResult();
         transaction.commit();
         session.flush();
         session.close();
-
         StringBuilder sb = new StringBuilder("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully. ");
         System.out.println("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully");
+        logger.info("Database Restore Factory Settings - ACCOUNT-SERVICE schema truncated successfully");
         //  endregion
-
         sb.append("Database Restore Factory Settings: ");
-
         //  region COUNTRY
         Map<Long, Country> countryMap = new HashMap<>();
         try {
@@ -795,60 +790,50 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
                 countryMap.put(country.getId(), country);
             }
 
-            if (countryRepository.getAll().size() == TOTAL_COUNTRIES_COUNT) {
+            if (countryRepository.getAllCountries().size() == TOTAL_COUNTRIES_COUNT) {
                 sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
                 System.out.println("Database Restore Factory Settings successful - table 'country'");
+                logger.info("Database Restore Factory Settings successful - table 'country'");
             } else {
                 sb.append("Table 'Country' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
                 System.out.println("Database Restore Factory Settings - table 'country' - FAILED");
+                logger.error("Database Restore Factory Settings - table 'country' - FAILED");
                 return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'country'", -1);
             }
         } catch (IOException e) {
             e.printStackTrace();
             sb.append("Table 'Country' - FAILED with Exception").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings - table 'country' - FAILED with Exception");
+            logger.error("Database Restore Factory Settings - table 'country' - FAILED with Exception");
             return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'country' FAILED with Exception", -1);
         }
-        //  endregion
+
 
         //  region ACCOUNT
         try {
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Avinu", "Avraham", "avinu.avraham", "Avraham1", countryMap.get(12l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Avinu", "itshak", "avinu.itshak", "Itshak1", countryMap.get(12l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Avinu", "jakob", "avinu.jakob", "Israel7", countryMap.get(12l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "imenu", "Sara", "sara.imenu", "Saramom2", countryMap.get(18l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "imenu", "Rivka", "rivka.imenu", "Rivka2", countryMap.get(18l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "imenu", "Lea", "lea.imenu", "Motherlea2", countryMap.get(18l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "imenu", "Rachel", "rachel.imenu", "Rachel21", countryMap.get(18l), "077-7654321", "Jerusalem1", "Alonei Mamreh", "address", "9876543", "a@b.com", true));
-
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "King", "David", "king.david", "DavidK1", countryMap.get(10l), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "King", "solomon", "king.solomon", "SolomonK2", countryMap.get(10l), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "a@b.com", true));
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Queen", "Sheeba", "queen.sheeba", "SheebaQ1", countryMap.get(10l), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "a@b.com", true));
-
-            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Fiskin", "Evgeney", "fizpok", "ASas12", countryMap.get(10l), "052-4898919", "Jerusalem1", "Jerusalem", "address", "9876543", "evgeney.fiskin@hpe.com", true));
-
-            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Regev", "Binyamin", "beni.regev", "Qe7uwt2v!", countryMap.get(128), "054-7654321", "Jerusalem", "Jerusalem", "Holly Land", "9876543", "nakdimon@ben-guryon.com", false));
-            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Mercury", "Admin User", "Mercury", "Mercury", countryMap.get(10l), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "mercury@hpe.com", true));
-            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(10l), "480-222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Mercury", "Admin User", "Mercury", "Mercury", countryMap.get(10L), "077-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "mercury@hpe.com", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Smith", "John", "admin", "adm1n", countryMap.get(40L), "480-222-1111", "NY", "New York", "address", "10017", "admin@admin.ad", true));
+            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Gilat", "Naor", "gilat", "gG123", countryMap.get(128L), "052-7654321", "Jerusalem1", "Jerusalem", "address", "9876543", "d0r1@gmail.com", true));
+            entityManager.persist(new Account(AccountType.USER.getAccountTypeCode(), "Bukhantsov", "Kostya", "kostya", "kostya", countryMap.get(10L), "052-22222222", "Jerusalem1", "Jerusalem", "address", "9876543", "kostya@gmail.com", true));
+            entityManager.persist(new Account(AccountType.ADMIN.getAccountTypeCode(), "Brown", "John", "AppPulse", "AppPulse1", countryMap.get(40L), "617-527-5555", "MA", "Newton", "826 Morseland Ave.", "02458", "AppPlusedemo@aos.ad", true));
 
             if (this.getAll().size() == TOTAL_ACCOUNTS_COUNT) {
                 sb.append("Account").append(Constants.COMMA).append(Constants.SPACE);
                 System.out.println("Database Restore Factory Settings successful - table 'account'");
+                logger.info("Database Restore Factory Settings successful - table 'account'");
             } else {
                 sb.append("Table 'account' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
                 System.out.println("Database Restore Factory Settings - table 'account' - FAILED");
+                logger.error("Database Restore Factory Settings - table 'account' - FAILED");
                 return new AccountStatusResponse(false, "Database Restore Factory Settings - table 'account'", -1);
             }
         } catch (Exception e) {
             e.printStackTrace();
             sb.append("Table 'Account' - FAILED with Exception").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings - table 'account' - FAILED with Exception");
+            logger.error("Database Restore Factory Settings - table 'account' - FAILED with Exception");
             return new AccountStatusResponse(false, "Restore factory settings FAILED - ACCOUNT table", -1);
         }
-        //  endregion
-
-        //return new AccountStatusResponse(true, "Restore factory settings ACCOUNT-SERVICE successful", 1);
         return new AccountStatusResponse(true, sb.toString(), 1);
     }
 

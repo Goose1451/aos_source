@@ -11,6 +11,7 @@ import com.advantage.accountsoap.dto.account.internal.AccountDtoNew;
 import com.advantage.accountsoap.dto.address.*;
 import com.advantage.accountsoap.dto.country.*;
 import com.advantage.accountsoap.dto.payment.*;
+import com.advantage.accountsoap.dto.payment.UpdateMasterCreditMethodResponse;
 import com.advantage.accountsoap.model.Account;
 import com.advantage.accountsoap.services.*;
 import com.advantage.accountsoap.util.AccountPassword;
@@ -425,26 +426,32 @@ public class AccountServiceEndpoint {
         }
     }
     //  region /Restore Database Factory Settings
-    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "dbRestoreFactorySettings")
-    public ResponseEntity<AccountStatusResponse> dbRestoreFactorySettings(HttpServletRequest request) {
-        CefHttpModel cefData = (CefHttpModel) request.getAttribute("cefData");
-        if (cefData != null) {
-            logger.trace("cefDataId=" + cefData.toString());
-            cefData.setEventRequiredParameters(String.valueOf("/account/Restore_db_factory_settings".hashCode()),
-                    "Restore Database factory settings", 5);
-        } else {
-            logger.warn("cefData is null");
-        }
+    @AuthorizeAsUser
+    @ApiResponses(value = {
+            @ApiResponse(code = 401, message = "Authorization token required", response = com.advantage.common.dto.ErrorResponseDto.class),
+            @ApiResponse(code = 403, message = "Wrong authorization token", response = com.advantage.common.dto.ErrorResponseDto.class)})
+    @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "RestoreDBToFactorySettingRequest")
+    @ResponsePayload
+    public RestoreDBToFactorySettingResponse RestoreDbToFactorySetting(@RequestPayload RestoreDBToFactorySettingRequest request) {
+
         HttpStatus httpStatus = HttpStatus.OK;
 
         AccountStatusResponse response = accountService.dbRestoreFactorySettings();
+        RestoreDBToFactorySettingResponse restoreResponse;
+
         if (!response.isSuccess()) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-
-            return new ResponseEntity<>(response, httpStatus);
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+             restoreResponse = new RestoreDBToFactorySettingResponse();
+            restoreResponse.setReason(response.getReason());
+            restoreResponse.setHttpStatus(httpStatus.toString());
+            restoreResponse.setSuccess(response.isSuccess());
+            return restoreResponse;
         }
-
-        return new ResponseEntity<>(response, httpStatus);
+        restoreResponse = new RestoreDBToFactorySettingResponse();
+        restoreResponse.setReason(response.getReason());
+        restoreResponse.setHttpStatus(httpStatus.toString());
+        restoreResponse.setSuccess(response.isSuccess());
+        return restoreResponse;
     }
     //  endregion. Test account service separate build..
 

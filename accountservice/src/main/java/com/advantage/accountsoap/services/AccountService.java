@@ -468,6 +468,7 @@ public class AccountService implements Injectable {
         return accountRepository.deleteUserOrders(accountId, base64Token);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public AccountStatusResponse dbRestoreFactorySettings() {
         AccountStatusResponse response = accountRepository.dbRestoreFactorySettings();
         return response;

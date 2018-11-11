@@ -328,7 +328,10 @@ public class DefaultShoppingCartRepository extends AbstractRepository implements
 
     @Override
     public List<ShoppingCart> getAll() {
-        return null;
+        List<ShoppingCart> shoppingCartList = entityManager.createNamedQuery(ShoppingCart.QUERY_GET_CART_ALL, ShoppingCart.class)
+                .getResultList();
+        return shoppingCartList;
+
     }
 
     @Override

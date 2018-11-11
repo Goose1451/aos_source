@@ -293,7 +293,6 @@ define(['./module'], function (controllers) {
                             angular.element(someVar).removeClass('bunny');
                         }, 2000);
                     });
-//comment to commence build.
                 }
 
             }

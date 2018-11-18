@@ -436,22 +436,32 @@ public class AccountServiceEndpoint {
 
         HttpStatus httpStatus = HttpStatus.OK;
 
-        AccountStatusResponse response = accountService.dbRestoreFactorySettings();
-        RestoreDBToFactorySettingResponse restoreResponse;
+        try {
+            AccountStatusResponse response = accountService.dbRestoreFactorySettings();
+            RestoreDBToFactorySettingResponse restoreResponse;
 
-        if (!response.isSuccess()) {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-             restoreResponse = new RestoreDBToFactorySettingResponse();
+            if (!response.isSuccess()) {
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+                restoreResponse = new RestoreDBToFactorySettingResponse();
+                restoreResponse.setReason(response.getReason());
+                restoreResponse.setHttpStatus(httpStatus.toString());
+                restoreResponse.setSuccess(response.isSuccess());
+                return restoreResponse;
+            }
+            restoreResponse = new RestoreDBToFactorySettingResponse();
             restoreResponse.setReason(response.getReason());
             restoreResponse.setHttpStatus(httpStatus.toString());
             restoreResponse.setSuccess(response.isSuccess());
             return restoreResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+            RestoreDBToFactorySettingResponse restoreResponse;
+            restoreResponse = new RestoreDBToFactorySettingResponse();
+            restoreResponse.setReason(e.toString());
+            restoreResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            restoreResponse.setSuccess(false);
+            return restoreResponse;
         }
-        restoreResponse = new RestoreDBToFactorySettingResponse();
-        restoreResponse.setReason(response.getReason());
-        restoreResponse.setHttpStatus(httpStatus.toString());
-        restoreResponse.setSuccess(response.isSuccess());
-        return restoreResponse;
     }
     //  endregion. Test account service separate build..
 

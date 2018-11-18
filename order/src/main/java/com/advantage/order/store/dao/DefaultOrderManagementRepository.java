@@ -179,7 +179,7 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
     @Override
     public RestoredefaultDBsettingsResponse restoreToDefaultDb () {
 
-        try {
+
             SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
 
             Session session = sessionFactory.openSession();
@@ -216,12 +216,7 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
 
             return new RestoredefaultDBsettingsResponse(true, "Order- Default setting restored");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new RestoredefaultDBsettingsResponse(false, e.toString());
         }
-
-    }
 
     private void validatePaymentMethod(final String paymentMethod, final String argumentInformativeName) {
 

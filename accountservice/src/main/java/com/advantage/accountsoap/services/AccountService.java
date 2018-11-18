@@ -470,8 +470,13 @@ public class AccountService implements Injectable {
 
     @Transactional(rollbackFor = Exception.class)
     public AccountStatusResponse dbRestoreFactorySettings() {
-        AccountStatusResponse response = accountRepository.dbRestoreFactorySettings();
-        return response;
+        try {
+            AccountStatusResponse response = accountRepository.dbRestoreFactorySettings();
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AccountStatusResponse(false, "Exception in dbRestoreFactorySettings" + e.toString(), -1);
+        }
     }
 
     private List<PaymentPreferencesDto> fillPaymentPreferencesDto(Set<PaymentPreferences> paymentPreferences) {

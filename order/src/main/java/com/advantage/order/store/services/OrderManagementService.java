@@ -17,6 +17,7 @@ import com.advantage.root.util.JsonHelper;
 import com.advantage.root.util.RestApiHelper;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
@@ -691,16 +692,21 @@ public class OrderManagementService {
 
     public RestoredefaultDBsettingsResponse dbRestoreFactorySettings (){
 
-        boolean result = orderManagementRepository.restoreToDefaultDb();
+        try {
+            RestoredefaultDBsettingsResponse result = orderManagementRepository.restoreToDefaultDb();
 
-        if(!result){
-            RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(false, "internal error check server logs ");
+            if(!result.isSuccess()){
+                return new RestoredefaultDBsettingsResponse(false, result.getDetails());
+
+            }
+
+            RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(true, result.getDetails());
+
             return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new RestoredefaultDBsettingsResponse(false, e.toString());
         }
-
-        RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(true, "default setting restored");
-
-        return response;
     }
     public HistoryOrderResponseDto getOrdersHistory(Long userId, Long orderId) {
 

@@ -765,7 +765,7 @@ public class DefaultAccountRepository extends AbstractRepository implements Acco
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         //  region TRUNCATE_ACCOUNT_SERVICE_TABLES()
-        String resultTruncate = (String) entityManager.createNativeQuery("SELECT truncate_account_service_tables()")
+        String resultTruncate = (String) entityManager.createNativeQuery("SELECT truncate_account_tables()")
                 .getSingleResult();
         transaction.commit();
         session.flush();

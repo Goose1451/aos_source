@@ -825,14 +825,19 @@ public class OrderController {
         }
         HttpStatus httpStatus = HttpStatus.OK;
 
-        RestoredefaultDBsettingsResponse response = orderManagementService.dbRestoreFactorySettings();
-        if (!response.isSuccess()) {
-
-            logger.info("RestoreDefaultDBSettings fail ");
+        try {
+            RestoredefaultDBsettingsResponse response = orderManagementService.dbRestoreFactorySettings();
+            if (!response.isSuccess()) {
+                logger.info("Order- restoreDefaultDBSettings fail ");
+                return new ResponseEntity<RestoredefaultDBsettingsResponse>(response, httpStatus);
+            }
+            logger.info("RestoreDefaultDBSettings completed successfully  ");
+            return new ResponseEntity<RestoredefaultDBsettingsResponse>(response, httpStatus);
+        } catch (Exception e) {
+            e.printStackTrace();
+            RestoredefaultDBsettingsResponse response = null;
             return new ResponseEntity<RestoredefaultDBsettingsResponse>(response, httpStatus) ;
         }
-        logger.info("RestoreDefaultDBSettings completed successfully  ");
-        return new ResponseEntity<RestoredefaultDBsettingsResponse>(response, httpStatus);
     }
 //comment for git
     boolean checkServicesStatus(){

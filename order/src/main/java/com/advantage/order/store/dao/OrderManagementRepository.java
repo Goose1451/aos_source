@@ -3,6 +3,7 @@ package com.advantage.order.store.dao;
 import com.advantage.order.store.dto.OrderPaymentInformation;
 import com.advantage.order.store.dto.OrderPurchasedProductInformation;
 import com.advantage.order.store.dto.OrderShippingInformation;
+import com.advantage.order.store.dto.RestoredefaultDBsettingsResponse;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface OrderManagementRepository {
 
     void updateUserOrderTrackingNumber(long userId, long orderNumber, long shippingTrackingNumber);
 
-    boolean restoreToDefaultDb ();
+    RestoredefaultDBsettingsResponse restoreToDefaultDb ();
 
 }

@@ -1,13 +1,9 @@
 package com.advantage.order.store.dao;
 
 import com.advantage.common.Constants;
-import com.advantage.common.dto.CatalogResponse;
 import com.advantage.common.enums.PaymentMethodEnum;
 import com.advantage.common.enums.TransactionTypeEnum;
-import com.advantage.order.store.dto.OrderPaymentInformation;
-import com.advantage.order.store.dto.OrderPurchaseResponse;
-import com.advantage.order.store.dto.OrderPurchasedProductInformation;
-import com.advantage.order.store.dto.OrderShippingInformation;
+import com.advantage.order.store.dto.*;
 import com.advantage.order.store.model.OrderHeader;
 import com.advantage.order.store.model.OrderHeaderPk;
 import com.advantage.order.store.model.OrderLines;
@@ -16,7 +12,6 @@ import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -182,7 +177,7 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
     }
     @Transactional
     @Override
-    public boolean restoreToDefaultDb () {
+    public RestoredefaultDBsettingsResponse restoreToDefaultDb () {
 
         try {
             SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
@@ -205,25 +200,27 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
             //Check all tables have 0 rows.
             if (historyOrderHeaderRepository.getAll().size() != 0){
                 logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_header'");
-                return false;
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'order_header'");
             }
             if (historyOrderLineRepository.getAll().size() != 0){
                 logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_lines'");
-                return false;
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'order_lines'");
             }
             if (shoppingCartRepository.getAll().size() != 0){
                 logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'shopping_cart'");
-                return false;
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'shopping_cart'");
             }
             sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings successful - adv_order");
             logger.info("Database Restore Factory Settings successful - adv_order");
 
-            return true;
-        } catch (HibernateException e) {
+            return new RestoredefaultDBsettingsResponse(true, "Order- Default setting restored");
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return new RestoredefaultDBsettingsResponse(false, e.toString());
         }
+
     }
 
     private void validatePaymentMethod(final String paymentMethod, final String argumentInformativeName) {

@@ -170,7 +170,7 @@ stage('Dotnet Tests'){
     unzip dotnet.zip
    '''
    
-   def dotnet_tests = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'DotNet'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"]], propagate: false
+   def dotnet_tests = build job: 'demoapp_folder/demoapp_tests_leanft_maven', parameters: [[$class: 'StringParameterValue', name: 'job_type', value: 'DotNet'], [$class: 'StringParameterValue', name: 'URL', value: "http://$aos_staging_ip"],[$class: 'StringParameterValue', name: 'APPLICATION_PATH', value: "C:\\LeanFTJavaRunner\\dotnet_release\\AdvantageShopAdministrator.exe"]], propagate: false
    
    result = dotnet_tests.result
        if (result.equals("SUCCESS")) {

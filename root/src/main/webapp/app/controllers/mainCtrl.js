@@ -125,7 +125,7 @@ define(['./module'], function (controllers) {
                         $(".PopUp > div:nth-child(1)").animate({"top": top}, 600);
                         $("body").css({"left": "0px"})
                     });
-
+                    document.getElementsByName("username")[0].focus();
                 };
 
                 $(".PopUp, .closeBtn.loginPopUpCloseBtn").click(function () {

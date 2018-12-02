@@ -788,7 +788,7 @@ public class OrderController {
         if (checkServicesStatus())
             return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         else
-            return new ResponseEntity<String>("FAILED", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("FAILED", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/orders/fields", method = RequestMethod.GET)

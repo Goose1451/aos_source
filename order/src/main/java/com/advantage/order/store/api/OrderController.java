@@ -873,7 +873,7 @@ public class OrderController {
             in.close();
             conn.disconnect();
 
-            // catalog is not up with data
+            // catalog is not up with data //git
             if ((List<ProductDto>)jsonMap.get("products") == null)
                 return false;
 

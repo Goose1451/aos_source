@@ -20,8 +20,15 @@ public class DefaultHistoryOrderLineRepository extends AbstractRepository implem
 
     @Override
     public List<OrderLines> getAll() {
-        List<OrderLines> lines = new ArrayList<>();
-        return null;
+
+        try {
+            List<OrderLines> orderLines = entityManager.createNamedQuery(OrderLines.QUERY_GET_All_ORDERS_LINES, OrderLines.class)
+                    .getResultList();
+            return orderLines;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

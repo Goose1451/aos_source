@@ -3,7 +3,6 @@ package com.advantage.order.store.services;
 import ShipExServiceClient.*;
 import com.advantage.common.Constants;
 import com.advantage.common.Url_resources;
-import com.advantage.common.dto.ProductDto;
 import com.advantage.common.enums.PaymentMethodEnum;
 import com.advantage.common.enums.ResponseEnum;
 import com.advantage.common.utils.LoggerUtils;
@@ -18,12 +17,10 @@ import com.advantage.root.util.JsonHelper;
 import com.advantage.root.util.RestApiHelper;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -692,6 +689,25 @@ public class OrderManagementService {
     currently order saved by unique orderID
     if change to unique per user the option get by userID and orderID available
      */
+
+    public RestoredefaultDBsettingsResponse dbRestoreFactorySettings (){
+
+        try {
+            RestoredefaultDBsettingsResponse result = orderManagementRepository.restoreToDefaultDb();
+
+            if(!result.isSuccess()){
+                return new RestoredefaultDBsettingsResponse(false, result.getDetails());
+
+            }
+
+            RestoredefaultDBsettingsResponse response = new RestoredefaultDBsettingsResponse(true, result.getDetails());
+
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new RestoredefaultDBsettingsResponse(false, e.toString());
+        }
+    }
     public HistoryOrderResponseDto getOrdersHistory(Long userId, Long orderId) {
 
         ArgumentValidationHelper.validateLongArgumentIsPositiveOrZero(userId, "user id");

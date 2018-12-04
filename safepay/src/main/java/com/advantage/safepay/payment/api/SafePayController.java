@@ -79,7 +79,7 @@ public class SafePayController {
             logger.warn("cefData is null");
         }
 
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<String>("Success", HttpStatus.OK);
     }
 //    /**
 //     * Sends <i>Refund</i> {@code request} to <b>MasterCredit</b> server and receives its {@code response}.

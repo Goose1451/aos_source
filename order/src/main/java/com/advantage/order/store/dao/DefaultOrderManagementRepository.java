@@ -1,11 +1,9 @@
 package com.advantage.order.store.dao;
 
+import com.advantage.common.Constants;
 import com.advantage.common.enums.PaymentMethodEnum;
 import com.advantage.common.enums.TransactionTypeEnum;
-import com.advantage.order.store.dto.OrderPaymentInformation;
-import com.advantage.order.store.dto.OrderPurchaseResponse;
-import com.advantage.order.store.dto.OrderPurchasedProductInformation;
-import com.advantage.order.store.dto.OrderShippingInformation;
+import com.advantage.order.store.dto.*;
 import com.advantage.order.store.model.OrderHeader;
 import com.advantage.order.store.model.OrderHeaderPk;
 import com.advantage.order.store.model.OrderLines;
@@ -13,9 +11,15 @@ import com.advantage.order.store.model.ShoppingCart;
 import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +33,19 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
 
     private static final String MESSAGE_SHIPPING_TRACKING_NUMBER_UPDATED_SUCCESSFULLY = "Purchase order, shipping tracking number was updated successfully";
     private static final String MESSAGE_ORDER_NOT_FOUND_TRACKING_NUMBER_NOT_UPDATED = "Purchase order not found, tracking number not updated";
+    private static final Logger logger = Logger.getLogger(DefaultOrderManagementRepository.class);
+
+    @Autowired
+    @Qualifier("historyOrderHeaderRepository")
+    public HistoryOrderHeaderRepository historyOrderHeaderRepository;
+
+    @Autowired
+    @Qualifier("historyOrderLineRepository")
+    public HistoryOrderLineRepository historyOrderLineRepository;
+
+    @Autowired
+    @Qualifier("shoppingCartRepository")
+    public ShoppingCartRepository shoppingCartRepository;
 
     private OrderPurchaseResponse orderPurchaseResponse = null;
 
@@ -158,10 +175,49 @@ public class DefaultOrderManagementRepository extends AbstractRepository impleme
                     orderNumber);
         }
     }
+    @Transactional
+    @Override
+    public RestoredefaultDBsettingsResponse restoreToDefaultDb () {
 
-    /*
 
-     */
+            SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+
+            Session session = sessionFactory.openSession();
+
+            Transaction transaction = session.beginTransaction();
+
+            //  region TRUNCATE_CATALOG_TABLES()
+            String resultTruncate = (String) entityManager.createNativeQuery("SELECT public.truncate_order_tables()")
+                    .getSingleResult();
+            transaction.commit();
+            session.flush();
+            session.close();
+
+            StringBuilder sb = new StringBuilder("Database Restore Factory Settings - CATALOG schema truncated successfully. ");
+            logger.info("Database Restore Factory Settings - CATALOG schema truncated successfully.");
+            System.out.println("Database Restore Factory Settings - CATALOG schema truncated successfully");
+            //  endregion
+            //Check all tables have 0 rows.
+            if (historyOrderHeaderRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_header'");
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'order_header'");
+            }
+            if (historyOrderLineRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'order_lines'");
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'order_lines'");
+            }
+            if (shoppingCartRepository.getAll().size() != 0){
+                logger.warn("FAIL- Database Restore Factory Settings FAIL - table 'shopping_cart'");
+                return new RestoredefaultDBsettingsResponse(false, "Database Restore Factory Settings FAIL - table 'shopping_cart'");
+            }
+            sb.append("Country").append(Constants.COMMA).append(Constants.SPACE);
+            System.out.println("Database Restore Factory Settings successful - adv_order");
+            logger.info("Database Restore Factory Settings successful - adv_order");
+
+            return new RestoredefaultDBsettingsResponse(true, "Order- Default setting restored");
+
+        }
+
     private void validatePaymentMethod(final String paymentMethod, final String argumentInformativeName) {
 
         ArgumentValidationHelper.validateStringArgumentIsNotNullAndNotBlank(paymentMethod, "payment method");

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -51,6 +52,8 @@ public class DefaultProductRepository extends AbstractRepository implements Prod
     private static final int TOTAL_CATEGORIES_COUNT = 5;
     private static final int TOTAL_ATTRIBUTES_COUNT = 17;
     private static final int MAX_NUM_OF_PRODUCTS = 100;
+
+    private static final Logger logger = Logger.getLogger(DefaultProductRepository.class);
 
     /**
      * Create Product entity
@@ -448,6 +451,7 @@ public class DefaultProductRepository extends AbstractRepository implements Prod
         session.close();
 
         StringBuilder sb = new StringBuilder("Database Restore Factory Settings - CATALOG schema truncated successfully. ");
+        logger.info("Database Restore Factory Settings - CATALOG schema truncated successfully.");
         System.out.println("Database Restore Factory Settings - CATALOG schema truncated successfully");
         //  endregion
 
@@ -469,9 +473,11 @@ public class DefaultProductRepository extends AbstractRepository implements Prod
         if (categoryService.getAllCategories().size() == TOTAL_CATEGORIES_COUNT) {
             sb.append("Category").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings successful - table 'category'");
+            logger.info("Database Restore Factory Settings successful - table 'category'");
         } else {
             sb.append("Table 'category' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings - table 'category' - FAILED");
+            logger.warn("Database Restore Factory Settings - table 'category' - FAILED");
             return new CatalogResponse(false, "Database Restore Factory Settings - table 'category'", -1);
         }
         //  endregion
@@ -489,9 +495,11 @@ public class DefaultProductRepository extends AbstractRepository implements Prod
         if (attributeService.getAllAttributes().size() == TOTAL_ATTRIBUTES_COUNT) {
             sb.append("Attribute").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings successful - table 'attribute'");
+            logger.info("Database Restore Factory Settings successful - table 'attribute'");
         } else {
             sb.append("Table 'attribute' - FAILED").append(Constants.COMMA).append(Constants.SPACE);
             System.out.println("Database Restore Factory Settings - table 'attribute' - FAILED");
+            logger.warn("Database Restore Factory Settings - table 'attribute' - FAILED");
             return new CatalogResponse(false, "Restore factory settings FAILED - table 'attribute'", -2);
         }
         //  endregion

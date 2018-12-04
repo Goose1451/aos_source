@@ -29,6 +29,8 @@ public class ShippingExpressService {
         this.shipexRepository = shipexRepository;
     }
 
+
+
     /**
      * Determines shipping cost according to country and orders quantity
      * @param countryIsoName {@link String} ISO name of country
@@ -37,7 +39,7 @@ public class ShippingExpressService {
      */
     public String getShippingCost(String countryIsoName, int quantity){
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        if(quantity <= shipexRepository.getFreeShippingOption()) return decimalFormat.format(0.0);
+        if(quantity == shipexRepository.getFreeShippingOption()) return decimalFormat.format(0.0);
 
         return decimalFormat.format(shipexRepository.getShippingCostByCountry(countryIsoName));
     }

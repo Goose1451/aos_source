@@ -82,6 +82,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency><!-- Use root.WAR with classes - for sharing with WARs-->
+            <groupId>com.advantage.online.store</groupId>
+            <artifactId>root</artifactId>
+            <version>${project.version}</version>
+            <classifier>classes</classifier>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.advantage.online.store</groupId>
             <artifactId>shared_resources</artifactId>
@@ -119,6 +132,18 @@
                     <include>log4j.properties</include>
                     <include>ver.txt</include>
                 </includes>
+                <!-- _v_ Replace ${parameters} to his real value in all resources files-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+                <targetPath>${project.build.outputDirectory}/properties</targetPath>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+                <excludes>
+                    <exclude>log4j.properties</exclude>
+                </excludes>
                 <!-- _v_ Replace ${parameters} to his real value in all resources files-->
                 <filtering>true</filtering>
             </resource>

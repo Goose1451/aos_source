@@ -1,5 +1,6 @@
 package ShippingExpress.model;
 
+import com.advantage.root.util.RestApiHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -45,7 +46,8 @@ public class DefaultShippingExpressRepository implements ShippingExpressReposito
      */
     @Override
     public int getFreeShippingOption() {
-        return Integer.parseInt(env.getProperty(SHIPEX_FREE_SHIPPING_OPTION));
+//        return Integer.parseInt(env.getProperty(SHIPEX_FREE_SHIPPING_OPTION));
+        return Integer.parseInt(RestApiHelper.getDemoAppConfigParameterValue(SHIPEX_QUANTITY_ENTITLING_FREE_SHIPPING));
     }
 
     @Override

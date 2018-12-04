@@ -5,6 +5,8 @@ package com.advantage.common;
  */
 
 import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.mockito.Mock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -13,6 +15,9 @@ import org.springframework.core.env.Environment;
 
 import javax.inject.Inject;
 import java.net.URL;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Configuration
 @PropertySources(value = {@PropertySource(Constants.FILE_PROPERTIES_EXTERNAL)})
@@ -28,7 +33,27 @@ public class Url_resources {
 
     private static final Logger logger = Logger.getLogger(Url_resources.class);
     @Inject
+    @Mock
     private Environment environment;
+
+
+
+    public void initEnvForTests(){
+        environment = mock(Environment.class);
+        when(environment.getProperty(Constants.SINGLE_MACHINE_DEPLOYMENT))
+                .thenReturn("true");
+        when(environment.getProperty("AOS.Domain.url.host"))
+                .thenReturn("No");
+        when(environment.getProperty("catalog.service.url.port"))
+                .thenReturn("8080");
+        when(environment.getProperty("catalog.service.url.suffix"))
+                .thenReturn("catalog/api/v1");
+
+    }
+
+    public void setConfigForTest(){
+        urlPrefixCatalog = generateUrlPrefix("Catalog");
+    }
 
     @Bean
     public int setConfiguration() {

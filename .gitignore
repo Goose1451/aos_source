@@ -133,3 +133,4 @@ local.properties
 /shipex/.gitignore
 rebel.xml
 liquibase/*
+root/src/main/webapp/package-lock.json

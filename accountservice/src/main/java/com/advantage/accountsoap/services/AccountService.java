@@ -335,7 +335,7 @@ public class AccountService implements Injectable {
 
         Account account = accountRepository.get(accountId);
         AccountStatusResponse response = new AccountStatusResponse(false, "Initial", 0);
-        AccountType currentUserAccountType;
+        AccountType currentUserAccountType = AccountType.valueOfCode(account.getAccountType());
         long currentUserId;
         if(oldPassword == null || oldPassword.isEmpty()) {
             oldPassword = account.getPassword();
@@ -357,17 +357,19 @@ public class AccountService implements Injectable {
             //  Get current user details from Token
             currentUserId = tokenJWT.getUserId();
         }
-        response = accountRepository.changePassword(accountId, newPassword);
         if ((oldPassword == null) || (oldPassword.isEmpty())) {
             //  Reset-Password FAILED! Old Password is empty and current user is not ADMIN-USER
             String message = "Old Password for user (" + currentUserId + ") is empty";
             logger.warn(message);
             response = new AccountStatusResponse(false, message, -1);
-        } else if (accountId != currentUserId) {
+        } else if ((accountId != currentUserId) && (currentUserAccountType != AccountType.valueOfCode(AccountType.ADMIN.getAccountTypeCode()))) {
             //  Not the same user and current user is not ADMIN
             logger.error("Not the same user and current user is not ADMIN");
             throw new VerificationTokenException("Not the same user and current user is not ADMIN");
+
         }
+        response = accountRepository.changePassword(accountId, newPassword);
+
 //        else {
 //            String parameterValue = RestApiHelper.getDemoAppConfigParameterValue("Implement_DevOps_Process");
             //  region PlaceHolder Feature 1789

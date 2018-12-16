@@ -8,13 +8,12 @@
     <!--<Email_address_in_login datatype="enum:[Yes,No]" description="No=(Default) Do Not; or Yes = e-mail address is mandatory in create-user and show it in login/sign-in page. With this feature (2 screens with one difference to show a change ), BPT shows that if there is one change in one page, if it was defined as a component, the user can change this component only, and not touch all tests like in UFT." tools="BPT" locationInAdvantage="">No</Email_address_in_login>-->
     <Email_in_login datatype="enum:[Yes,No]" description="Determines whether a mandatory Email field is added to the login screen. Use this parameter to demonstrate that in BPT, a single component can be modified without updating other tests. Default = No. Yes = Add the Email Address field." tools="BPT" locationInAdvantage="Login page">No</Email_in_login>
 
-
     <!-- Original Name = "AppPulse_user" ; Corrected Name = "AppPulse_user" -->
-    <AppPulse_user datatype="string" description="UserName:Password for AppPulse user to trigger the relevant AppPluse features." tools="AppPulse" locationInAdvantage="Entire site">AppPulse:AppPulse1</AppPulse_user>
+    <AppPulse_user datatype="string" description="UserName:Password for AppPulse user to trigger the relevant AppPulse features." tools="AppPulse" locationInAdvantage="Entire site">AppPulse:AppPulse1</AppPulse_user>
 
     <!-- Original Name = "Repeat_ShipEx_call" ; Corrected Name = "ShipEx_repeat_calls" -->
     <!--<Repeat_ShipEx_call datatype="string" description="Perform the same call to ShipEx multiple times (place shipping order - from Order service to ShipEx). Parameter values: 0=(Default) Disabled; any other positive number is the number of repeat calls to ShipEx. The goal of this capability is to find multiple calls to the same methods usually done by multiple developers causing inefficient application." tools="LoadRunner;SV;StormRunner" locationInAdvantage="">0</Repeat_ShipEx_call>-->
-    <ShipEx_repeat_calls datatype="string" description="Defines the number of times to repeat a call to ShipEx. Use this parameter to find unneccesary multiple calls to the same methods, and affects performance. Default = 0 (no repeat calling). " tools="NV" locationInAdvantage="Purchase">0</ShipEx_repeat_calls>
+    <ShipEx_repeat_calls datatype="string" description="Defines the number of times to repeat a call to ShipEx. Use this parameter to find unnecessary multiple calls to the same methods, and affects performance. Default = 0 (no repeat calling. " tools="NV" locationInAdvantage="Purchase">0</ShipEx_repeat_calls>
 
     <!-- Original Name = "Add_wrong_product_to_speakers_category" ; Corrected Name = "Add_product_to_incorrect_category" -->
     <!--<Add_wrong_product_to_speakers_category datatype="enum:[Yes,No]" description="No=(Default) Disabled; Yes = Move product-id=13 from Headphones category to Speakers category. UI and API. " tools="LeanFT;UFT" locationInAdvantage="">No</Add_wrong_product_to_speakers_category>-->
@@ -43,6 +42,9 @@
     <!-- Original Name = "Generate_memory_leak" ; Corrected Name = "User_alternate_WSDL" -->
     <!-- feature 1779 -->
     <Generate_memory_leak datatype="string" description="Defines the amount of memory leak in megabytes while retrieving the order history. The memory leak is visible in both the UI and the API. Default = 0 (no leak at all). Positive Integer = Number, multiplied by 1000. For example 1 = 1000 megabyte memory leak." tools="LoadRunner;StormRunner" locationInAdvantage="Order history">0</Generate_memory_leak>
+
+    <!--<Instantiating a problem on the DB level>-->
+    <Postgres_Locks datatype="enum:[Tip]" description="To generate a exhaustion of PostgresSQL locks, go to CONTACT US type ‘database’ at the Subject and click SEND." tools="Ops B" locationInAdvantage="Mobile, Entire App">Tip</Postgres_Locks>
 
     <!-- Feature #1550  -->
     <!-- Values: (default) -1 = DISABLED, any other positive number = the actual number of concurrent sessions. -->

@@ -17,6 +17,8 @@ public class ContactSupportService {
 
     private static String MESSAGE_SUCCESS = "Thank you for contacting Advantage support.";
     private static String MESSAGE_INVALID_EMAIL_ADDRESS = "Invalid e-mail address.";
+    private static String DB_LOCK_FLAG = "database";
+    private static String MESSAGE_DB_LOCK_ACTIVATED = "DB lock flag activated successfully.";
 
 
     public ContactUsResponse sendMail(ContactUsMailRequest contactUs) {
@@ -24,6 +26,12 @@ public class ContactSupportService {
         ArgumentValidationHelper.validateStringArgumentIsNotNullAndNotBlank(contactUs.getText(), "e-mail text");
 
         ContactUsResponse response;
+
+        if(contactUs.getEmail().toLowerCase().equals(DB_LOCK_FLAG)){
+
+            response = new ContactUsResponse(true, MESSAGE_DB_LOCK_ACTIVATED, SUCCESS);
+            return response;
+        }
 
         if (ValidationHelper.isValidEmail(contactUs.getEmail())) {
             response = new ContactUsResponse(true, MESSAGE_SUCCESS, SUCCESS);

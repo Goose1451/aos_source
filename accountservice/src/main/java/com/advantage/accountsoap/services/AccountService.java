@@ -317,7 +317,7 @@ public class AccountService implements Injectable {
      * <ul>NOTE:</ul> In this case {@link TokenJWT#getAccountType()} must by <i>ADMIN</i>. <br/>
      * (a) Verify the account type in the token is ADMIN. If NOT then return HTTP code 401 (Unauthorized).
      * (b) Get the registered user account details by accountId.
-     * (c) Verify old pasword for the registered user.
+     * (c) Verify old password for the registered user.
      * (d) If <b>VERIFIED</b> then change the user's password, Return <b>Successful</b>with HTTP code 202 (Accepted).
      * (e) Return <b>Successful</b>with HTTP code 202 (Accepted). </p>
      *
@@ -333,36 +333,39 @@ public class AccountService implements Injectable {
     @Transactional
     public AccountStatusResponse changePassword(long accountId, String oldPassword, String newPassword, String base64Token) throws TokenException {
 
-        Account account = accountRepository.get(accountId);
+        Account accountToChange = accountRepository.get(accountId);
         AccountStatusResponse response = new AccountStatusResponse(false, "Initial", 0);
-        AccountType currentUserAccountType = AccountType.valueOfCode(account.getAccountType());
+        AccountType accountToChangeType = AccountType.valueOfCode(accountToChange.getAccountType());
+        AccountType userMakingTheChangeType = AccountType.USER ;
         long currentUserId;
         if(oldPassword == null || oldPassword.isEmpty()) {
-            oldPassword = account.getPassword();
+            oldPassword = accountToChange.getPassword();
         }
         if (SecurityTools.isBasic(base64Token)) {
             currentUserId = accountId;
-            currentUserAccountType = AccountType.valueOfCode(account.getAccountType());
+            accountToChangeType = AccountType.valueOfCode(accountToChange.getAccountType());
             String token = base64Token.substring(base64Token.indexOf(" ") + 1);
             String[] loginPassword = SecurityTools.decodeBase64(token).split(":");
             System.out.println(loginPassword[0] + "*****************" + loginPassword[1]);
             System.out.println((new AccountPassword(loginPassword[0], loginPassword[1])).getEncryptedPassword());
-            if (!loginPassword[0].equals(account.getLoginName())
+            if (!loginPassword[0].equals(accountToChange.getLoginName())
                     || !(new AccountPassword(loginPassword[0], loginPassword[1]))
-                    .getEncryptedPassword().equals(account.getPassword())) {
+                    .getEncryptedPassword().equals(accountToChange.getPassword())) {
                 throw new VerificationTokenException("Not the same user and current user is not ADMIN");
             }
         } else {
             TokenJWT tokenJWT = TokenJWT.parseToken(base64Token);
             //  Get current user details from Token
             currentUserId = tokenJWT.getUserId();
+            userMakingTheChangeType = AccountType.valueOfCode(accountRepository.get(currentUserId).getAccountType());
+
         }
         if ((oldPassword == null) || (oldPassword.isEmpty())) {
             //  Reset-Password FAILED! Old Password is empty and current user is not ADMIN-USER
             String message = "Old Password for user (" + currentUserId + ") is empty";
             logger.warn(message);
             response = new AccountStatusResponse(false, message, -1);
-        } else if ((accountId != currentUserId) && (currentUserAccountType != AccountType.valueOfCode(AccountType.ADMIN.getAccountTypeCode()))) {
+        } else if ((accountId != currentUserId) && (userMakingTheChangeType != AccountType.valueOfCode(AccountType.ADMIN.getAccountTypeCode()))) {
             //  Not the same user and current user is not ADMIN
             logger.error("Not the same user and current user is not ADMIN");
             throw new VerificationTokenException("Not the same user and current user is not ADMIN");

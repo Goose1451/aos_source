@@ -169,7 +169,22 @@ module.exports = function (grunt) {
                     spawn: false
                 }
             }
+        },
+
+        htmlmin: {                                     // Task
+            dist: {                                      // Target
+                options: {                                 // Target options
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: {                                   // Dictionary of files
+                    'index.html': 'index.html'    // 'destination': 'source'
+                }
+            }
+
         }
+
+
 
 
     });
@@ -178,6 +193,7 @@ module.exports = function (grunt) {
     grunt.registerTask('ngTemplatesBuild', ['ngtemplates']);
     grunt.registerTask('ngt', ['ngtemplates']);
     grunt.registerTask('useminTest', ['copy', 'regex-replace', 'usemin']);
+    grunt.registerTask('htmlminTest', ['htmlmin']);
 
 };
 

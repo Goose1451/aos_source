@@ -174,7 +174,6 @@ module.exports = function (grunt) {
         htmlmin: {                                     // Task
             dist: {                                      // Target
                 options: {                                 // Target options
-                    removeComments: true,
                     collapseWhitespace: true
                 },
                 files: {                                   // Dictionary of files

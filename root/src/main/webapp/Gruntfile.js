@@ -174,11 +174,11 @@ module.exports = function (grunt) {
         htmlmin: {                                     // Task
             dist: {                                      // Target
                 options: {                                 // Target options
-                    removeComments: false,
+                    removeComments: true,
                     collapseWhitespace: true
                 },
                 files: {                                   // Dictionary of files
-                    'index.html': 'index.html'    // 'destination': 'source'
+                    'target/index.html': 'index.html'    // 'destination': 'source'
                 }
             }
 

@@ -178,7 +178,7 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                 },
                 files: {                                   // Dictionary of files
-                    'target/index.html': 'index.html'    // 'destination': 'source'
+                    'target/index.html': 'target/index.html'    // 'destination': 'source'
                 }
             }
 

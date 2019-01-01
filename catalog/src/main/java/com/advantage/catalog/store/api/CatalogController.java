@@ -873,7 +873,7 @@ public class CatalogController {
         }
 
         HTTPException e = new HTTPException(403);
-        logger.error(HttpStatus.FORBIDDEN + " " + e.getMessage(), e);
+        logger.error(HttpStatus.FORBIDDEN + " Sorry, connecting to Facebook is currently unavailable. Please try again later.", e);
         ErrorResponseDto erd = new ErrorResponseDto(false, HttpStatus.FORBIDDEN +  " Sorry, connecting to Facebook is currently unavailable. Please try again later.");
         return new ResponseEntity<>(erd, HttpStatus.FORBIDDEN);
     }

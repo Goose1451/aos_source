@@ -27,7 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
@@ -40,7 +39,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.advantage.common.Constants.NO_IMAGE_AVAILABLE_ID;
-import static java.lang.System.in;
 
 /**
  * @author Binyamin Regev on 23/05/2016
@@ -873,9 +871,10 @@ public class CatalogController {
         } else {
             logger.warn("cefData is null");
         }
+
         HTTPException e = new HTTPException(403);
-        logger.error(e.getMessage(), e);
-        ErrorResponseDto erd = new ErrorResponseDto(false, "Sorry, connecting to Facebook is currently unavailable. Please try again later.");
+        logger.error(HttpStatus.FORBIDDEN + " " + e.getMessage(), e);
+        ErrorResponseDto erd = new ErrorResponseDto(false, HttpStatus.FORBIDDEN +  " Sorry, connecting to Facebook is currently unavailable. Please try again later.");
         return new ResponseEntity<>(erd, HttpStatus.FORBIDDEN);
     }
 

@@ -5,7 +5,6 @@ import com.advantage.common.dto.ContactUsMailRequest;
 import com.advantage.common.dto.ContactUsResponse;
 import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.ValidationHelper;
-import com.sun.media.jfxmedia.logging.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

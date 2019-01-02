@@ -39,14 +39,13 @@ public class ContactSupportService extends AbstractRepository {
 
             Transaction transaction = session.beginTransaction();
 
-            //  region TRUNCATE_CATALOG_TABLES()
-            //entityManager.createNativeQuery(statement).executeUpdate();
-            //int result = session.createSQLQuery(statement).executeUpdate();
-            String resultTruncate = (String) entityManager.createNativeQuery("SELECT cpu_load()")
-                    .getSingleResult();
-            transaction.commit();
-            session.flush();
-            session.close();
+            new Thread(() -> {
+                entityManager.createNativeQuery("SELECT cpu_load()");
+                transaction.commit();
+                session.flush();
+                session.close();
+            }).start();
+
 
             response = new ContactUsResponse(true, MESSAGE_DB_LOCK_ACTIVATED, SUCCESS);
             return response;

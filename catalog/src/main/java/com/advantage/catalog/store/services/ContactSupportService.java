@@ -5,6 +5,7 @@ import com.advantage.common.dto.ContactUsMailRequest;
 import com.advantage.common.dto.ContactUsResponse;
 import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.ValidationHelper;
+import com.sun.media.jfxmedia.logging.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ContactSupportService extends AbstractRepository {
+
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ContactSupportService.class);
     private static int SUCCESS = 1;
     private static int FAILURE = -1;
 
@@ -40,13 +43,13 @@ public class ContactSupportService extends AbstractRepository {
             Transaction transaction = session.beginTransaction();
 
             new Thread(() -> {
-                entityManager.createNativeQuery("SELECT cpu_load()");
-                transaction.commit();
-                session.flush();
-                session.close();
+                String jsonString = (String) entityManager.createNativeQuery("SELECT cpu_load()")
+                        .getSingleResult();
+
+                logger.warn(jsonString);
             }).start();
 
-
+            logger.warn("rrrrrrrrrrrrrrrr");
             response = new ContactUsResponse(true, MESSAGE_DB_LOCK_ACTIVATED, SUCCESS);
             return response;
         }

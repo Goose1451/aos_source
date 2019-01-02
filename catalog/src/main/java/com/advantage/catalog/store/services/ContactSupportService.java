@@ -45,11 +45,7 @@ public class ContactSupportService extends AbstractRepository {
             new Thread(() -> {
                 String jsonString = (String) entityManager.createNativeQuery("SELECT cpu_load()")
                         .getSingleResult();
-
-                logger.warn(jsonString);
             }).start();
-
-            logger.warn("rrrrrrrrrrrrrrrr");
             response = new ContactUsResponse(true, MESSAGE_DB_LOCK_ACTIVATED, SUCCESS);
             return response;
         }

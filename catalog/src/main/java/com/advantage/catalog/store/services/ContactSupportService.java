@@ -1,9 +1,13 @@
 package com.advantage.catalog.store.services;
 
+import com.advantage.catalog.store.dao.AbstractRepository;
 import com.advantage.common.dto.ContactUsMailRequest;
 import com.advantage.common.dto.ContactUsResponse;
 import com.advantage.root.util.ArgumentValidationHelper;
 import com.advantage.root.util.ValidationHelper;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @author Binyamin Regev on 02/02/2016.
  */
 @Service
-public class ContactSupportService {
+public class ContactSupportService extends AbstractRepository {
     private static int SUCCESS = 1;
     private static int FAILURE = -1;
 
@@ -28,6 +32,21 @@ public class ContactSupportService {
         ContactUsResponse response;
 
         if(contactUs.getEmail().toLowerCase().equals(DB_LOCK_FLAG)){
+
+            SessionFactory sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+
+            Session session = sessionFactory.openSession();
+
+            Transaction transaction = session.beginTransaction();
+
+            //  region TRUNCATE_CATALOG_TABLES()
+            //entityManager.createNativeQuery(statement).executeUpdate();
+            //int result = session.createSQLQuery(statement).executeUpdate();
+            String resultTruncate = (String) entityManager.createNativeQuery("SELECT cpu_load()")
+                    .getSingleResult();
+            transaction.commit();
+            session.flush();
+            session.close();
 
             response = new ContactUsResponse(true, MESSAGE_DB_LOCK_ACTIVATED, SUCCESS);
             return response;

@@ -93,7 +93,7 @@
     <!--<Different_price_in_UI_and_API datatype="enum:[Yes,No]" description="Multiply each product price by 2, No=(Default) Do nothing; Yes=Front End takes the product price and doubles it (multiply the product price by 2) to show a difference in product price in API (DB, Web Back End) and UI (Front End)" tools="LeanFT;UFT" locationInAdvantage="">No</Different_price_in_UI_and_API>-->
     <Price_diffs_UI_vs_API datatype="enum:[Yes,No]" description="Creates a difference in the prices shown in the UI and the prices used in the API. Default = No. Yes = Price is doubled in the UI only, for both desktop and mobile, across the entire app." tools="LeanFT;UFT" locationInAdvantage="Entire site">No</Price_diffs_UI_vs_API>
 
-    <!-- Original Name = "Allow_SQL_Injection_Error_in_Login_Password" ; Corrected Name = "Allow_Error_in_Login" -->
+    <!-- Original Name = "senderCtrl.send()_SQL_Injection_Error_in_Login_Password" ; Corrected Name = "Allow_Error_in_Login" -->
     <!-- Feature 1539 -->
     <!--<Allow_SQL_Injection_Error_in_Login_Password datatype="enum:[Yes,No]" description="No=(Default) Do Not inject; or Yes=Inject SQL error in Login/Password." tools="Fortify" locationInAdvantage="">No</Allow_SQL_Injection_Error_in_Login_Password>-->
     <Allow_Error_in_Login datatype="enum:[Yes,No]" description="Determines whether an invalid passwords are allowed. These would trigger an error in a test, indicating a security gap in the product. Default = No. Yes = Invalid passwords allowed, such as an empty password, or ‘1’=’1’" tools="Fortify" locationInAdvantage="Login page">No</Allow_Error_in_Login>

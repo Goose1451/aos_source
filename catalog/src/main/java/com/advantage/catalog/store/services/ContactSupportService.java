@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactSupportService extends AbstractRepository {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ContactSupportService.class);
     private static int SUCCESS = 1;
     private static int FAILURE = -1;
 

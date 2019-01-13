@@ -11,7 +11,7 @@
     <!-- Original Name = "AppPulse_user" ; Corrected Name = "AppPulse_user" -->
     <AppPulse_user datatype="string" description="UserName:Password for AppPulse user to trigger the relevant AppPulse features." tools="AppPulse" locationInAdvantage="Entire site">AppPulse:AppPulse1</AppPulse_user>
 
-    <!-- Original Name = "Repeat_ShipEx_call" ; Corrected Name = "ShipEx_repeat_calls" -->
+    <!--   Original Name = "Repeat_ShipEx_call" ; Corrected Name = "ShipEx_repeat_calls" -->
     <!--<Repeat_ShipEx_call datatype="string" description="Perform the same call to ShipEx multiple times (place shipping order - from Order service to ShipEx). Parameter values: 0=(Default) Disabled; any other positive number is the number of repeat calls to ShipEx. The goal of this capability is to find multiple calls to the same methods usually done by multiple developers causing inefficient application." tools="LoadRunner;SV;StormRunner" locationInAdvantage="">0</Repeat_ShipEx_call>-->
     <ShipEx_repeat_calls datatype="string" description="Defines the number of times to repeat a call to ShipEx. Use this parameter to find unnecessary multiple calls to the same methods, and affects performance. Default = 0 (no repeat calling. " tools="NV" locationInAdvantage="Purchase">0</ShipEx_repeat_calls>
 

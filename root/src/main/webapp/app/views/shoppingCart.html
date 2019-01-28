@@ -88,7 +88,7 @@
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <button name="check_out_btn" role="button" class="roboto-medium" data-ng-click="checkout()">{{'CHECK_OUT' | translate}} ({{ cart | productsCartSum:shippingCost | currency:'$' }})</button>
+                        <button id="checkOutButton" name="check_out_btn" role="button" class="roboto-medium" data-ng-click="checkout()">{{'CHECK_OUT' | translate}} ({{ cart | productsCartSum:shippingCost | currency:'$' }})</button>
                     </td>
                 </tr>
                 </tfoot>

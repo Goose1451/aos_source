@@ -66,7 +66,7 @@
         <javax.inject.version>1</javax.inject.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <baseNexusURL>http://mydtbld0051.isr.hp.com:8081/nexus</baseNexusURL>
+        <!-- <baseNexusURL>http://mydtbld0051.isr.hp.com:8081/nexus</baseNexusURL> -->
         <maven.build.timestamp.format>yyyyMMdd_HHmmss</maven.build.timestamp.format>
     </properties>
     <profiles>

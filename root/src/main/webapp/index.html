@@ -9,15 +9,13 @@
     <link rel="shortcut icon" href="css/images/favicon.ico">
     <meta name="viewport" content="width=device-width,  initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
     <title>&nbsp;Advantage Shopping</title>
-    <!-- build:css css/main.min.css -->
-    <link href="css/main.css" rel="stylesheet">
-    <!-- endbuild -->
+    <link rel="stylesheet" href="css/main.min.css">
     <!--<script>-->
         <!--(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),-->
                 <!--m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');-->
         <!--ga('create', 'UA-81334227-1', 'auto');ga('send', 'pageview');-->
     <!--</script>-->
-
+    <script src="https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js" data-collection-source-url="https://rum-collectors.us2.sumologic.com/receiver/v1/trace/ZaVnC4dhaV3THOUdGLYJX_tTpBMJc6GjwLI7YLQivtK-SOMXmYrQPKM6lWzZS7AqsAuN8MyTCXDa5AF74_Pg_EoeMeOWN7b3y5zNF1oEXKxYZxzBeyH6ig==" data-service-name="shoppingfrontend" data-application-name="advantage">
 </head>
 
 <body data-ng-controller="mainCtrl as mainCtrl" data-ng-cloak>
@@ -95,6 +93,7 @@
     <div class="mini-title-help mini-title-help-mobile" id="helpMobileMiniTitle">
         <label class="option" translate="ABOUT" ng-click="mobileRedirectHelp('about')"></label>
         <label class="option" translate="AOS_VERSIONS" ng-click="mobileRedirectHelp('version')"></label>
+        <label class="option" translate="CONFIG_TOOL" ng-click="openAdminClient()"></label>
     </div>
 </span>
 
@@ -141,11 +140,12 @@
                     <div id="helpMiniTitle" class="mini-title-help">
                         <label class="option roboto-medium" translate="ABOUT" ng-click="mobileRedirectHelp('about')" href="javascript:void(0)" role="link"></label>
                         <label class="option" translate="AOS_VERSIONS" ng-click="mobileRedirectHelp('version')" href="javascript:void(0)" role="link"></label>
+                        <label class="option" translate="CONFIG_TOOL" ng-click="openAdminClient()" href="javascript:void(0)" role="link"></label>
                     </div>
                 </a>
             </li>
             <li data-ng-mouseenter="enterCart()" data-ng-mouseleave="leaveCart()">
-                <a id="shoppingCartLink" class="img" href="#/shoppingCart" role="link">
+                <a id="shoppingCartLink" aria-label="ShoppingCart" class="img" href="#/shoppingCart" role="link">
                     <div icon-cart-svg></div>
                     <span class="cart" ng-show="(cart | productsCartCount) > 0">{{ cart | productsCartCount }}</span>
                 </a>
@@ -156,11 +156,10 @@
                 </ul>
             </li>
             <li>
-                <a href="javascript:void(0)" role="link" class="img" data-ng-click="login('loginMiniTitle')"
+                <a id="menuUserLink" aria-label="UserMenu" href="javascript:void(0)" role="link" class="img" data-ng-click="login('loginMiniTitle')"
                    data-ng-mouseenter="miniTitleIn('loginMiniTitle')"
                    data-ng-mouseleave="miniTitleOut('loginMiniTitle')">
-                    <span data-ng-show="userCookie.response" class="hi-user containMiniTitle">{{userCookie.name}}</span>
-                    <div icon-user-svg></div>
+                    <span data-ng-show="userCookie.response" class="hi-user containMiniTitle">{{userCookie.name}}</span><div icon-user-svg></div>
                     <div class="mini-title" id="loginMiniTitle">
                         <label class="option roboto-medium" translate="My_account" ng-click="accountSection()" href="javascript:void(0)" role="link"></label>
                         <label class="option" translate="My_Orders" ng-click="mobileRedirect('MyOrders')" href="javascript:void(0)" role="link"></label>
@@ -207,6 +206,7 @@
             </div>
         </div>
     </nav>
+    <toaster-container toaster-options="{'time-out': 5000, }" toaster-options="{}"></toaster-container>
 </header>
 
 <!-- end navigation " ng-show="cartCount != 0 -->
@@ -216,12 +216,11 @@
 <div virtual-footer></div>
 
 
-<script type="text/javascript" data-main="main" src="vendor/requirejs/require.js"></script>
+<script type="text/javascript" data-main="main.min" src="vendor/requirejs/require.js"></script>
 
 <div id="toast">
     <a>Product Added Successfully</a>
 </div>
-
 
 </body>
 </html>
